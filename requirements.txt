@@ -8,3 +8,5 @@ icecream
 scikit-learn
 torch
 transformers
+sphinx
+sphinx-autoapi
