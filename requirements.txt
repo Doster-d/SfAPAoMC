@@ -3,3 +3,4 @@ numpy
 asyncpg
 jupyter
 py7zr
+openpyxl
