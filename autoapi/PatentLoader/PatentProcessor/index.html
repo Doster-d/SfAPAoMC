@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PatentLoader.PatentProcessor &#8212; Service for analyzing patent activity of Moscow companies 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=12dfc556" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="CompanyCategory" href="../../CompanyCategory/index.html" />
+    <link rel="prev" title="PatentLoader.PatentLinkage" href="../PatentLinkage/index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-PatentLoader.PatentProcessor">
+<span id="patentloader-patentprocessor"></span><h1>PatentLoader.PatentProcessor<a class="headerlink" href="#module-PatentLoader.PatentProcessor" title="Link to this heading">¶</a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#PatentLoader.PatentProcessor.PatentProcessor" title="PatentLoader.PatentProcessor.PatentProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PatentProcessor</span></code></a></p></td>
+<td><p>Class for processing patent data, including reading, cleaning, and transforming patent records.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PatentLoader.PatentProcessor.</span></span><span class="sig-name descname"><span class="pre">PatentProcessor</span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor" title="Link to this definition">¶</a></dt>
+<dd><p>Class for processing patent data, including reading, cleaning, and transforming patent records.</p>
+<p>Methods:
+- __init__: Initializes the DataFrame attributes and defines the columns and data types.
+- read_patents: Reads patent data from an Excel file.
+- load_patents: Loads patent data from a DataFrame.
+- apply_replace_strategy: Replaces missing values in a specific column based on an alternate column.
+- lower_text: Converts text to lowercase.
+- find_foreign: Identifies foreign patents based on specific patterns.
+- process_patent_holder: Cleans and normalizes the patent holder text.
+- split_holders: Splits the patent holders string into unique components.
+- remove_parentheses: Removes text within parentheses.
+- remove_spaces: Removes spaces from text.
+- process_design: Processes each row of the DataFrame to clean and normalize patent data.
+- start_process: Starts the processing of the patent DataFrame.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.read_patents">
+<span class="sig-name descname"><span class="pre">read_patents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">read_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.read_patents" title="Link to this definition">¶</a></dt>
+<dd><p>Reads patent data from an Excel file.</p>
+<p>Parameters:
+read_object: Object representing the Excel file (e.g., file path or file-like object).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.load_patents">
+<span class="sig-name descname"><span class="pre">load_patents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patents_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.load_patents" title="Link to this definition">¶</a></dt>
+<dd><p>Loads patent data from a DataFrame.</p>
+<p>Parameters:
+patents_df (pd.DataFrame): DataFrame containing patent data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.apply_replace_strategy">
+<span class="sig-name descname"><span class="pre">apply_replace_strategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'patent</span> <span class="pre">processed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_alt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'authors'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.apply_replace_strategy" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces missing values in a specific column based on an alternate column.</p>
+<p>Parameters:
+row (pd.Series): Row of data.
+column (str): Column name to check for missing values.
+column_alt (str): Alternate column name to use for replacement.</p>
+<p>Returns:
+Value from the column or alternate column based on the condition.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.lower_text">
+<span class="sig-name descname"><span class="pre">lower_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.lower_text" title="Link to this definition">¶</a></dt>
+<dd><p>Converts text to lowercase.</p>
+<p>Parameters:
+text (str): Input text.</p>
+<p>Returns:
+str: Lowercase text.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.find_foreign">
+<span class="sig-name descname"><span class="pre">find_foreign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.find_foreign" title="Link to this definition">¶</a></dt>
+<dd><p>Identifies foreign patents based on specific patterns.</p>
+<p>Parameters:
+row (pd.Series): Row of data.</p>
+<p>Returns:
+list: List indicating whether each patent holder is foreign.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.process_patent_holder">
+<span class="sig-name descname"><span class="pre">process_patent_holder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.process_patent_holder" title="Link to this definition">¶</a></dt>
+<dd><p>Cleans and normalizes the patent holder text.</p>
+<p>Parameters:
+text (str): Input text.</p>
+<p>Returns:
+str: Cleaned and normalized text.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.split_holders">
+<span class="sig-name descname"><span class="pre">split_holders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patent_holder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.split_holders" title="Link to this definition">¶</a></dt>
+<dd><p>Splits the patent holders string into unique components.</p>
+<p>Parameters:
+patent_holder (str): String of patent holders.</p>
+<p>Returns:
+list: List of unique patent holders.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.remove_parentheses">
+<span class="sig-name descname"><span class="pre">remove_parentheses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.remove_parentheses" title="Link to this definition">¶</a></dt>
+<dd><p>Removes text within parentheses from a list of strings.</p>
+<p>Parameters:
+text (list): List of strings.</p>
+<p>Returns:
+list: List of strings without parentheses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.remove_spaces">
+<span class="sig-name descname"><span class="pre">remove_spaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.remove_spaces" title="Link to this definition">¶</a></dt>
+<dd><p>Removes spaces from a list of strings.</p>
+<p>Parameters:
+text (list): List of strings.</p>
+<p>Returns:
+list: List of strings without spaces.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.process_design">
+<span class="sig-name descname"><span class="pre">process_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.process_design" title="Link to this definition">¶</a></dt>
+<dd><p>Processes each row of the DataFrame to clean and normalize patent data.</p>
+<p>Parameters:
+row (pd.Series): Row of data.</p>
+<p>Returns:
+pd.Series: Processed row of data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.start_process">
+<span class="sig-name descname"><span class="pre">start_process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.start_process" title="Link to this definition">¶</a></dt>
+<dd><p>Starts the processing of the patent DataFrame, cleaning and normalizing the data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Service for analyzing patent activity of Moscow companies</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">PatentLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CompanyCategory/index.html">CompanyCategory</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">API Reference</a><ul>
+  <li><a href="../index.html">PatentLoader</a><ul>
+      <li>Previous: <a href="../PatentLinkage/index.html" title="previous chapter">PatentLoader.PatentLinkage</a></li>
+      <li>Next: <a href="../../CompanyCategory/index.html" title="next chapter">CompanyCategory</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Alexandr Fedorov, Alexandr Vagulich, Alexandr Arefiev, Konstantin Savchenko, Dmitriy Alekseev.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../../../_sources/autoapi/PatentLoader/PatentProcessor/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

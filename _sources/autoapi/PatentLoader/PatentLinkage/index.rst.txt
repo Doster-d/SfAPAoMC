@@ -1,0 +1,73 @@
+PatentLoader.PatentLinkage
+==========================
+
+.. py:module:: PatentLoader.PatentLinkage
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   PatentLoader.PatentLinkage.PatentLinkage
+
+
+Module Contents
+---------------
+
+.. py:class:: PatentLinkage
+
+   Class for linking patent data with company data.
+
+   Methods:
+   - __init__: Initializes the DataFrame attributes.
+   - clean_name: Cleans and normalizes the company name.
+   - load_patent_df: Loads the patent DataFrame.
+   - proceed_chunk: Processes a chunk of company data and links it to patent data.
+   - extract_tin: Extracts TIN and PSRN and merges them with the patent DataFrame.
+
+
+   .. py:method:: clean_name(name: str) -> str
+
+      Cleans and normalizes the company name.
+
+      Parameters:
+      name (str): The name of the company.
+
+      Returns:
+      str: The cleaned and normalized company name.
+
+
+
+   .. py:method:: load_patent_df(patent_df: pandas.DataFrame)
+
+      Loads the patent DataFrame.
+
+      Parameters:
+      patent_df (pd.DataFrame): DataFrame containing patent data.
+
+
+
+   .. py:method:: proceed_chunk(chunk_df: pandas.DataFrame) -> pandas.DataFrame
+      :async:
+
+
+      Processes a chunk of company data and links it to patent data.
+
+      Parameters:
+      chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.
+
+      Returns:
+      pd.DataFrame: DataFrame with linked company and patent data.
+
+
+
+   .. py:method:: extract_tin(df: pandas.DataFrame)
+
+      Extracts TIN and PSRN and merges them with the patent DataFrame.
+
+      Parameters:
+      df (pd.DataFrame): DataFrame with linked company and patent data.
+
+
+

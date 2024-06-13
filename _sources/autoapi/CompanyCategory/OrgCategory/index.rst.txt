@@ -1,0 +1,93 @@
+CompanyCategory.OrgCategory
+===========================
+
+.. py:module:: CompanyCategory.OrgCategory
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   CompanyCategory.OrgCategory.CategoryConfig
+   CompanyCategory.OrgCategory.CategoryDetector
+
+
+Module Contents
+---------------
+
+.. py:class:: CategoryConfig
+
+   Configurator for the classifier.
+   Contains settings for tokenizer, models and description of industries.
+
+
+   .. py:attribute:: tokenizer
+
+
+   .. py:attribute:: model
+
+
+   .. py:attribute:: industries_description
+
+
+.. py:class:: CategoryDetector
+
+   Classifier of categories of organizations by their OKVED description.
+
+   Methods:
+   - __init__: Initialize tokenizer, model and category embeddings.
+   - _get_embedding: Retrieve embedding for a given text.
+   - _classify_organization: Classifying organization based on similarity to category embeddings.
+   - __call__: Applying a classifier to a DataFrame with organization data.
+
+
+   Example Usage:
+   import pandas as pd
+   from org_category import category_detector
+
+   if __name__ == "__main__":
+       df = pd.read_csv(path_to_df)
+       classified_df = category_detector(df)
+       print(classified_df)
+
+
+   .. py:method:: _get_embedding(text: str) -> torch.Tensor
+
+      Gets the embedding for the given text.
+
+      :parameter
+      text (str): Input text.
+
+      :return
+      torch.Tensor: Embedding of text.
+
+
+
+   .. py:method:: _classify_organization(text: str) -> str
+
+      Classifies an organization based on similarity to embedding categories.
+
+      Parameters:
+      text (str): Description of the organization.
+
+      Returns:
+      str: The name of the most appropriate category.
+
+
+
+   .. py:method:: __call__(df: pandas.DataFrame, okvd_column_name: str = 'ОКВЭД2 расшифровка', new_column_name: str = 'category', fillna_name: str = 'Нет категории') -> pandas.DataFrame
+
+      Applies a classifier to a DataFrame with organization data.
+
+      Parameters:
+      df (pd.DataFrame): DataFrame with organizations data.
+      okvd_column_name (str): The name of the column with the OKVED description.
+      new_column_name (str): The name of the new column for the classification results.
+      fillna_name (str): The name of the category applied to pd.Nan.
+
+      Returns:
+      pd.DataFrame: The updated DataFrame with the classification results.
+
+
+

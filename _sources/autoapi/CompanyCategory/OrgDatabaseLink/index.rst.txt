@@ -1,0 +1,131 @@
+CompanyCategory.OrgDatabaseLink
+===============================
+
+.. py:module:: CompanyCategory.OrgDatabaseLink
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   CompanyCategory.OrgDatabaseLink.company_ids
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   CompanyCategory.OrgDatabaseLink.OrgDatabaseLink
+
+
+Module Contents
+---------------
+
+.. py:class:: OrgDatabaseLink
+
+   A class for working with organization database and data classification.
+
+   Methods:
+   - __init__: Initialization of connection and classifier parameters.
+   - fetch_holder_entities: Retrieve data of organizations by their ID.
+   - fetch_holder_entities_in_chunks: Fetch organization data by chunks.
+   - process_company: Process company data with its classification.
+   - run_process: Start the data processing.
+   - insert_classification: Inserting the classification results into the database.
+   - update_classification: Updating the classification in the database.
+
+
+   .. py:method:: fetch_holder_entities(company_ids, offset, limit)
+      :async:
+
+
+      Fetches the data of organizations by their IDs.
+
+      Parameters:
+      company_ids (list): List of company IDs.
+      offset (int): Offset for data sampling.
+      limit (int): The limit of the data sample.
+
+      Returns:
+      list: Records from the database.
+
+
+
+   .. py:method:: fetch_holder_entities_in_chunks(chunk_size, company_ids)
+      :async:
+
+
+      Fetches organization data in chunks.
+
+      Parameters:
+      chunk_size (int): The size of the chunk to sample the data.
+      company_ids (list): List of company IDs.
+
+      Returns:
+      generator: A DataFrame generator with data of organizations.
+
+
+
+   .. py:method:: process_company(company_ids, batch_size=10000)
+      :async:
+
+
+      Processes company data with its classification.
+
+      Parameters:
+      company_ids (list): List of company IDs.
+      batch_size (int): The batch size for the data to be inserted.
+
+      Returns:
+      None
+
+
+
+   .. py:method:: run_process(company_ids)
+
+      Starts the data processing.
+
+      Parameters:
+      company_ids (list): A list of company IDs.
+
+      Returns:
+      None
+
+
+
+   .. py:method:: insert_classification(updates, batch_size)
+      :async:
+
+
+      Inserts the classification results into the database.
+
+      Parameters:
+      updates (pd.DataFrame): DataFrame with the classification results.
+      batch_size (int): The batch size for the data to insert.
+
+      Returns:
+      None
+
+
+
+   .. py:method:: update_classification(conn, updates)
+      :async:
+
+
+      Updates the classification in the database.
+
+      Parameters:
+      conn (asyncpg.Connection): Connection to the database.
+      updates (pd.DataFrame): DataFrame with the results of the classification.
+
+      Returns:
+      None
+
+
+
+.. py:data:: company_ids
+   :value: [1627747, 1627748, 1627749, 1627750, 1627751, 1627752, 1627753, 1627754, 1627755, 1627756,...
+
+

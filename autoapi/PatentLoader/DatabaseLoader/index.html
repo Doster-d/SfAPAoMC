@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PatentLoader.DatabaseLoader &#8212; Service for analyzing patent activity of Moscow companies 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=12dfc556" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="PatentLoader.PatentLinkage" href="../PatentLinkage/index.html" />
+    <link rel="prev" title="PatentLoader" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-PatentLoader.DatabaseLoader">
+<span id="patentloader-databaseloader"></span><h1>PatentLoader.DatabaseLoader<a class="headerlink" href="#module-PatentLoader.DatabaseLoader" title="Link to this heading">¶</a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#PatentLoader.DatabaseLoader.a" title="PatentLoader.DatabaseLoader.a"><code class="xref py py-obj docutils literal notranslate"><span class="pre">a</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#PatentLoader.DatabaseLoader.DatabaseLoader" title="PatentLoader.DatabaseLoader.DatabaseLoader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatabaseLoader</span></code></a></p></td>
+<td><p>Class for loading patent data and linking it to companies in the database.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PatentLoader.DatabaseLoader.</span></span><span class="sig-name descname"><span class="pre">DatabaseLoader</span></span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader" title="Link to this definition">¶</a></dt>
+<dd><p>Class for loading patent data and linking it to companies in the database.</p>
+<p>Methods:
+- __init__: Initialize database connection parameters and helper objects.
+- fetch_holder_entities: Fetch company data from the database with offset and limit.
+- fetch_holder_entities_in_chunks: Fetch company data from the database in chunks.
+- insert_patent_model_holder: Insert patent holder data into the database.
+- process_company: Process company data and link it to patents.
+- load_company: Run the process of loading and linking company and patent data.
+- fetch_patent_models: Fetch patent data from the database by patent type.
+- fetch_and_convert_to_df: Convert patent data to a DataFrame.
+- load_patent_model: Load patent data and start its processing.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.fetch_holder_entities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_holder_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.fetch_holder_entities" title="Link to this definition">¶</a></dt>
+<dd><p>Fetches company data from the database with offset and limit.</p>
+<p>Parameters:
+offset (int): Offset for data selection.
+limit (int): Limit for data selection.</p>
+<p>Returns:
+list: Records from the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.fetch_holder_entities_in_chunks">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_holder_entities_in_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.fetch_holder_entities_in_chunks" title="Link to this definition">¶</a></dt>
+<dd><p>Fetches company data from the database in chunks.</p>
+<p>Parameters:
+chunk_size (int): Size of each chunk for data selection.</p>
+<p>Returns:
+generator: Generator yielding DataFrame with company data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.insert_patent_model_holder">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">insert_patent_model_holder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.insert_patent_model_holder" title="Link to this definition">¶</a></dt>
+<dd><p>Inserts patent holder data into the database.</p>
+<p>Parameters:
+conn (asyncpg.Connection): Database connection.
+df (pd.DataFrame): DataFrame with data to insert.
+patent_type (str): Type of patent (model, design, invention).</p>
+<p>Returns:
+None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.process_company">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_company</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.process_company" title="Link to this definition">¶</a></dt>
+<dd><p>Processes company data and links it to patents.</p>
+<p>Parameters:
+patent_type (str): Type of patent (model, design, invention).</p>
+<p>Returns:
+None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.load_company">
+<span class="sig-name descname"><span class="pre">load_company</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.load_company" title="Link to this definition">¶</a></dt>
+<dd><p>Runs the process of loading and linking company and patent data.</p>
+<p>Parameters:
+patent_type (str): Type of patent (model, design, invention).</p>
+<p>Returns:
+None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.fetch_patent_models">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_patent_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.fetch_patent_models" title="Link to this definition">¶</a></dt>
+<dd><p>Fetches patent data from the database by patent type.</p>
+<p>Parameters:
+patent_type (str): Type of patent (model, design, invention).</p>
+<p>Returns:
+list: Records from the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.fetch_and_convert_to_df">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_and_convert_to_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.fetch_and_convert_to_df" title="Link to this definition">¶</a></dt>
+<dd><p>Converts patent data to a DataFrame.</p>
+<p>Parameters:
+patent_type (str): Type of patent (model, design, invention).</p>
+<p>Returns:
+pd.DataFrame: DataFrame with patent data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.load_patent_model">
+<span class="sig-name descname"><span class="pre">load_patent_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.load_patent_model" title="Link to this definition">¶</a></dt>
+<dd><p>Loads patent data and starts its processing.</p>
+<p>Parameters:
+patent_type (str): Type of patent (model, design, invention).</p>
+<p>Returns:
+None</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.a">
+<span class="sig-prename descclassname"><span class="pre">PatentLoader.DatabaseLoader.</span></span><span class="sig-name descname"><span class="pre">a</span></span><a class="headerlink" href="#PatentLoader.DatabaseLoader.a" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Service for analyzing patent activity of Moscow companies</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">PatentLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CompanyCategory/index.html">CompanyCategory</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">API Reference</a><ul>
+  <li><a href="../index.html">PatentLoader</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">PatentLoader</a></li>
+      <li>Next: <a href="../PatentLinkage/index.html" title="next chapter">PatentLoader.PatentLinkage</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Alexandr Fedorov, Alexandr Vagulich, Alexandr Arefiev, Konstantin Savchenko, Dmitriy Alekseev.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../../../_sources/autoapi/PatentLoader/DatabaseLoader/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

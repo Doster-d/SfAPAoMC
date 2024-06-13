@@ -1,0 +1,158 @@
+PatentLoader.PatentProcessor
+============================
+
+.. py:module:: PatentLoader.PatentProcessor
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   PatentLoader.PatentProcessor.PatentProcessor
+
+
+Module Contents
+---------------
+
+.. py:class:: PatentProcessor
+
+   Class for processing patent data, including reading, cleaning, and transforming patent records.
+
+   Methods:
+   - __init__: Initializes the DataFrame attributes and defines the columns and data types.
+   - read_patents: Reads patent data from an Excel file.
+   - load_patents: Loads patent data from a DataFrame.
+   - apply_replace_strategy: Replaces missing values in a specific column based on an alternate column.
+   - lower_text: Converts text to lowercase.
+   - find_foreign: Identifies foreign patents based on specific patterns.
+   - process_patent_holder: Cleans and normalizes the patent holder text.
+   - split_holders: Splits the patent holders string into unique components.
+   - remove_parentheses: Removes text within parentheses.
+   - remove_spaces: Removes spaces from text.
+   - process_design: Processes each row of the DataFrame to clean and normalize patent data.
+   - start_process: Starts the processing of the patent DataFrame.
+
+
+   .. py:method:: read_patents(read_object)
+
+      Reads patent data from an Excel file.
+
+      Parameters:
+      read_object: Object representing the Excel file (e.g., file path or file-like object).
+
+
+
+   .. py:method:: load_patents(patents_df: pandas.DataFrame)
+
+      Loads patent data from a DataFrame.
+
+      Parameters:
+      patents_df (pd.DataFrame): DataFrame containing patent data.
+
+
+
+   .. py:method:: apply_replace_strategy(row, column='patent processed', column_alt='authors')
+
+      Replaces missing values in a specific column based on an alternate column.
+
+      Parameters:
+      row (pd.Series): Row of data.
+      column (str): Column name to check for missing values.
+      column_alt (str): Alternate column name to use for replacement.
+
+      Returns:
+      Value from the column or alternate column based on the condition.
+
+
+
+   .. py:method:: lower_text(text: str) -> str
+
+      Converts text to lowercase.
+
+      Parameters:
+      text (str): Input text.
+
+      Returns:
+      str: Lowercase text.
+
+
+
+   .. py:method:: find_foreign(row)
+
+      Identifies foreign patents based on specific patterns.
+
+      Parameters:
+      row (pd.Series): Row of data.
+
+      Returns:
+      list: List indicating whether each patent holder is foreign.
+
+
+
+   .. py:method:: process_patent_holder(text: str) -> str
+
+      Cleans and normalizes the patent holder text.
+
+      Parameters:
+      text (str): Input text.
+
+      Returns:
+      str: Cleaned and normalized text.
+
+
+
+   .. py:method:: split_holders(patent_holder: str) -> list
+
+      Splits the patent holders string into unique components.
+
+      Parameters:
+      patent_holder (str): String of patent holders.
+
+      Returns:
+      list: List of unique patent holders.
+
+
+
+   .. py:method:: remove_parentheses(text: list) -> list
+
+      Removes text within parentheses from a list of strings.
+
+      Parameters:
+      text (list): List of strings.
+
+      Returns:
+      list: List of strings without parentheses.
+
+
+
+   .. py:method:: remove_spaces(text: list) -> list
+
+      Removes spaces from a list of strings.
+
+      Parameters:
+      text (list): List of strings.
+
+      Returns:
+      list: List of strings without spaces.
+
+
+
+   .. py:method:: process_design(row: pandas.Series) -> pandas.Series
+
+      Processes each row of the DataFrame to clean and normalize patent data.
+
+      Parameters:
+      row (pd.Series): Row of data.
+
+      Returns:
+      pd.Series: Processed row of data.
+
+
+
+   .. py:method:: start_process()
+
+      Starts the processing of the patent DataFrame, cleaning and normalizing the data.
+
+
+

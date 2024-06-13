@@ -1,0 +1,17 @@
+PatentLoader
+============
+
+.. py:module:: PatentLoader
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/PatentLoader/DatabaseLoader/index
+   /autoapi/PatentLoader/PatentLinkage/index
+   /autoapi/PatentLoader/PatentProcessor/index
+
+
