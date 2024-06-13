@@ -4,3 +4,7 @@ asyncpg
 jupyter
 py7zr
 openpyxl
+icecream
+scikit-learn
+torch
+transformers
