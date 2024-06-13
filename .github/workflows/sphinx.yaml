@@ -19,3 +19,4 @@ jobs:
       with:
         requirements_path: ./requirements.txt
         cache: true
+        token: ${{ secrets.ACCESS_TOKEN }}
