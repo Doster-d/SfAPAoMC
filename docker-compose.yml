@@ -8,4 +8,89 @@ services:
           devices:
             - driver: nvidia
               count: all
-              capabilities: [gpu]
+              capabilities: [ gpu ]
+  postgres:
+    container_name: postgres_container
+    image: postgres:16.1-alpine3.18
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=50"
+      - "-c"
+      - "shared_buffers=2GB"
+      - "-c"
+      - "effective_cache_size=8GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=1GB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "temp_file_limit=10GB"
+      - "-c"
+      - "log_min_duration_statement=200ms"
+      - "-c"
+      - "idle_in_transaction_session_timeout=10s"
+      - "-c"
+      - "lock_timeout=1s"
+      - "-c"
+      - "statement_timeout=360s"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.max=10000"
+      - "-c"
+      - "pg_stat_statements.track=all"
+    environment:
+      POSTGRES_DB: "patentanal"
+      POSTGRES_USER: "patentexpertuser"
+      POSTGRES_PASSWORD: "mycoolpassword123"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - ./sql/migrate:/docker-entrypoint-initdb.d
+      - patentdb-data:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql.conf:ro
+    ports:
+      - "6432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U patentexpertuser -d patentanal" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 10G
+    networks:
+      - postgres
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "patentexpertuser@thrushes.ai"
+      PGADMIN_DEFAULT_PASSWORD: "pgadminpwd4thrushes"
+      PGADMIN_CONFIG_SERVER_MODE: "False" # To allow running in desktop mode
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./data/ProcessedData:/home/data
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - postgres
+volumes:
+  patentdb-data:
+  pgadmin-data:
+
+networks:
+  postgres:
+    driver: bridge
