@@ -1,5 +1,11 @@
+.main {
+  overflow: hidden;
+}
 .main-banner {
   margin-top: 85px;
+  @media (max-width: 1023px) {
+    margin-top: 30px;
+  }
   &__title {
     max-width: 688px;
   }
@@ -19,6 +25,12 @@
       rgb(56, 249, 215) 99.647%
     );
     padding: 10px;
+    @media (max-width: 1023px) {
+      font-size: 32px;
+    }
+    @media (max-width: 424px) {
+      font-size: 24px;
+    }
   }
 }
 

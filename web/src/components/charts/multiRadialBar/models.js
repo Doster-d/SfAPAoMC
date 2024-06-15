@@ -2,8 +2,9 @@
 
 export const getOptionsMultiRadial = (handleBarSelection) => ({
     chart: {
-      height: 390,
       type: "radialBar",
+      height:502,
+      width:502,
       events: {
         click: (event) => {
           handleBarSelection(event);
@@ -57,4 +58,19 @@ export const getOptionsMultiRadial = (handleBarSelection) => ({
     },
     colors: ["#0BA360", "#46AEF7", "#F83600"],
     labels: ["Модель", "Образец", "Изобретение"],
+    responsive: [{
+      breakpoint: 1023,
+      options: {
+        chart: {
+          width: 400
+        },
+        plotOptions: {
+          radialBar: {
+            barLabels: {
+              fontSize: "16px"
+            }
+          }
+        }
+      }
+    }]
   })

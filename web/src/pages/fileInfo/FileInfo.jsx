@@ -4,6 +4,7 @@ import MultiRadialBar from "../../components/charts/multiRadialBar/MultiRadialBa
 import SemiRadialBar from "../../components/charts/semiRadialBar/SemiRadialBar";
 import TablePie from "../../components/charts/tablePie/TablePie";
 import ReactApexChart from "react-apexcharts";
+import SimplePie from "../../components/charts/simplePie/SimplePie";
 function FileInfo() {
   const [barSelected, setBarSelected] = useState(undefined);
   useEffect(() => {
@@ -26,49 +27,7 @@ function FileInfo() {
     };
   }, []);
 
-  const simplePieOptions = {
-    chart: {
-      type: "donut",
-      width: 360
-    },
-    legend: {
-      position: "bottom",
-      fontFamily: 'Geologica Cursive',
-      fontSize: '16px',
-
-    },
-    colors: ['#0BA360', '#005BEA', '#FF9A9E', '#F6D365'],
-    labels: ["Label 1", "Label 2", "Label 3", "Label 4"],
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shade: 'light',
-        type: "horizontal",
-        shadeIntensity: 0.5,
-        gradientToColors: ['#3CBA92', '#00C6FB', '#FECFEF', '#FDA085'],
-        inverseColors: true,
-        opacityFrom: 1,
-        opacityTo: 1,
-        stops: [20, 100],
-      }
-    },
-    plotOptions: {
-      pie: {
-        dataLabels: {
-          show: false,
-        },
-        donut: {
-          size: '65%',
-          labels: {
-            show: false
-          }
-        }
-      }
-    },
-    dataLabels: {
-      enabled: false,
-    },
-  };
+  
   return (
     <main className="file-info">
       <div className="container">
@@ -84,12 +43,7 @@ function FileInfo() {
             <TablePie series={[28, 12, 6]} />
           </div>
           <div className="file-info__charts-row">
-            <ReactApexChart
-              options={simplePieOptions}
-              series={[44, 55, 17, 15]}
-              type="donut"
-              width={460}
-            />
+            <SimplePie series={[44, 55, 17, 15]}/>
             <SemiRadialBar series={[72]} />
           </div>
         </div>

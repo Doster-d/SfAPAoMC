@@ -1,7 +1,13 @@
 import ReactApexChart from "react-apexcharts";
 import { optionsPie } from "./models";
+import { useEffect } from "react";
 
 function TablePie({ series }) {
+  useEffect(() => {
+    if(window.outerWidth < 1024) {
+      window.dispatchEvent(new Event("resize"));
+    }
+  }, []);
   return (
     <div className="charts__table-pie">
       <ReactApexChart

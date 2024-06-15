@@ -1,8 +1,14 @@
 .upload-form {
   position: absolute;
   top: 67px;
+  right: 40px;
   width: 300px;
   height: 200px;
+  @media (max-width: 1023px) {
+    position: static;
+    margin: 20px 0 0 auto;
+    width: 100%;
+  }
   &__dropping-span {
     display: inline-block;
     margin-top: 13px;
@@ -18,12 +24,15 @@
     background-repeat: no-repeat;
     display: inline-flex;
     flex-direction: column;
-    width: 300px;
+    width: 100%;
     height: 200px;
     box-sizing: border-box;
     position: relative;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
+    @media (max-width: 1023px) {
+      background: none;
+      border: 2px #000000 dotted;
+    }
     &::after {
       transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       content: "";
@@ -38,6 +47,9 @@
       transform: translate(-50%, -50%);
     }
     &:hover {
+      background-color: rgba(161, 196, 253, 0.438);
+    }
+    @media (max-width: 1439px) {
       background-color: rgba(161, 196, 253, 0.438);
     }
     &--dropping {

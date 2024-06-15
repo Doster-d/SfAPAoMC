@@ -75,4 +75,24 @@ export const optionsPie = {
     width: "auto",
     colors: ["#005BEA", "#F83600", "#9BE15D"],
     labels: ["Юридическое лицо", "Инд. предприниматель", "Физическое лицо"],
+    responsive: [{
+      breakpoint: 1023,
+      options: {
+        chart: {
+          width: 370
+        },
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: 20,
+              },
+              value: {
+                fontSize: 32,
+              }
+            }
+          }
+        }
+      }
+    }]
   };

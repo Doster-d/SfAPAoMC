@@ -1,6 +1,8 @@
 export const optionsSemiRadial = {
   chart: {
     type: "radialBar",
+    width: 502,
+    redrawOnParentResize: true,
     offsetY: 0,
     sparkline: {
       enabled: true,
@@ -50,4 +52,24 @@ export const optionsSemiRadial = {
   },
   labels: ["Размеченных патента"],
   colors: ["#4FACFE"],
+  responsive: [{
+    breakpoint: 1023,
+    options: {
+      chart: {
+        width: 360
+      },
+      plotOptions: {
+        radialBar: {
+          dataLabels: {
+            name: {
+              fontSize: 18,
+            },
+            value: {
+              fontSize: 32,
+            }
+          }
+        }
+      }
+    }
+  }]
 };

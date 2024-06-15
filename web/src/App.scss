@@ -14,6 +14,8 @@ body {
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
+  padding-bottom: 100px;
+
   &::before {
     content: "";
     z-index: -1;
@@ -34,7 +36,6 @@ body {
   margin: 0 auto;
   padding-left: 40px;
   padding-right: 40px;
-  padding-bottom: 100px;
   @media (max-width: 1023px) {
     padding-left: 30px;
     padding-right: 30px;
@@ -50,6 +51,15 @@ body {
   font-family: "Rimma_Sans";
   font-size: 48px;
   font-weight: 700;
+  @media (max-width: 1439px) {
+    font-size: 44px;
+  }
+  @media (max-width: 1023px) {
+    font-size: 36px;
+  }
+  @media (max-width: 424px) {
+    font-size: 28px;
+  }
 }
 
 .title-h2 {
@@ -57,4 +67,10 @@ body {
   font-family: "Rimma_Sans";
   font-size: 40px;
   font-weight: 700;
+  @media (max-width: 1023px) {
+    font-size: 32px;
+  }
+  @media (max-width: 424px) {
+    font-size: 24px;
+  }
 }
