@@ -12,14 +12,18 @@
     transition: all 3s cubic-bezier(0.165, 0.84, 0.44, 1);
     flex: 0 1 510px;
     .apexcharts-radialbar path[selected="true"] {
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       stroke-width: 25px;
       filter: none;
     }
+    .apexcharts-radialbar path {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .apexcharts-radialbar path ~ text {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
     .apexcharts-radialbar path[selected="true"] ~ text {
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
       font-size: 28px;
       fill: #000000;
     }
@@ -138,5 +142,3 @@
     }
   }
 }
-
-
