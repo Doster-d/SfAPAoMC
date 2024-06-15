@@ -1,0 +1,142 @@
+.charts {
+  &__title {
+    text-align: center;
+    margin-top: 92px;
+  }
+  &__container {
+    margin-top: 68px;
+    display: flex;
+    justify-content: center;
+  }
+  &__main-chart {
+    transition: all 3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    flex: 0 1 510px;
+    .apexcharts-radialbar path[selected="true"] {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      stroke-width: 25px;
+      filter: none;
+    }
+
+    .apexcharts-radialbar path[selected="true"] ~ text {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+      font-size: 28px;
+      fill: #000000;
+    }
+
+    .apexcharts-radialbar text {
+      fill: #737373;
+    }
+  }
+  &__additional-charts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 125px;
+    flex: 1 1 759px;
+    .apexcharts-radialbar path[selected="true"],
+    .apexcharts-pie path[selected="true"] {
+      filter: none;
+    }
+  }
+
+  &__table-pie {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .apexcharts-pie path[selected="true"] {
+      filter: none;
+    }
+    .apexcharts-pie path {
+      stroke: none;
+    }
+  }
+
+  &__table {
+    max-width: 461px;
+    width: 100%;
+    border-collapse: collapse;
+    thead {
+      border-bottom: #000000 solid 1px;
+    }
+  }
+  &__table-header {
+    color: #737373;
+    text-align: left;
+    padding: 6px 0;
+    font-size: 20px;
+    font-weight: 400;
+  }
+  &__table-header:nth-child(1) {
+    padding-left: 25px;
+  }
+  &__table-header + &__table-header {
+    padding-left: 13px;
+  }
+  &__table-cell + &__table-cell {
+    padding-left: 13px;
+  }
+  &__table-header:nth-child(3) {
+    text-align: right;
+  }
+  &__table-cell:nth-child(3) {
+    text-align: right;
+  }
+  &__table-cell:nth-child(2) {
+    text-align: center;
+  }
+  &__table-cell {
+    font-size: 16px;
+    color: #0a0a0a;
+    font-weight: 400;
+    text-align: center;
+    padding: 6px 0;
+  }
+  &__table-cell:nth-child(1) {
+    position: relative;
+    color: #404040;
+    font-weight: 300;
+    padding-left: 25px;
+    text-align: left;
+    &::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      top: 50%;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      left: 0;
+    }
+  }
+  &__table-row:nth-child(1) &__table-cell:nth-child(1) {
+    &::after {
+      background: linear-gradient(
+        90deg,
+        rgb(0, 198, 251),
+        rgb(0, 91, 234) 100%
+      );
+    }
+  }
+  &__table-row:nth-child(2) &__table-cell:nth-child(1) {
+    &::after {
+      background: linear-gradient(
+        90deg,
+        rgb(248, 54, 0),
+        rgb(249, 212, 35) 100%
+      );
+    }
+  }
+  &__table-row:nth-child(3) &__table-cell:nth-child(1) {
+    &::after {
+      background: linear-gradient(
+        90deg,
+        rgb(155, 225, 93),
+        rgb(0, 227, 174) 100%
+      );
+    }
+  }
+}
+
+

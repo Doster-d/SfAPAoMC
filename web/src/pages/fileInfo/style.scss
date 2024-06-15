@@ -1,0 +1,50 @@
+.file-info {
+
+  &__title {
+    margin-top: 85px;
+    max-width: 770px;
+    width: 100%;
+  }
+  &__charts {
+    margin-top: 100px;
+  }
+  &__charts-row {
+    display: flex;
+    justify-content: space-between;
+    & + & {
+      margin-top: 52px;
+    }
+    & > * {
+      flex: 1 1 50%;
+      align-self: center;
+      & > * {
+        margin: 0 auto;
+      }
+    }
+  }
+  &__charts-row:nth-child(1) {
+    .apexcharts-radialbar path[selected="true"] {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      stroke-width: 25px;
+      filter: none;
+    }
+
+    .apexcharts-radialbar path[selected="true"] ~ text {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+      font-size: 28px;
+      fill: #000000;
+    }
+
+    .apexcharts-radialbar text {
+      fill: #737373;
+    }
+  }
+
+  &__charts-row:nth-child(2) {
+    .apexcharts-radialbar path[selected="true"],
+    .apexcharts-pie path[selected="true"] {
+      filter: none;
+    }
+  }
+}
