@@ -63,6 +63,7 @@ function UploadFile({addNotification}) {
               className="upload-form__input"
               type="file"
               onChange={handleFileChange}
+              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             />
             <span className="upload-form__add-span">{fileName ? fileName : 'Формат .xlxs'}</span>
           </>
