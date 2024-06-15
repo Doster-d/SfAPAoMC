@@ -30,7 +30,7 @@ function Mainpage() {
           <h1 className="main-banner__title title-h1">
             Решение кейса “Сервис анализа патентной активности компаний Москвы”
           </h1>
-          <Link className="main-banner__button">я фурри фашист </Link>
+          <Link className="main-banner__button">Кнопка для чего-то</Link>
         </div>
       </section>
       <TeamSlider />
