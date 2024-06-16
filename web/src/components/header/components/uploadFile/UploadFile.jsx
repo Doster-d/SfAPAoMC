@@ -16,7 +16,7 @@ function UploadFile({addNotification}) {
     }
     addNotification("Файл добавлен", 'good', 5000)
     setFileName(file.name)
-    const response = await uploadFileMutation.mutateAsync()
+    const response = await uploadFileMutation.mutateAsync(file)
     addNotification("Данные обрабатываются. Пожалуйста подождите, это может занять продолжительное время.", 'good', 5000)
     await addNotification('Данные обработаны', 'good', 3000)
     console.log('Response:', response);
