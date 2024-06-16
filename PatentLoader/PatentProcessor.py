@@ -26,6 +26,7 @@ class PatentProcessor:
 		"""
 		Initializes the DataFrame attributes and defines the columns and data types.
 		"""
+		self.patent_type = 'design'
 		self.patents_ids = pd.DataFrame()
 		self.current_patents_dataframe = pd.DataFrame()
 		self.current_ids_dataframe = pd.DataFrame()
@@ -52,9 +53,17 @@ class PatentProcessor:
 			use_cols = self.current_columns
 		self.current_patents_dataframe = pd.read_excel(
 			read_object,
-			usecols=use_cols,
 			dtype=self.current_dtype
 		)
+		columns = self.current_patents_dataframe.columns.to_list()
+		if 'industrial_design_name' in columns:
+			self.patent_type = 'design'
+		elif 'utility_model_name' in columns:
+			self.patent_type = 'model'
+		else:
+			self.patent_type = 'invention'
+
+		# self.current_patents_dataframe = self.current_patents_dataframe[use_cols]
 		date_format = "%Y-%m-%d"
 		unix_start_time = datetime.strptime('1970-01-01', date_format)
 		self.current_patents_dataframe.dropna(subset={'registration_number'})
