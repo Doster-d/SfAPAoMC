@@ -98,6 +98,7 @@ class PatentLinkage:
 			df = await self.process_rapid_df_linkage(df, chunk_df)
 		del df['full_name']
 		df = df.dropna(subset=['company_id', 'registration_number'])
+		self.extract_tin(df)
 		return df
 
 	def extract_tin(self, df: pd.DataFrame):
@@ -115,3 +116,7 @@ class PatentLinkage:
 			lambda row: len(row['patent_holders']) != len(row['company_id']), axis=1
 		)
 		self.final_df = final_df
+
+	def export_final_dataframe_to_excel(self, filepath):
+		self.final_df.to_excel(filepath)
+
