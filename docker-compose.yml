@@ -89,8 +89,8 @@ services:
       - postgres
   api:
     build:
-      context: .
-      dockerfile: Dockerfile.api
+      context: ./api
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     networks:

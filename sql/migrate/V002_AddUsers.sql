@@ -9,3 +9,9 @@ CREATE TABLE access_tokens (
     token VARCHAR(255) NOT NULL UNIQUE,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE processed_files (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES user(id) ON DELETE CASCADE,
+    path TEXT NOT NULL,
+)
