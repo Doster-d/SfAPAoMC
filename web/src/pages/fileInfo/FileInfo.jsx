@@ -6,9 +6,11 @@ import TablePie from "../../components/charts/tablePie/TablePie";
 import { Helmet } from "react-helmet-async";
 import SimplePie from "../../components/charts/simplePie/SimplePie";
 import { useParams } from "react-router-dom";
+import { useGetFileInfoById } from "./hooks/useGetFileInfoById";
 function FileInfo() {
   const {fileId} = useParams();
-  const [barSelected, setBarSelected] = useState(undefined);
+  const {data: fileData, isPending, isError} = useGetFileInfoById(fileId)
+  console.log(fileData);
   useEffect(() => {
     document.body.style =
       "  background:linear-gradient(90deg, rgb(132, 250, 176), rgb(143, 211, 244) 52.465%)";
@@ -17,19 +19,6 @@ function FileInfo() {
     };
   }, []);
 
-
-  const handleBarSelection = (event) => {
-    if (
-      event.target.parentElement.attributes.seriesName ||
-      event.target.attributes.selected
-    ) {
-      if (event.target.attributes.selected?.value === "true") {
-        setBarSelected(event.target.parentElement.attributes.seriesName?.value);
-      } else {
-        setBarSelected(undefined);
-      }
-    }
-  };
 
   return (
     <>
@@ -48,10 +37,6 @@ function FileInfo() {
           </h1>
           <div className="file-info__charts">
             <div className="file-info__charts-row">
-              <MultiRadialBar
-                handleBarSelection={handleBarSelection}
-                series={[100, 90, 80]}
-              />
               <TablePie series={[28, 12, 6]} />
             </div>
             <div className="file-info__charts-row">

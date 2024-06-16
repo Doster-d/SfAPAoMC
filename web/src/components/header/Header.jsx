@@ -75,7 +75,7 @@ function Header() {
                     Использовать сейчас
                   </button>
                   {isDownloadOpen && (
-                    <UploadFile addNotification={addNotification} />
+                    <UploadFile toggleDownloadOpen={toggleDownloadOpen} addNotification={addNotification} />
                   )}
                 </li>
               )}

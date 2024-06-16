@@ -3,23 +3,31 @@ import "./style.scss";
 import { useForm } from "react-hook-form";
 import { useUploadFileMutation } from "./hooks/useUploadFileMutation";
 import { useNavigate } from "react-router-dom";
-function UploadFile({addNotification}) {
+function UploadFile({ addNotification, toggleDownloadOpen }) {
   const [drop, setDrop] = useState(false);
-  const [fileName, setFileName] = useState(undefined)
-  const uploadFileMutation = useUploadFileMutation(addNotification)
-  const navigate = useNavigate()
+  const [fileName, setFileName] = useState(undefined);
+  const uploadFileMutation = useUploadFileMutation(addNotification);
+  const navigate = useNavigate();
   const handleFile = async (file) => {
     console.log(file);
-    if(file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-        addNotification("Не правильный тип файла", 'bad', 5000)
-        return;
+    if (
+      file.type !==
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ) {
+      addNotification("Не правильный тип файла", "bad", 5000);
+      return;
     }
-    addNotification("Файл добавлен", 'good', 5000)
-    setFileName(file.name)
-    const response = await uploadFileMutation.mutateAsync(file)
-    addNotification("Данные обрабатываются. Пожалуйста подождите, это может занять продолжительное время.", 'good', 5000)
-    await addNotification('Данные обработаны', 'good', 3000)
-    console.log('Response:', response);
+    addNotification("Файл добавлен", "good", 5000);
+    setFileName(file.name);
+    addNotification(
+      "Данные обрабатываются. Пожалуйста подождите, это может занять продолжительное время.",
+      "good",
+      5000
+    );
+    const response = await uploadFileMutation.mutateAsync(file);
+    await addNotification("Данные обработаны", "good", 3000);
+    toggleDownloadOpen()
+    console.log("Response:", response);
   };
   const onDragLeave = (e) => {
     e.preventDefault();
@@ -45,8 +53,8 @@ function UploadFile({addNotification}) {
     setDrop(false);
 
     console.log(e);
-    handleFile(e.target.files[0])
-  }
+    handleFile(e.target.files[0]);
+  };
   return (
     <form
       className="upload-form"
@@ -64,7 +72,13 @@ function UploadFile({addNotification}) {
       >
         {!drop && (
           <>
-            <span className="upload-form__span">{fileName ? uploadFileMutation.isPending ? 'Обработка...' : 'Файл загружен' : 'Загузить файлы'}</span>
+            <span className="upload-form__span">
+              {fileName
+                ? uploadFileMutation.isPending
+                  ? "Обработка..."
+                  : "Файл загружен"
+                : "Загузить файлы"}
+            </span>
             <input
               id="upload-input"
               className="upload-form__input"
@@ -73,7 +87,9 @@ function UploadFile({addNotification}) {
               disabled={uploadFileMutation.isPending}
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             />
-            <span className="upload-form__add-span">{fileName ? fileName : 'Формат .xlxs'}</span>
+            <span className="upload-form__add-span">
+              {fileName ? fileName : "Формат .xlxs"}
+            </span>
           </>
         )}
       </label>
