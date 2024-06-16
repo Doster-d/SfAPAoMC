@@ -96,7 +96,7 @@ async def fetch_information(
 
     if user is None or user.id != user_id:
         return JSONResponse(
-            {"detail": "Для загрузки файла нужно войти в свой аккаунт"},
+            {"detail": "Для получения информации"},
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
@@ -116,3 +116,20 @@ async def fetch_information(
     classificator.classify_company(data)
 
     return classificator.classification
+
+
+@router.get("/information")
+async def fetch_all_information(
+    authorization: Annotated[str, Header()],
+    user_service: Annotated[UserService, Depends(get_user_service)],
+) -> JSONResponse:
+    access_token = authorization.split()[-1]
+    user = await user_service.fetch_by_token(access_token)
+
+    if user is None:
+        return JSONResponse(
+            {"detail": "Для получения информации войти в свой аккаунт"},
+            status_code=status.HTTP_401_UNAUTHORIZED,
+        )
+
+    return OrgClassificator.global_classification
