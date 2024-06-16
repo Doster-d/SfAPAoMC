@@ -1,14 +1,14 @@
 services:
-  test:
-    image: nvidia/cuda:12.3.2-runtime-ubuntu22.04
-    command: nvidia-smi
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [ gpu ]
+#  test:
+#    image: nvidia/cuda:12.3.2-runtime-ubuntu22.04
+#    command: nvidia-smi
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: all
+#              capabilities: [ gpu ]
   postgres:
     container_name: postgres_container
     image: postgres:16.1-alpine3.18
@@ -85,6 +85,21 @@ services:
         limits:
           cpus: '0.5'
           memory: 1G
+    networks:
+      - postgres
+  web:
+    container_name: web_container
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
     networks:
       - postgres
 volumes:
