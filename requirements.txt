@@ -10,3 +10,5 @@ torch
 transformers
 sphinx
 sphinx-autoapi
+rapidfuzz
+python-Levenshtein

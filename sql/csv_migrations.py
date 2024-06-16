@@ -7,18 +7,12 @@ import os
 import re
 from pathlib import Path
 from datetime import datetime
+import csv
 
 _DEFAULT_PROJECT_PATH = Path(__file__).resolve().parents[1]
 
 PROJECT_ROOT = Path(os.getenv('PROJ_ROOT', _DEFAULT_PROJECT_PATH))
 os.chdir(PROJECT_ROOT)
-
-import pandas as pd
-import os
-import re
-from pathlib import Path
-from datetime import datetime
-import csv
 
 
 def split_holders(patent_holder):
@@ -31,9 +25,9 @@ def split_holders(patent_holder):
 
 
 def process_company(
-		path_to_file="MIK/DatabaseOfAllOrganizationsAndIE/DatasetOrg.csv",
+		path_to_file="data/DatabaseOfAllOrganizationsAndIE/DatasetOrg.csv",
 		use_columns=None,
-		save_to="MIK/ProcessedData/DatasetOrg"
+		save_to="data/ProcessedData/DatasetOrg"
 ):
 	if use_columns is None:
 		use_columns = [
@@ -51,11 +45,11 @@ def process_company(
 	chunk_size = 5000000
 	chunk_id = 0
 	for chunk in pd.read_csv(
-    path_to_file,
-    sep=';',
-    chunksize=chunk_size,
-    usecols=use_columns,
-    dtype=dtype):
+			path_to_file,
+			sep=';',
+			chunksize=chunk_size,
+			usecols=use_columns,
+			dtype=dtype):
 		company_data = chunk.rename(columns={
 			'ID компании': 'company_id',
 			'Наименование полное': 'full_name',
@@ -87,24 +81,31 @@ def process_company(
 		company_data['okved'] = company_data['okved'].apply(
 			lambda nid: nid if pd.notna(nid) else None
 		)
-		company_data.to_csv(save_to+str(chunk_id)+".csv", columns = [
-				 'company_id',
-				 'full_name',
-				 'shorten_name',
-				 'okved',
-				 'classification',
-				 'tin',
-				 'psrn',
-				 'is_active_company'
-		], sep=";", quotechar = "'",
-											index=False, na_rep='NULL', quoting=csv.QUOTE_ALL)
+		company_data.to_csv(
+			save_to + str(chunk_id) + ".csv",
+			columns=[
+				'company_id',
+				'full_name',
+				'shorten_name',
+				'okved',
+				'classification',
+				'tin',
+				'psrn',
+				'is_active_company'
+			],
+			sep=";",
+			quotechar="'",
+			index=False,
+			na_rep='NULL',
+			quoting=csv.QUOTE_ALL)
 		chunk_id = chunk_id + 1
 
+
 def process_patent(
-		path_to_file="MIK/PatentDatabaseFromPublicData/POOD.csv",
+		path_to_file="data/PatentDatabaseFromPublicData/POOD.csv",
 		use_columns=None,
 		patent_type='design',
-		save_to="MIK/ProcessedData/POOD.csv"
+		save_to="data/ProcessedData/POOD.csv"
 ):
 	if use_columns is None:
 		use_columns = [
@@ -165,20 +166,23 @@ def process_patent(
 		patent_data = patent_data.rename(columns={
 			'invention name': 'description'
 		})
-	patent_data.to_csv(save_to,
-	                   quotechar = "'",
-	                   index=False,
-										          na_rep='NULL', quoting=csv.QUOTE_ALL)
+	patent_data.to_csv(
+		save_to,
+		quotechar="'",
+		index=False,
+		na_rep='NULL',
+		quoting=csv.QUOTE_ALL
+	)
 
 
 process_patent()
 
-process_patent(path_to_file="MIK/PatentDatabaseFromPublicData/PMOD.csv", use_columns=[
+process_patent(path_to_file="data/PatentDatabaseFromPublicData/PMOD.csv", use_columns=[
 	'registration number', 'registration date', 'authors', 'patent holders', 'actual', 'utility model name'
-], patent_type='model', save_to="MIK/ProcessedData/PMOD.csv")
+], patent_type='model', save_to="data/ProcessedData/PMOD.csv")
 
-process_patent(path_to_file="MIK/PatentDatabaseFromPublicData/inventionsOD.csv", use_columns=[
+process_patent(path_to_file="data/PatentDatabaseFromPublicData/inventionsOD.csv", use_columns=[
 	'registration number', 'registration date', 'authors', 'patent holders', 'actual', 'invention name'
-], patent_type='invention', save_to="MIK/ProcessedData/inventionsOD.csv")
+], patent_type='invention', save_to="data/ProcessedData/inventionsOD.csv")
 
 process_company()

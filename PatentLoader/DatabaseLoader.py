@@ -39,17 +39,20 @@ class DatabaseLoader:
 			'model': """
 			INSERT INTO PATENT_MODEL_HOLDER (patent_id, company_id)
 			VALUES ($1, $2)
+			ON CONFLICT (patent_id, company_id) DO NOTHING;
 			""",
 			'design': """
 			INSERT INTO PATENT_DESIGN_HOLDER (patent_id, company_id)
 			VALUES ($1, $2)
+			ON CONFLICT (patent_id, company_id) DO NOTHING;
 			""",
 			'invention': """
 			INSERT INTO PATENT_INVENTION_HOLDER (patent_id, company_id)
 			VALUES ($1, $2)
+			ON CONFLICT (patent_id, company_id) DO NOTHING;
 			"""
 		}
-		self.mtmgetters = {
+		self.sql_getters = {
 			'model': """
 			SELECT registration_number, authors, patent_holders
 			FROM PATENT_MODEL;
@@ -61,6 +64,23 @@ class DatabaseLoader:
 			'invention': """
 			SELECT registration_number, authors, patent_holders
 			FROM PATENT_INVENTION;
+			"""
+		}
+		self.sql_setters = {
+			'model': """
+			INSERT INTO PATENT_MODEL (registration_number, publish_date, description, authors, patent_holders, is_active)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			ON CONFLICT (registration_number) DO NOTHING;
+			""",
+			'design': """
+			INSERT INTO PATENT_DESIGN (registration_number, publish_date, description, authors, patent_holders, is_active)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			ON CONFLICT (registration_number) DO NOTHING
+			""",
+			'invention': """
+			INSERT INTO PATENT_INVENTION (registration_number, publish_date, description, authors, patent_holders, is_active)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			ON CONFLICT (registration_number) DO NOTHING
 			"""
 		}
 
@@ -106,6 +126,47 @@ class DatabaseLoader:
 			df_chunk = pd.DataFrame(records, columns=['company_id', 'full_name'])
 			yield df_chunk
 			offset += chunk_size
+
+	async def insert_patent_model(self, conn, df: pd.DataFrame, patent_type: str):
+		"""
+		Inserts patent holder data into the database.
+
+		Parameters:
+		conn (asyncpg.Connection): Database connection.
+		df (pd.DataFrame): DataFrame with data to insert.
+		patent_type (str): Type of patent (model, design, invention).
+
+		Returns:
+		None
+		"""
+		query = self.sql_setters[patent_type]
+		async with conn.transaction():
+			for index, row in df.iterrows():
+				if patent_type == 'design':
+					description = row['industrial_design_name']
+				elif patent_type == 'model':
+					description = row['utility_model_name']
+				else:
+					description = row['invention_name']
+				if pd.isna(description):
+					description = "NULL"
+				# (registration_number, publish_date, description, authors, patent_holders, is_active)
+				await conn.execute(
+					query,
+					row['registration_number'],
+					row['registration_date'],
+					description,
+					row['authors'],
+					row['patent_holders'],
+					row['actual']
+				)
+
+	async def insert_patents(self, df: pd.DataFrame, patent_type: str):
+		conn = await asyncpg.connect(
+			user=self.user, password=self.password,
+			database=self.database, host=self.host, port=self.port)
+		await self.insert_patent_model(conn, df, patent_type)
+		await conn.close()
 
 	async def insert_patent_model_holder(self, conn, df: pd.DataFrame, patent_type: str):
 		"""
@@ -169,7 +230,7 @@ class DatabaseLoader:
 		conn = await asyncpg.connect(
 			user=self.user, password=self.password,
 			database=self.database, host=self.host, port=self.port)
-		query = self.mtmgetters[patent_type]
+		query = self.sql_getters[patent_type]
 		records = await conn.fetch(query)
 		await conn.close()
 		return records
