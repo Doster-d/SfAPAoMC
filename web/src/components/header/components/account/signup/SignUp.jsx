@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { signInSchema } from "./models";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSignInMutation } from "../hooks/useSignInMutation";
+import { useSignUpMutation } from "../hooks/useSignUpMutation";
 
 function SignUp({ setIsRegistration, addNotification }) {
   const {
@@ -9,8 +11,10 @@ function SignUp({ setIsRegistration, addNotification }) {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(signInSchema) });
+  const signUpMutation = useSignUpMutation()
   const onSubmit = async (data) => {
     addNotification(JSON.stringify(data), "good", 3000);
+    await signUpMutation.mutateAsync(data)
   };
   return (
     <form

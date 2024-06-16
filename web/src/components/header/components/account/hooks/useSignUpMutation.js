@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { signUp } from "../api/signUp";
 
-export function useSignUnMutation() {
+export function useSignUpMutation() {
     return useMutation({
       mutationFn: async (data) => {
         return await signUp(data);
