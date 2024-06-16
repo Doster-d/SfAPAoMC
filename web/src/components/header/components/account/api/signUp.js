@@ -6,7 +6,7 @@ const signInInstance = axios.create({baseURL: BASE_URL})
 
 
 export async function signUp(data) {
-    return (await signInInstance.post('/api/signin', data))
+    return (await signInInstance.post('/api/signup', data))
 }
 
 
