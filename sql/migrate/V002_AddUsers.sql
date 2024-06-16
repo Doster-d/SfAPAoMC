@@ -7,6 +7,5 @@ CREATE TABLE users (
 
 CREATE TABLE access_tokens (
     token VARCHAR(255) NOT NULL UNIQUE,
-    created_at TIMESTAMP NOT NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 );

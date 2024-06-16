@@ -7,7 +7,7 @@ CREATE TABLE HOLDER_ENTITY (
     classification VARCHAR(255),
     tin BIGSERIAL,
     psrn BIGSERIAL,
-    is_active_company BOOLEAN NOT NULL,
+    is_active_company BOOLEAN NOT NULL
 --     id_of_heir BIGSERIAL,
 --     CONSTRAINT fk_heir FOREIGN KEY (id_of_heir) REFERENCES HOLDER_ENTITY (company_id)
 );

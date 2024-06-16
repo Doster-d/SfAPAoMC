@@ -93,6 +93,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    networks:
+      - postgres
   web:
     container_name: web_container
     build:
