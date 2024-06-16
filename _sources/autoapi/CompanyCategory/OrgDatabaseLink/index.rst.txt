@@ -29,15 +29,18 @@ Module Contents
 
    Methods:
    - __init__: Initialization of connection and classifier parameters.
-   - fetch_holder_entities: Retrieve data of organizations by their ID.
-   - fetch_holder_entities_in_chunks: Fetch organization data by chunks.
+   - fetch_company_entities: Retrieve data of organizations by their ID.
+   - fetch_company_entities_in_chunks: Fetch organization data by chunks.
+   - fetch_holder_entities: Retrieve data of patent holders by offset and limit.
+   - fetch_holder_entities_in_chunks: Fetch patent holder data by chunks.
+   - does_exist_in_holders: Check if a company exists in the patent holders table.
    - process_company: Process company data with its classification.
    - run_process: Start the data processing.
    - insert_classification: Inserting the classification results into the database.
    - update_classification: Updating the classification in the database.
 
 
-   .. py:method:: fetch_holder_entities(company_ids, offset, limit)
+   .. py:method:: fetch_company_entities(company_ids, offset, limit)
       :async:
 
 
@@ -53,7 +56,22 @@ Module Contents
 
 
 
-   .. py:method:: fetch_holder_entities_in_chunks(chunk_size, company_ids)
+   .. py:method:: does_exist_in_holders(company_id, patent_type='all')
+      :async:
+
+
+      Check if a company exists in the patent holders table.
+
+      Parameters:
+      company_id (int): The ID of the company.
+      patent_type (str): Type of patent (default is "all").
+
+      Returns:
+      bool: True if the company exists, False otherwise.
+
+
+
+   .. py:method:: fetch_company_entities_in_chunks(chunk_size, company_ids)
       :async:
 
 
@@ -62,6 +80,37 @@ Module Contents
       Parameters:
       chunk_size (int): The size of the chunk to sample the data.
       company_ids (list): List of company IDs.
+
+      Returns:
+      generator: A DataFrame generator with data of organizations.
+
+
+
+   .. py:method:: fetch_holder_entities(offset, limit, patent_type='design')
+      :async:
+
+
+      Fetches organization data by chunks.
+
+      Parameters:
+      offset (int): Offset for data sampling.
+      limit (int): The limit of the data sample.
+      patent_type (str): Type of patent (default is "design").
+
+      Returns:
+      list: Records from the database.
+
+
+
+   .. py:method:: fetch_holder_entities_in_chunks(chunk_size, patent_type='design')
+      :async:
+
+
+      Fetches organization data in chunks.
+
+      Parameters:
+      chunk_size (int): The size of the chunk to sample the data.
+      patent_type (str): Type of patent (default is "design").
 
       Returns:
       generator: A DataFrame generator with data of organizations.

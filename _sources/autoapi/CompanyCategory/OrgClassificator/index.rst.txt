@@ -1,0 +1,126 @@
+CompanyCategory.OrgClassificator
+================================
+
+.. py:module:: CompanyCategory.OrgClassificator
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   CompanyCategory.OrgClassificator.company_ids
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   CompanyCategory.OrgClassificator.OrgClassificator
+
+
+Module Contents
+---------------
+
+.. py:class:: OrgClassificator
+
+   Class for classifying organizations and patents based on their OKVED descriptions and company data.
+
+   Methods:
+   - __init__: Initializes the OrgClassificator with necessary attributes and links.
+   - reset_classification: Resets the classification dictionary.
+   - reset_global_classification: Resets the global classification dictionary.
+   - classify_companies: Classifies a chunk of company data.
+   - classify_company: Classifies companies based on provided IDs.
+   - classify_patent: Classifies patents by type.
+   - run_process_manual: Runs the classification process for companies manually.
+   - run_process_manual_patents: Runs the classification process for patents manually.
+
+
+   .. py:method:: reset_classification()
+      :async:
+
+
+      Resets the classification dictionary.
+
+
+
+   .. py:method:: reset_global_classification()
+      :async:
+
+
+      Resets the global classification dictionary.
+
+
+
+   .. py:method:: classify_companies(chunk: pandas.DataFrame, patent_type='all', classify_categories=True, target_classifier=None)
+      :async:
+
+
+      Classifies a chunk of company data.
+
+      Parameters:
+      chunk (pd.DataFrame): DataFrame containing a chunk of company data.
+      patent_type (str): Type of patent (default is "all").
+      classify_categories (bool): Whether to classify categories (default is True).
+      target_classifier (dict): Target classifier dictionary (default is None).
+
+
+
+   .. py:method:: classify_company(company_ids, patent_type='all', classify_categories=True, target_classifier=None)
+      :async:
+
+
+      Classifies companies based on provided IDs.
+
+      Parameters:
+      company_ids (list): List of company IDs.
+      patent_type (str): Type of patent (default is "all").
+      classify_categories (bool): Whether to classify categories (default is True).
+      target_classifier (dict): Target classifier dictionary (default is None).
+
+
+
+   .. py:method:: classify_patent(patent_type='design')
+      :async:
+
+
+      Classifies patents by type.
+
+      Parameters:
+      patent_type (str): Type of patent (default is "design").
+
+      Returns:
+      None
+
+
+
+   .. py:method:: run_process_manual(company_ids)
+
+      Runs the classification process for companies manually.
+
+      Parameters:
+      company_ids (list): List of company IDs.
+
+      Returns:
+      None
+
+
+
+   .. py:method:: run_process_manual_patents(patent_ids)
+
+      Runs the classification process for patents manually.
+
+      Parameters:
+      patent_ids (list): List of patent IDs.
+
+      Returns:
+      None
+
+
+
+.. py:data:: company_ids
+   :value: [27245300, 23835322, 23940849, 26473466, 27511281, 27796092, 28742157, 29031331, 30459384,...
+
+

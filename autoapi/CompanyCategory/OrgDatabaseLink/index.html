@@ -14,7 +14,7 @@
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="prev" title="CompanyCategory.OrgCategory" href="../OrgCategory/index.html" />
+    <link rel="prev" title="CompanyCategory.OrgClassificator" href="../OrgClassificator/index.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
@@ -62,15 +62,18 @@
 <dd><p>A class for working with organization database and data classification.</p>
 <p>Methods:
 - __init__: Initialization of connection and classifier parameters.
-- fetch_holder_entities: Retrieve data of organizations by their ID.
-- fetch_holder_entities_in_chunks: Fetch organization data by chunks.
+- fetch_company_entities: Retrieve data of organizations by their ID.
+- fetch_company_entities_in_chunks: Fetch organization data by chunks.
+- fetch_holder_entities: Retrieve data of patent holders by offset and limit.
+- fetch_holder_entities_in_chunks: Fetch patent holder data by chunks.
+- does_exist_in_holders: Check if a company exists in the patent holders table.
 - process_company: Process company data with its classification.
 - run_process: Start the data processing.
 - insert_classification: Inserting the classification results into the database.
 - update_classification: Updating the classification in the database.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_holder_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_company_entities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_company_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_company_entities" title="Link to this definition">¶</a></dt>
 <dd><p>Fetches the data of organizations by their IDs.</p>
 <p>Parameters:
 company_ids (list): List of company IDs.
@@ -81,12 +84,46 @@ list: Records from the database.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities_in_chunks">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_holder_entities_in_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities_in_chunks" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.does_exist_in_holders">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">does_exist_in_holders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.does_exist_in_holders" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a company exists in the patent holders table.</p>
+<p>Parameters:
+company_id (int): The ID of the company.
+patent_type (str): Type of patent (default is “all”).</p>
+<p>Returns:
+bool: True if the company exists, False otherwise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_company_entities_in_chunks">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_company_entities_in_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_company_entities_in_chunks" title="Link to this definition">¶</a></dt>
 <dd><p>Fetches organization data in chunks.</p>
 <p>Parameters:
 chunk_size (int): The size of the chunk to sample the data.
 company_ids (list): List of company IDs.</p>
+<p>Returns:
+generator: A DataFrame generator with data of organizations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_holder_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'design'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities" title="Link to this definition">¶</a></dt>
+<dd><p>Fetches organization data by chunks.</p>
+<p>Parameters:
+offset (int): Offset for data sampling.
+limit (int): The limit of the data sample.
+patent_type (str): Type of patent (default is “design”).</p>
+<p>Returns:
+list: Records from the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities_in_chunks">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_holder_entities_in_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'design'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CompanyCategory.OrgDatabaseLink.OrgDatabaseLink.fetch_holder_entities_in_chunks" title="Link to this definition">¶</a></dt>
+<dd><p>Fetches organization data in chunks.</p>
+<p>Parameters:
+chunk_size (int): The size of the chunk to sample the data.
+patent_type (str): Type of patent (default is “design”).</p>
 <p>Returns:
 generator: A DataFrame generator with data of organizations.</p>
 </dd></dl>
@@ -176,7 +213,7 @@ None</p>
   <li><a href="../../../index.html">Documentation overview</a><ul>
   <li><a href="../../index.html">API Reference</a><ul>
   <li><a href="../index.html">CompanyCategory</a><ul>
-      <li>Previous: <a href="../OrgCategory/index.html" title="previous chapter">CompanyCategory.OrgCategory</a></li>
+      <li>Previous: <a href="../OrgClassificator/index.html" title="previous chapter">CompanyCategory.OrgClassificator</a></li>
   </ul></li>
   </ul></li>
   </ul></li>

@@ -40,26 +40,26 @@ Module Contents
    - _get_embedding: Retrieve embedding for a given text.
    - _classify_organization: Classifying organization based on similarity to category embeddings.
    - __call__: Applying a classifier to a DataFrame with organization data.
-
+   - _edu_final_category: Classifies education-related organizations into more specific categories.
 
    Example Usage:
    import pandas as pd
    from org_category import category_detector
 
    if __name__ == "__main__":
-       df = pd.read_csv(path_to_df)
-       classified_df = category_detector(df)
-       print(classified_df)
+           df = pd.read_csv(path_to_df)
+           classified_df = category_detector(df)
+           print(classified_df)
 
 
    .. py:method:: _get_embedding(text: str) -> torch.Tensor
 
       Gets the embedding for the given text.
 
-      :parameter
+      Parameters:
       text (str): Input text.
 
-      :return
+      Returns:
       torch.Tensor: Embedding of text.
 
 
@@ -73,6 +73,18 @@ Module Contents
 
       Returns:
       str: The name of the most appropriate category.
+
+
+
+   .. py:method:: _edu_final_category(text: str) -> str
+
+      Classifies education-related organizations into more specific categories.
+
+      Parameters:
+      text (str): Description of the organization.
+
+      Returns:
+      str: The name of the specific education-related category.
 
 
 

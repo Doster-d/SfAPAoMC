@@ -11,6 +11,7 @@ Submodules
    :maxdepth: 1
 
    /autoapi/CompanyCategory/OrgCategory/index
+   /autoapi/CompanyCategory/OrgClassificator/index
    /autoapi/CompanyCategory/OrgDatabaseLink/index
 
 

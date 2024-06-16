@@ -14,7 +14,7 @@
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="CompanyCategory.OrgDatabaseLink" href="../OrgDatabaseLink/index.html" />
+    <link rel="next" title="CompanyCategory.OrgClassificator" href="../OrgClassificator/index.html" />
     <link rel="prev" title="CompanyCategory" href="../index.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -80,7 +80,8 @@ Contains settings for tokenizer, models and description of industries.</p>
 - __init__: Initialize tokenizer, model and category embeddings.
 - _get_embedding: Retrieve embedding for a given text.
 - _classify_organization: Classifying organization based on similarity to category embeddings.
-- __call__: Applying a classifier to a DataFrame with organization data.</p>
+- __call__: Applying a classifier to a DataFrame with organization data.
+- _edu_final_category: Classifies education-related organizations into more specific categories.</p>
 <p>Example Usage:
 import pandas as pd
 from org_category import category_detector</p>
@@ -94,9 +95,9 @@ print(classified_df)</p>
 <dt class="sig sig-object py" id="CompanyCategory.OrgCategory.CategoryDetector._get_embedding">
 <span class="sig-name descname"><span class="pre">_get_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#CompanyCategory.OrgCategory.CategoryDetector._get_embedding" title="Link to this definition">¶</a></dt>
 <dd><p>Gets the embedding for the given text.</p>
-<p>:parameter
+<p>Parameters:
 text (str): Input text.</p>
-<p>:return
+<p>Returns:
 torch.Tensor: Embedding of text.</p>
 </dd></dl>
 
@@ -108,6 +109,16 @@ torch.Tensor: Embedding of text.</p>
 text (str): Description of the organization.</p>
 <p>Returns:
 str: The name of the most appropriate category.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CompanyCategory.OrgCategory.CategoryDetector._edu_final_category">
+<span class="sig-name descname"><span class="pre">_edu_final_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#CompanyCategory.OrgCategory.CategoryDetector._edu_final_category" title="Link to this definition">¶</a></dt>
+<dd><p>Classifies education-related organizations into more specific categories.</p>
+<p>Parameters:
+text (str): Description of the organization.</p>
+<p>Returns:
+str: The name of the specific education-related category.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -161,7 +172,7 @@ pd.DataFrame: The updated DataFrame with the classification results.</p>
   <li><a href="../../index.html">API Reference</a><ul>
   <li><a href="../index.html">CompanyCategory</a><ul>
       <li>Previous: <a href="../index.html" title="previous chapter">CompanyCategory</a></li>
-      <li>Next: <a href="../OrgDatabaseLink/index.html" title="next chapter">CompanyCategory.OrgDatabaseLink</a></li>
+      <li>Next: <a href="../OrgClassificator/index.html" title="next chapter">CompanyCategory.OrgClassificator</a></li>
   </ul></li>
   </ul></li>
   </ul></li>
