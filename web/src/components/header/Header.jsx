@@ -34,13 +34,25 @@ function Header() {
             <img src={openNav} alt="" />
           </button>
           <div
+            onClick={(e) => {
+              if(!e.target.closest('.header__navigation')) {
+                toggleMenuOpened();
+              }
+            }}
             className={
               isMenuOpened
                 ? "header__navigation-wrapper header__navigation-wrapper--opened"
                 : "header__navigation-wrapper"
             }
           >
-            <ul ref={navigationRef} className={isMenuOpened ? "header__navigation header__navigation--opened" : "header__navigation"}>
+            <ul
+              ref={navigationRef}
+              className={
+                isMenuOpened
+                  ? "header__navigation header__navigation--opened"
+                  : "header__navigation"
+              }
+            >
               <button
                 onClick={toggleMenuOpened}
                 className="header__close-navigation-btn"

@@ -3,9 +3,10 @@ import AV from "./../../assets/images/mainpage/team__vagulich.png";
 import figma from "./../../assets/images/mainpage/team_figma.svg";
 import js from "./../../assets/images/mainpage/team_js.svg";
 import ai from "./../../assets/images/mainpage/team_ai.svg";
-import fedorov from "./../../assets/images/mainpage/team_fedorov.png";
-import alekseev from "./../../assets/images/mainpage/team_alekseev.png";
+import fedorov from "./../../assets/images/mainpage/team_fedorov-new.jpg";
+import alekseev from "./../../assets/images/mainpage/team_alekseev-new.jpg";
 import savchenko from "./../../assets/images/mainpage/team_savchenko.png";
+import arefev from "./../../assets/images/mainpage/team_arefev.png";
 import gc from "./../../assets/images/mainpage/team_gc.svg";
 import postgre from "./../../assets/images/mainpage/team_postgre.svg";
 import react from "./../../assets/images/mainpage/team_react.svg";
@@ -136,7 +137,7 @@ function TeamSlider() {
             <TeamCard
               avatar={alekseev}
               avatarAlt={"Дмитрий Алексеев"}
-              title={"Дмитрий Алексеев"}
+              title={"Алексеев Дмитрий"}
               position={"ML-инженер"}
               age={"19 лет"}
               description={"бла-бла-бла"}
@@ -164,6 +165,27 @@ function TeamSlider() {
                 ML <br />
                 алгоритмы
               </p>
+            </TeamCard>
+          </SwiperSlide>
+          <SwiperSlide className="team__slide">
+            <TeamCard
+              avatar={arefev}
+              avatarAlt={"Арефев Александр"}
+              title={"Арефев Александр"}
+              position={"ML-инженер"}
+              age={"19 лет"}
+              description={"бла-бла-бла"}
+            >
+              <picture
+                className="image-wrapper team-card__floating-image"
+                style={{ bottom: "118px", right: "200px" }}
+              >
+                <img
+                  src={python}
+                  alt="Python"
+                  className="image-wrapper__image"
+                />
+              </picture>
             </TeamCard>
           </SwiperSlide>
         </Swiper>

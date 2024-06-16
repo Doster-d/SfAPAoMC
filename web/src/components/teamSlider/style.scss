@@ -13,6 +13,11 @@
   }
   &__image {
     position: relative;
+    width: 269px;
+    height: 269px;
+    img {
+      border-radius: 50%;
+    }
     @media (max-width: 767px) {
       width: 200px;
     }
