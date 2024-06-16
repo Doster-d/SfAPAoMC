@@ -69,7 +69,8 @@
       align-items:stretch;
       background-color: #FFFFFF;
       padding: 80px 60px 80px 20px;
-      min-height: 110vh;
+      height: 100vh;
+      overflow-x: hidden;
       gap: 40px;
       transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       &--opened {
