@@ -103,7 +103,7 @@ class DatabaseLoader:
             port=self.port,
         )
         query = f"""
-		SELECT company_id, full_name
+		SELECT company_id, full_name, tin, psrn
 		FROM HOLDER_ENTITY
 		ORDER BY company_id
 		OFFSET {offset} LIMIT {limit};
@@ -127,7 +127,7 @@ class DatabaseLoader:
             records = await self.fetch_holder_entities(offset, chunk_size)
             if not records:
                 break
-            df_chunk = pd.DataFrame(records, columns=["company_id", "full_name"])
+            df_chunk = pd.DataFrame(records, columns=["company_id", "full_name", 'tin', 'psrn'])
             yield df_chunk
             offset += chunk_size
 
