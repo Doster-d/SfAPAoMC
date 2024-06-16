@@ -10,6 +10,6 @@ COPY requirements.txt /app/
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+COPY src /app
 
 CMD ["uvicorn",  "--reload",  "--host", "0.0.0.0",  "--port", "8000", "src.main:api"]

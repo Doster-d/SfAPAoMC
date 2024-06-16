@@ -89,12 +89,14 @@ services:
       - postgres
   api:
     build:
-      context: ./api 
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.api
     ports:
       - "8000:8000"
     networks:
       - postgres
+    volumes:
+      - /app/data:uploaded-files
   web:
     container_name: web_container
     build:
@@ -113,6 +115,7 @@ services:
 volumes:
   patentdb-data:
   pgadmin-data:
+  uploaded-files:
 
 networks:
   postgres:
