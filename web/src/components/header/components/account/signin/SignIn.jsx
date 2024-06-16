@@ -10,10 +10,9 @@ function SignIn({ setIsRegistration, addNotification }) {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(signInSchema) });
-  const signInMutation = useSignInMutation()
+  const signInMutation = useSignInMutation(addNotification);
   const onSubmit = async (data) => {
-    addNotification(JSON.stringify(data), 'good', 3000)
-    await signInMutation.mutateAsync(data)
+    await signInMutation.mutateAsync(data);
   };
   return (
     <form
@@ -57,8 +56,8 @@ function SignIn({ setIsRegistration, addNotification }) {
           <p className="account__error">{errors.password.message}</p>
         )}
       </label>
-      <button className="account__btn" type="submit">
-        Вход
+      <button className="account__btn" type="submit" disabled={signInMutation.isPending}>
+        {signInMutation.isPending ? "Входим" : "Вход"}
       </button>
       <p className="account__text">
         Нет аккаунта?{" "}

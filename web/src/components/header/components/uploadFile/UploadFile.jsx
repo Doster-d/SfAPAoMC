@@ -1,10 +1,14 @@
 import { useState } from "react";
 import "./style.scss";
+import { useForm } from "react-hook-form";
+import { useUploadFileMutation } from "./hooks/useUploadFileMutation";
+import { useNavigate } from "react-router-dom";
 function UploadFile({addNotification}) {
   const [drop, setDrop] = useState(false);
-
   const [fileName, setFileName] = useState(undefined)
-  const handleFile = (file) => {
+  const uploadFileMutation = useUploadFileMutation(addNotification)
+  const navigate = useNavigate()
+  const handleFile = async (file) => {
     console.log(file);
     if(file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
         addNotification("Не правильный тип файла", 'bad', 5000)
@@ -12,11 +16,14 @@ function UploadFile({addNotification}) {
     }
     addNotification("Файл добавлен", 'good', 5000)
     setFileName(file.name)
+    const response = await uploadFileMutation.mutateAsync()
+    addNotification("Данные обрабатываются. Пожалуйста подождите, это может занять продолжительное время.", 'good', 5000)
+    await addNotification('Данные обработаны', 'good', 3000)
+    console.log('Response:', response);
   };
   const onDragLeave = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     setDrop(false);
   };
 
