@@ -12,3 +12,4 @@ sphinx
 sphinx-autoapi
 rapidfuzz
 python-Levenshtein
+FastAPI
