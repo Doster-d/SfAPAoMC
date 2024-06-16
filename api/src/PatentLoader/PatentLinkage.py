@@ -122,8 +122,8 @@ class PatentLinkage:
 		final_df = df.groupby('registration_number')['company_id'].apply(list).reset_index()
 		final_df["tin"] = df.groupby('registration_number')["tin"].apply(list).reset_index()["tin"]
 		final_df["psrn"] = df.groupby('registration_number')["psrn"].apply(list).reset_index()["psrn"]
-		final_df = self.final_df.merge(final_df, on='registration_number', how='left')
 		final_df = final_df.dropna(subset={'company_id'})
+		final_df = self.final_df.merge(final_df, on='registration_number', how='left')
 		final_df["is_multiple_choice"] = final_df.apply(
 			process_row, axis=1
 		)
