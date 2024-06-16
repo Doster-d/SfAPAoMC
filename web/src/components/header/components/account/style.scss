@@ -13,6 +13,9 @@
     flex-direction: column;
     gap: 20px;
   }
+  &__error {
+    color: rgb(243, 59, 59);
+  }
   &__label {
     color: rgb(105, 92, 92);
     font-family: "Geologica";
@@ -37,6 +40,10 @@
     &::placeholder {
       color: rgba(0, 0, 0, 0.7);
     }
+  }
+  &__input--error {
+    border: rgb(243, 59, 59) 1px solid;
+
   }
   &__btn {
     margin-top: 12px;
@@ -88,7 +95,7 @@
     color: rgb(22, 0, 98);
     font-weight: 600;
     &:hover {
-        text-decoration: underline;
+      text-decoration: underline;
     }
   }
 }
