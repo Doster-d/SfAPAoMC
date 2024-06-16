@@ -6,7 +6,8 @@ import UploadFile from "./components/uploadFile/UploadFile";
 import NotificationContainer from "../notification/Notification";
 import useNotifications from "../../hooks/useNotification";
 import Account from "./components/account/Account";
-
+import openNav from './../../assets/images/openMenu.svg'
+import closeNav from './../../assets/images/closeMenu.svg'
 function Header() {
   const [isDownloadOpen, toggleDownloadOpen] = useToggle();
   const {notifications, addNotification, removeNotification} = useNotifications()
@@ -19,7 +20,13 @@ function Header() {
           <picture className="image-wrapper">
             <img src={logo} alt="K1 Logo" className="image-wrapper__image" />
           </picture>
+          <button className="header__open-navigation-btn">
+            <img src={openNav} alt="" />
+          </button>
           <ul className="header__navigation">
+          <button className="header__open-navigation-btn">
+            <img src={openNav} alt="" />
+          </button>
             <li className="header__navigation-item">
               <Link className="header__navigation-text" to={"/"}>Главная</Link>
             </li>
