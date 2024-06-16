@@ -64,12 +64,13 @@ function UploadFile({addNotification}) {
       >
         {!drop && (
           <>
-            <span className="upload-form__span">{fileName ? 'Файл загружен' : 'Загузить файлы'}</span>
+            <span className="upload-form__span">{fileName ? uploadFileMutation.isPending ? 'Обработка...' : 'Файл загружен' : 'Загузить файлы'}</span>
             <input
               id="upload-input"
               className="upload-form__input"
               type="file"
               onChange={handleFileChange}
+              disabled={uploadFileMutation.isPending}
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             />
             <span className="upload-form__add-span">{fileName ? fileName : 'Формат .xlxs'}</span>
