@@ -2,6 +2,8 @@ import traceback
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+
 
 from .auth import router as auth_router
 
@@ -12,6 +14,17 @@ api = FastAPI(
     debug=True,
     docs_url="/api/docs",
     openapi_url="/api/openapi.json",
+)
+origins = [
+    "http://localhost:3000",  # ваш клиентский сервер
+]
+
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

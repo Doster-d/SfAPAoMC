@@ -8,7 +8,7 @@ __all__ = [
     "router",
 ]
 
-router = APIRouter()
+router = APIRouter(prefix="/api")
 
 
 @router.post("/signup")
