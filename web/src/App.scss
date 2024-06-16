@@ -1,0 +1,76 @@
+@import "./assets/reset.css";
+@import "./assets/fonts.css";
+
+body {
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  font-family: "Geologica";
+  background: linear-gradient(
+    90deg,
+    rgb(161, 196, 253),
+    rgb(194, 233, 251) 100%
+  );
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  padding-bottom: 100px;
+
+  &::before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
+    background-image: url("./assets/images/background_lines.svg");
+  }
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: 40px;
+  padding-right: 40px;
+  @media (max-width: 1023px) {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  @media (max-width: 768px) {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.title-h1 {
+  color: #000000;
+  font-family: "Rimma_Sans";
+  font-size: 48px;
+  font-weight: 700;
+  @media (max-width: 1439px) {
+    font-size: 44px;
+  }
+  @media (max-width: 1023px) {
+    font-size: 36px;
+  }
+  @media (max-width: 424px) {
+    font-size: 28px;
+  }
+}
+
+.title-h2 {
+  color: #000000;
+  font-family: "Rimma_Sans";
+  font-size: 40px;
+  font-weight: 700;
+  @media (max-width: 1023px) {
+    font-size: 32px;
+  }
+  @media (max-width: 424px) {
+    font-size: 24px;
+  }
+}

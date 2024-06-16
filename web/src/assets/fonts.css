@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'Rimma_Sans';
+    src: url('./fonts/RIMMA_SANS-BOLD.woff2');
+}
+
+@font-face {
+    font-family: "Geologica";
+    src: url('./fonts/Geologica_Cursive-Regular.woff2');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Geologica";
+    src: url('./fonts/Geologica-Regular.woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: "Geologica Cursive";
+    src: url('./fonts/Geologica_Cursive-Medium.woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geologica";
+    src: url('./fonts/Geologica-Bold.woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geologica";
+    src: url('./fonts/Geologica-SemiBold.woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geologica";
+    src: url('./fonts/Geologica-SemiBold.woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geologica";
+    src: url('./fonts/Geologica-Light.woff2');
+    font-weight: 300;
+    font-style: normal;
+}

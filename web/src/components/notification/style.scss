@@ -1,0 +1,45 @@
+.notification {
+  position: fixed;
+  z-index: 9999;
+  top: 20px;
+  right: 50px;
+  max-width: 400px;
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 10px;
+  background: linear-gradient(
+    62.98deg,
+    rgb(67, 233, 123) 0.192%,
+    rgb(56, 249, 215) 99.835%
+  );
+  font-size: 16px;
+  font-weight: 600;
+
+  letter-spacing: 0%;
+  text-align: center;
+  animation: notifyAnim cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0;
+  &--bad {
+    background: linear-gradient(
+      270deg,
+      rgb(255, 8, 68),
+      rgb(255, 177, 153) 100%
+    );
+  }
+}
+
+@keyframes notifyAnim {
+  0% {
+    top: -50px;
+    opacity: 1;
+  }
+  20% {
+    top: 20px;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
