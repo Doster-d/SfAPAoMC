@@ -44,4 +44,16 @@ async def upload_data(
 
     loader.patent_linker.export_final_dataframe_to_excel(path)
 
-    return JSONResponse({})
+    file_id = await file_service.create(user.id, path)
+
+    data = b""
+    with path.open(mode="br") as fin:
+        data = fin.read()
+
+    return JSONResponse(
+        {
+            "filename": file.filename,
+            "fileId": file_id,
+            "file": data,
+        }
+    )

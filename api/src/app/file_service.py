@@ -23,6 +23,6 @@ class FileService:
 
 
 def get_file_service(
-    con: Annotated[Connection, Depends(get_db_connection)],
+    con: Connection = Depends(get_db_connection),
 ) -> FileService:
     return FileService(con)
