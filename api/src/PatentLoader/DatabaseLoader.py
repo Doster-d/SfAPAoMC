@@ -99,7 +99,7 @@ class DatabaseLoader:
 			user=self.user, password=self.password,
 			database=self.database, host=self.host, port=self.port)
 		query = f"""
-		SELECT company_id, full_name
+		SELECT company_id, full_name, tin, psrn
 		FROM HOLDER_ENTITY
 		ORDER BY company_id
 		OFFSET {offset} LIMIT {limit};
@@ -123,7 +123,7 @@ class DatabaseLoader:
 			records = await self.fetch_holder_entities(offset, chunk_size)
 			if not records:
 				break
-			df_chunk = pd.DataFrame(records, columns=['company_id', 'full_name'])
+			df_chunk = pd.DataFrame(records, columns=['company_id', 'full_name', 'tin', 'psrn'])
 			yield df_chunk
 			offset += chunk_size
 
@@ -261,6 +261,7 @@ class DatabaseLoader:
 		"""
 		loop = asyncio.get_event_loop()
 		self.patents_df = loop.run_until_complete(self.fetch_and_convert_to_df(patent_type))
+		self.patent_linker.load_linkage_df(self.patents_df)
 		self.patent_processor.load_patents(self.patents_df)
 		self.patent_processor.start_process()
 		self.patents_df = self.patent_processor.patents_ids

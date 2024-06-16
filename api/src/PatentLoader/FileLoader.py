@@ -50,6 +50,8 @@ class FileLoader:
 		Parameters:
 		patent_type (str): Type of the patent (default is "design").
 		"""
+		self.patent_processor.start_process()
+		self.patent_linker.load_linkage_df(self.patent_processor.current_patents_dataframe)
 		await self.dataBaseLoader.process_company(self.patent_type)
 
 	async def manual_start(self, file_path: str):
@@ -75,5 +77,5 @@ if __name__ == "__main__":
 	"""
 	a = FileLoader()
 	loop = asyncio.get_event_loop()
-	loop.run_until_complete(a.manual_start("../data/DesignsSmall.xlsx"))
-	a.patent_linker.export_final_dataframe_to_excel("../data/DesignFinal")
+	loop.run_until_complete(a.manual_start("../../../data/DesignsSmall.xlsx"))
+	a.patent_linker.export_final_dataframe_to_excel("../../../data/DesignFinal")

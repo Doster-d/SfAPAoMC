@@ -67,8 +67,8 @@ class PatentProcessor:
 		date_format = "%Y-%m-%d"
 		unix_start_time = datetime.strptime('1970-01-01', date_format)
 		self.current_patents_dataframe.dropna(subset={'registration_number'})
-		self.current_patents_dataframe['patent_holders'].fillna("NULL", inplace=True)
-		self.current_patents_dataframe['authors'].fillna("NULL", inplace=True)
+		self.current_patents_dataframe['patent_holders'].fillna("NULL (CN)", inplace=True)
+		self.current_patents_dataframe['authors'].fillna("NULL (CN)", inplace=True)
 		self.current_patents_dataframe['registration_date'] = self.current_patents_dataframe['registration_date'].apply(
 			lambda date: datetime.strptime(date, date_format) if pd.notna(date) and has_numbers(date) else unix_start_time
 		)

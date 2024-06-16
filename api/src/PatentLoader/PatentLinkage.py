@@ -2,8 +2,14 @@ from PatentLoader import PatentProcessor
 from LinkStrategy.RapidLinkStrategy import RapidLinkStrategy
 import pandas as pd
 import re
+import numpy as np
+import math
 import asyncpg
 import asyncio
+
+
+def process_row(row):
+	return len(row['patent processed']) != len(row['company_id'])
 
 class PatentLinkage:
 	"""
@@ -24,7 +30,6 @@ class PatentLinkage:
 		Initializes the DataFrame attributes.
 		"""
 		self.patent_df = pd.DataFrame()
-		self.linkage_df = pd.DataFrame()
 		self.final_df = pd.DataFrame()
 
 	def clean_name(self, name: str) -> str:
@@ -50,6 +55,15 @@ class PatentLinkage:
 		patent_df (pd.DataFrame): DataFrame containing patent data.
 		"""
 		self.patent_df = patent_df
+
+	def load_linkage_df(self, linkage_df: pd.DataFrame):
+		"""
+		Loads the patent DataFrame.
+
+		Parameters:
+		linkage_df (pd.DataFrame): DataFrame containing full patent data.
+		"""
+		self.final_df = linkage_df
 
 	async def process_rapid_df_linkage(self, df: pd.DataFrame, chunk_df: pd.DataFrame) -> pd.DataFrame:
 		"""
@@ -111,9 +125,10 @@ class PatentLinkage:
 		final_df = df.groupby('registration_number')['company_id'].apply(list).reset_index()
 		final_df["tin"] = df.groupby('registration_number')["tin"].apply(list).reset_index()["tin"]
 		final_df["psrn"] = df.groupby('registration_number')["psrn"].apply(list).reset_index()["psrn"]
-		final_df = self.patent_df.merge(final_df, on='registration_number', how='left')
+		final_df = self.final_df.merge(final_df, on='registration_number', how='left')
+		final_df = final_df.dropna(subset={'company_id', 'patent processed'})
 		final_df["is_multiple_choice"] = final_df.apply(
-			lambda row: len(row['patent_holders']) != len(row['company_id']), axis=1
+			process_row, axis=1
 		)
 		self.final_df = final_df
 

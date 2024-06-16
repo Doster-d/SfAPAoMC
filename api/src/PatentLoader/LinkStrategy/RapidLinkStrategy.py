@@ -36,8 +36,12 @@ class RapidLinkStrategy:
 
 		if matches is not None and len(matches) > 0:
 			row['company_id'] = []
+			row['tin'] = []
+			row['psrn'] = []
 			for match in matches:
 				extracted_row = cleared_company_df.loc[match[2]]
 				row['company_id'].append(extracted_row['company_id'])
+				row['tin'].append(extracted_row['tin'])
+				row['psrn'].append(extracted_row['psrn'])
 
 		return row
