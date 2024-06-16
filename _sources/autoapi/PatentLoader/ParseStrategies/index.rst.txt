@@ -1,0 +1,15 @@
+PatentLoader.ParseStrategies
+============================
+
+.. py:module:: PatentLoader.ParseStrategies
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/PatentLoader/ParseStrategies/StandardParseStrategy/index
+
+

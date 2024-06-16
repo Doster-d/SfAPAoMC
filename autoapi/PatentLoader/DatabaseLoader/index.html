@@ -14,8 +14,8 @@
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="PatentLoader.PatentLinkage" href="../PatentLinkage/index.html" />
-    <link rel="prev" title="PatentLoader" href="../index.html" />
+    <link rel="next" title="PatentLoader.FileLoader" href="../FileLoader/index.html" />
+    <link rel="prev" title="PatentLoader.ParseStrategies.StandardParseStrategy" href="../ParseStrategies/StandardParseStrategy/index.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
@@ -91,6 +91,23 @@ chunk_size (int): Size of each chunk for data selection.</p>
 <p>Returns:
 generator: Generator yielding DataFrame with company data.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.insert_patent_model">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">insert_patent_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.insert_patent_model" title="Link to this definition">¶</a></dt>
+<dd><p>Inserts patent holder data into the database.</p>
+<p>Parameters:
+conn (asyncpg.Connection): Database connection.
+df (pd.DataFrame): DataFrame with data to insert.
+patent_type (str): Type of patent (model, design, invention).</p>
+<p>Returns:
+None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.insert_patents">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">insert_patents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patent_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.DatabaseLoader.DatabaseLoader.insert_patents" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="PatentLoader.DatabaseLoader.DatabaseLoader.insert_patent_model_holder">
@@ -196,8 +213,8 @@ None</p>
   <li><a href="../../../index.html">Documentation overview</a><ul>
   <li><a href="../../index.html">API Reference</a><ul>
   <li><a href="../index.html">PatentLoader</a><ul>
-      <li>Previous: <a href="../index.html" title="previous chapter">PatentLoader</a></li>
-      <li>Next: <a href="../PatentLinkage/index.html" title="next chapter">PatentLoader.PatentLinkage</a></li>
+      <li>Previous: <a href="../ParseStrategies/StandardParseStrategy/index.html" title="previous chapter">PatentLoader.ParseStrategies.StandardParseStrategy</a></li>
+      <li>Next: <a href="../FileLoader/index.html" title="next chapter">PatentLoader.FileLoader</a></li>
   </ul></li>
   </ul></li>
   </ul></li>

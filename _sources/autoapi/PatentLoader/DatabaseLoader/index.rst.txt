@@ -68,6 +68,27 @@ Module Contents
 
 
 
+   .. py:method:: insert_patent_model(conn, df: pandas.DataFrame, patent_type: str)
+      :async:
+
+
+      Inserts patent holder data into the database.
+
+      Parameters:
+      conn (asyncpg.Connection): Database connection.
+      df (pd.DataFrame): DataFrame with data to insert.
+      patent_type (str): Type of patent (model, design, invention).
+
+      Returns:
+      None
+
+
+
+   .. py:method:: insert_patents(df: pandas.DataFrame, patent_type: str)
+      :async:
+
+
+
    .. py:method:: insert_patent_model_holder(conn, df: pandas.DataFrame, patent_type: str)
       :async:
 

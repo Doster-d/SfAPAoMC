@@ -4,6 +4,16 @@ PatentLoader
 .. py:module:: PatentLoader
 
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/PatentLoader/LinkStrategy/index
+   /autoapi/PatentLoader/ParseStrategies/index
+
+
 Submodules
 ----------
 
@@ -11,6 +21,7 @@ Submodules
    :maxdepth: 1
 
    /autoapi/PatentLoader/DatabaseLoader/index
+   /autoapi/PatentLoader/FileLoader/index
    /autoapi/PatentLoader/PatentLinkage/index
    /autoapi/PatentLoader/PatentProcessor/index
 

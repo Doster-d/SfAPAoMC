@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="PatentLoader.PatentProcessor" href="../PatentProcessor/index.html" />
-    <link rel="prev" title="PatentLoader.DatabaseLoader" href="../DatabaseLoader/index.html" />
+    <link rel="prev" title="PatentLoader.FileLoader" href="../FileLoader/index.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
@@ -56,7 +56,13 @@
 - clean_name: Cleans and normalizes the company name.
 - load_patent_df: Loads the patent DataFrame.
 - proceed_chunk: Processes a chunk of company data and links it to patent data.
+- process_rapid_df_linkage: Links patent data to company data using rapid fuzzy matching.
 - extract_tin: Extracts TIN and PSRN and merges them with the patent DataFrame.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PatentLoader.PatentLinkage.PatentLinkage.allow_rapid_linkage">
+<span class="sig-name descname"><span class="pre">allow_rapid_linkage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#PatentLoader.PatentLinkage.PatentLinkage.allow_rapid_linkage" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="PatentLoader.PatentLinkage.PatentLinkage.clean_name">
 <span class="sig-name descname"><span class="pre">clean_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#PatentLoader.PatentLinkage.PatentLinkage.clean_name" title="Link to this definition">¶</a></dt>
@@ -73,6 +79,17 @@ str: The cleaned and normalized company name.</p>
 <dd><p>Loads the patent DataFrame.</p>
 <p>Parameters:
 patent_df (pd.DataFrame): DataFrame containing patent data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PatentLoader.PatentLinkage.PatentLinkage.process_rapid_df_linkage">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_rapid_df_linkage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#PatentLoader.PatentLinkage.PatentLinkage.process_rapid_df_linkage" title="Link to this definition">¶</a></dt>
+<dd><p>Links patent data to company data using rapid fuzzy matching.</p>
+<p>Parameters:
+df (pd.DataFrame): DataFrame with patent data.
+chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.</p>
+<p>Returns:
+pd.DataFrame: DataFrame with linked company and patent data.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -130,7 +147,7 @@ df (pd.DataFrame): DataFrame with linked company and patent data.</p>
   <li><a href="../../../index.html">Documentation overview</a><ul>
   <li><a href="../../index.html">API Reference</a><ul>
   <li><a href="../index.html">PatentLoader</a><ul>
-      <li>Previous: <a href="../DatabaseLoader/index.html" title="previous chapter">PatentLoader.DatabaseLoader</a></li>
+      <li>Previous: <a href="../FileLoader/index.html" title="previous chapter">PatentLoader.FileLoader</a></li>
       <li>Next: <a href="../PatentProcessor/index.html" title="next chapter">PatentLoader.PatentProcessor</a></li>
   </ul></li>
   </ul></li>

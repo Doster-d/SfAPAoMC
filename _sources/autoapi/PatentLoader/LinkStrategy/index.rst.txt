@@ -1,0 +1,15 @@
+PatentLoader.LinkStrategy
+=========================
+
+.. py:module:: PatentLoader.LinkStrategy
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/PatentLoader/LinkStrategy/RapidLinkStrategy/index
+
+

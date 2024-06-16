@@ -1,0 +1,73 @@
+PatentLoader.FileLoader
+=======================
+
+.. py:module:: PatentLoader.FileLoader
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   PatentLoader.FileLoader.a
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   PatentLoader.FileLoader.FileLoader
+
+
+Module Contents
+---------------
+
+.. py:class:: FileLoader
+
+   Class for loading patent data from a file and processing it to link with company data.
+
+   Methods:
+   - __init__: Initializes the FileLoader with instances of DatabaseLoader, PatentProcessor, and PatentLinkage.
+   - load_file: Loads and processes a patent file.
+   - process_file: Processes the loaded patent file to link with company data.
+   - manual_start: Manually starts the process of loading and processing a patent file.
+
+
+   .. py:method:: load_file(file_path: str, patent_type='design')
+      :async:
+
+
+      Loads and processes a patent file.
+
+      Parameters:
+      file_path (str): Path to the patent file.
+      patent_type (str): Type of the patent (default is "design").
+
+
+
+   .. py:method:: process_file(patent_type='design')
+      :async:
+
+
+      Processes the loaded patent file to link with company data.
+
+      Parameters:
+      patent_type (str): Type of the patent (default is "design").
+
+
+
+   .. py:method:: manual_start(file_path: str, patent_type='design')
+      :async:
+
+
+      Manually starts the process of loading and processing a patent file.
+
+      Parameters:
+      file_path (str): Path to the patent file.
+      patent_type (str): Type of the patent (default is "design").
+
+
+
+.. py:data:: a
+

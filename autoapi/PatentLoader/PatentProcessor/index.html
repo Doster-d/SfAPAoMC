@@ -45,8 +45,23 @@
 </tbody>
 </table>
 </section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#PatentLoader.PatentProcessor.has_numbers" title="PatentLoader.PatentProcessor.has_numbers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_numbers</span></code></a>(inputString)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.has_numbers">
+<span class="sig-prename descclassname"><span class="pre">PatentLoader.PatentProcessor.</span></span><span class="sig-name descname"><span class="pre">has_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputString</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.has_numbers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PatentLoader.PatentProcessor.</span></span><span class="sig-name descname"><span class="pre">PatentProcessor</span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor" title="Link to this definition">¶</a></dt>
@@ -55,18 +70,11 @@
 - __init__: Initializes the DataFrame attributes and defines the columns and data types.
 - read_patents: Reads patent data from an Excel file.
 - load_patents: Loads patent data from a DataFrame.
-- apply_replace_strategy: Replaces missing values in a specific column based on an alternate column.
-- lower_text: Converts text to lowercase.
-- find_foreign: Identifies foreign patents based on specific patterns.
-- process_patent_holder: Cleans and normalizes the patent holder text.
-- split_holders: Splits the patent holders string into unique components.
-- remove_parentheses: Removes text within parentheses.
-- remove_spaces: Removes spaces from text.
 - process_design: Processes each row of the DataFrame to clean and normalize patent data.
 - start_process: Starts the processing of the patent DataFrame.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.read_patents">
-<span class="sig-name descname"><span class="pre">read_patents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">read_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.read_patents" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read_patents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">read_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.read_patents" title="Link to this definition">¶</a></dt>
 <dd><p>Reads patent data from an Excel file.</p>
 <p>Parameters:
 read_object: Object representing the Excel file (e.g., file path or file-like object).</p>
@@ -78,78 +86,6 @@ read_object: Object representing the Excel file (e.g., file path or file-like ob
 <dd><p>Loads patent data from a DataFrame.</p>
 <p>Parameters:
 patents_df (pd.DataFrame): DataFrame containing patent data.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.apply_replace_strategy">
-<span class="sig-name descname"><span class="pre">apply_replace_strategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'patent</span> <span class="pre">processed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_alt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'authors'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.apply_replace_strategy" title="Link to this definition">¶</a></dt>
-<dd><p>Replaces missing values in a specific column based on an alternate column.</p>
-<p>Parameters:
-row (pd.Series): Row of data.
-column (str): Column name to check for missing values.
-column_alt (str): Alternate column name to use for replacement.</p>
-<p>Returns:
-Value from the column or alternate column based on the condition.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.lower_text">
-<span class="sig-name descname"><span class="pre">lower_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.lower_text" title="Link to this definition">¶</a></dt>
-<dd><p>Converts text to lowercase.</p>
-<p>Parameters:
-text (str): Input text.</p>
-<p>Returns:
-str: Lowercase text.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.find_foreign">
-<span class="sig-name descname"><span class="pre">find_foreign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.find_foreign" title="Link to this definition">¶</a></dt>
-<dd><p>Identifies foreign patents based on specific patterns.</p>
-<p>Parameters:
-row (pd.Series): Row of data.</p>
-<p>Returns:
-list: List indicating whether each patent holder is foreign.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.process_patent_holder">
-<span class="sig-name descname"><span class="pre">process_patent_holder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.process_patent_holder" title="Link to this definition">¶</a></dt>
-<dd><p>Cleans and normalizes the patent holder text.</p>
-<p>Parameters:
-text (str): Input text.</p>
-<p>Returns:
-str: Cleaned and normalized text.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.split_holders">
-<span class="sig-name descname"><span class="pre">split_holders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patent_holder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.split_holders" title="Link to this definition">¶</a></dt>
-<dd><p>Splits the patent holders string into unique components.</p>
-<p>Parameters:
-patent_holder (str): String of patent holders.</p>
-<p>Returns:
-list: List of unique patent holders.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.remove_parentheses">
-<span class="sig-name descname"><span class="pre">remove_parentheses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.remove_parentheses" title="Link to this definition">¶</a></dt>
-<dd><p>Removes text within parentheses from a list of strings.</p>
-<p>Parameters:
-text (list): List of strings.</p>
-<p>Returns:
-list: List of strings without parentheses.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="PatentLoader.PatentProcessor.PatentProcessor.remove_spaces">
-<span class="sig-name descname"><span class="pre">remove_spaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#PatentLoader.PatentProcessor.PatentProcessor.remove_spaces" title="Link to this definition">¶</a></dt>
-<dd><p>Removes spaces from a list of strings.</p>
-<p>Parameters:
-text (list): List of strings.</p>
-<p>Returns:
-list: List of strings without spaces.</p>
 </dd></dl>
 
 <dl class="py method">

@@ -24,7 +24,13 @@ Module Contents
    - clean_name: Cleans and normalizes the company name.
    - load_patent_df: Loads the patent DataFrame.
    - proceed_chunk: Processes a chunk of company data and links it to patent data.
+   - process_rapid_df_linkage: Links patent data to company data using rapid fuzzy matching.
    - extract_tin: Extracts TIN and PSRN and merges them with the patent DataFrame.
+
+
+   .. py:attribute:: allow_rapid_linkage
+      :value: True
+
 
 
    .. py:method:: clean_name(name: str) -> str
@@ -45,6 +51,21 @@ Module Contents
 
       Parameters:
       patent_df (pd.DataFrame): DataFrame containing patent data.
+
+
+
+   .. py:method:: process_rapid_df_linkage(df: pandas.DataFrame, chunk_df: pandas.DataFrame) -> pandas.DataFrame
+      :async:
+
+
+      Links patent data to company data using rapid fuzzy matching.
+
+      Parameters:
+      df (pd.DataFrame): DataFrame with patent data.
+      chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.
+
+      Returns:
+      pd.DataFrame: DataFrame with linked company and patent data.
 
 
 
