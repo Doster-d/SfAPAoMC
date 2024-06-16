@@ -1,9 +1,6 @@
-from PatentLoader import PatentProcessor
-from LinkStrategy.RapidLinkStrategy import RapidLinkStrategy
+from .LinkStrategy.RapidLinkStrategy import RapidLinkStrategy
 import pandas as pd
 import re
-import asyncpg
-import asyncio
 
 
 class PatentLinkage:
