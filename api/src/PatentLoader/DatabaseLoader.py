@@ -28,8 +28,8 @@ class DatabaseLoader:
         """
         self.chunk_size = 5000000
         self.patents_df = pd.DataFrame()
-        self.port = os.getenv("DB_port", 6432)
-        self.host = os.getenv("DB_address", "127.0.0.1")
+        self.port = os.getenv("DB_port", 5432)
+        self.host = os.getenv("DB_address", "postgres")
         self.user = os.getenv("DB_user", "patentexpertuser")
         self.password = os.getenv("DB_pass", "mycoolpassword123")
         self.database = os.getenv("DB_db", "patentanal")
