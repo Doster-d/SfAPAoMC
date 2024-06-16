@@ -13,3 +13,4 @@ sphinx-autoapi
 rapidfuzz
 python-Levenshtein
 FastAPI
+passlib

@@ -9,7 +9,8 @@ __all__ = [
 
 
 async def get_db_connection() -> AsyncGenerator[Connection, None]:
-    async with connect(
+    con = await connect(
         host=PG_HOST, port=PG_PORT, user=PG_USER, database=PG_DATABASE, password=PG_PASS
-    ) as con:
-        yield con
+    )
+    yield con
+    # await con.close()

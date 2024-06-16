@@ -1,3 +1,5 @@
+import traceback
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -17,8 +19,8 @@ async def catch_exceptions_middleware(request: Request, call_next):
     try:
         return await call_next(request)
     except Exception as e:
-        print(e)
-        return JSONResponse({"detail": "Internal server error"}, status_code=500)
+        print(f"EXCEPTIOn={traceback.format_exc()}")
+        return JSONResponse({"detail": "Что-то пошло не так"}, status_code=500)
 
 
 api.middleware("http")(catch_exceptions_middleware)
