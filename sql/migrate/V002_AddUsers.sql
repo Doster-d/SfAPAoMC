@@ -12,6 +12,6 @@ CREATE TABLE access_tokens (
 
 CREATE TABLE processed_files (
     id BIGSERIAL PRIMARY KEY,
-    user_id BIGINT REFERENCES user(id) ON DELETE CASCADE,
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     path TEXT NOT NULL
 )
