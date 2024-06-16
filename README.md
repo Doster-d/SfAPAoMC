@@ -8,7 +8,7 @@
 
 ## Процедура запуска
 
-Запуск Docker - ```docker-compose --project-name="SfAPAoMC" up -d```
+Запуск Docker - ```docker-compose --project-name="SfAPAoMC" up -d --build```
 
 ## Загрузка базы по ЮЛ, ФЛ и ИП.
 
