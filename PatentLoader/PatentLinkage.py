@@ -1,9 +1,9 @@
 from PatentLoader import PatentProcessor
+from LinkStrategy.RapidLinkStrategy import RapidLinkStrategy
 import pandas as pd
 import re
 import asyncpg
 import asyncio
-
 
 class PatentLinkage:
 	"""
@@ -14,8 +14,10 @@ class PatentLinkage:
 	- clean_name: Cleans and normalizes the company name.
 	- load_patent_df: Loads the patent DataFrame.
 	- proceed_chunk: Processes a chunk of company data and links it to patent data.
+	- process_rapid_df_linkage: Links patent data to company data using rapid fuzzy matching.
 	- extract_tin: Extracts TIN and PSRN and merges them with the patent DataFrame.
 	"""
+	allow_rapid_linkage = True
 
 	def __init__(self):
 		"""
@@ -49,6 +51,28 @@ class PatentLinkage:
 		"""
 		self.patent_df = patent_df
 
+	async def process_rapid_df_linkage(self, df: pd.DataFrame, chunk_df: pd.DataFrame) -> pd.DataFrame:
+		"""
+		Links patent data to company data using rapid fuzzy matching.
+
+		Parameters:
+		df (pd.DataFrame): DataFrame with patent data.
+		chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.
+
+		Returns:
+		pd.DataFrame: DataFrame with linked company and patent data.
+		"""
+		cleared = chunk_df[
+			~chunk_df['company_id'].isin(
+				df[df['company_id'].notna()]['company_id'].to_list()
+			)
+		]
+		return df.apply(
+			RapidLinkStrategy().process_row,
+			axis=1,
+			args=(cleared,)
+		)
+
 	async def proceed_chunk(self, chunk_df: pd.DataFrame) -> pd.DataFrame:
 		"""
 		Processes a chunk of company data and links it to patent data.
@@ -70,6 +94,8 @@ class PatentLinkage:
 			right_on='full_name',
 			how='left'
 		)
+		if self.allow_rapid_linkage:
+			df = await self.process_rapid_df_linkage(df, chunk_df)
 		del df['full_name']
 		df = df.dropna(subset=['company_id', 'registration_number'])
 		return df
