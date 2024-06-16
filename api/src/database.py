@@ -13,4 +13,4 @@ async def get_db_connection() -> AsyncGenerator[Connection, None]:
         host=PG_HOST, port=PG_PORT, user=PG_USER, database=PG_DATABASE, password=PG_PASS
     )
     yield con
-    # await con.close()
+    await con.close()
