@@ -87,6 +87,14 @@ services:
           memory: 1G
     networks:
       - postgres
+  api:
+    build:
+      context: ./api 
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - postgres
   web:
     container_name: web_container
     build:
