@@ -12,9 +12,9 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUserData (state, action) {
-            state.username = action.payload.username
-            state.accessToken = action.payload.accessToken
-            state.userId = action.payload.userId
+            state.username = action.payload.username ? action.payload?.username : ''
+            state.accessToken = action.payload.accessToken ? action.payload?.accessToken : ''
+            state.userId = action.payload.userId ? action.payload?.userId : null
         },
         clearUserData(state) {
             state.username = ''

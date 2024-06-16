@@ -9,10 +9,12 @@ import Account from "./components/account/Account";
 import openNav from "./../../assets/images/openMenu.svg";
 import closeNav from "./../../assets/images/closeMenu.svg";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
 function Header() {
   const [isDownloadOpen, toggleDownloadOpen] = useToggle();
   const { notifications, addNotification, removeNotification } =
     useNotifications();
+  const { userId, username } = useSelector((state) => state.user);
   const [isAccountOpen, toggleAccountOpen] = useToggle();
   const [isMenuOpened, toggleMenuOpened] = useToggle();
   const navigationRef = useRef();
@@ -35,7 +37,7 @@ function Header() {
           </button>
           <div
             onClick={(e) => {
-              if(!e.target.closest('.header__navigation')) {
+              if (!e.target.closest(".header__navigation")) {
                 toggleMenuOpened();
               }
             }}
@@ -64,17 +66,19 @@ function Header() {
                   Главная
                 </Link>
               </li>
-              <li className="header__navigation-item">
-                <button
-                  onClick={toggleDownloadOpen}
-                  className="header__navigation-text"
-                >
-                  Использовать сейчас
-                </button>
-                {isDownloadOpen && (
-                  <UploadFile addNotification={addNotification} />
-                )}
-              </li>
+              {userId && (
+                <li className="header__navigation-item">
+                  <button
+                    onClick={toggleDownloadOpen}
+                    className="header__navigation-text"
+                  >
+                    Использовать сейчас
+                  </button>
+                  {isDownloadOpen && (
+                    <UploadFile addNotification={addNotification} />
+                  )}
+                </li>
+              )}
               <li className="header__navigation-item">
                 <button
                   onClick={toggleAccountOpen}

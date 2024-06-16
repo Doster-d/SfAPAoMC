@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 from .auth import router as auth_router
-
+from .app import router as app_router
 
 api = FastAPI(
     prefix="/api",
@@ -21,7 +21,7 @@ origins = [
 
 api.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins="*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,5 +37,5 @@ async def catch_exceptions_middleware(request: Request, call_next):
 
 
 api.middleware("http")(catch_exceptions_middleware)
-# api.include_router(api_router)
+api.include_router(app_router)
 api.include_router(auth_router)

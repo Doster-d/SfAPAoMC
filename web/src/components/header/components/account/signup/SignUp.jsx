@@ -11,10 +11,12 @@ function SignUp({ setIsRegistration, addNotification }) {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(signInSchema) });
-  const signUpMutation = useSignUpMutation()
+  const signUpMutation = useSignUpMutation(addNotification)
   const onSubmit = async (data) => {
-    addNotification(JSON.stringify(data), "good", 3000);
     await signUpMutation.mutateAsync(data)
+    if(signUpMutation.isSuccess) {
+      setIsRegistration(false)
+    }
   };
   return (
     <form
@@ -74,8 +76,8 @@ function SignUp({ setIsRegistration, addNotification }) {
           <p className="account__error">{errors.password.message}</p>
         )}
       </label>
-      <button className="account__btn" type="submit">
-        Зарегистрироваться
+      <button className="account__btn" type="submit" disabled={signUpMutation.isPending}>
+        {signUpMutation.isPending ? 'Регистрируемся' : 'Зарегистрироваться'}
       </button>
       <p className="account__text">
         Уже есть аккаунт?
