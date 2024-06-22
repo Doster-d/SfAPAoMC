@@ -16,7 +16,7 @@ export function useUploadFileMutation(addNotification) {
         },
         onSuccess: async (data) => {
             addNotification(`Файл ${data.data.filename} обработан`, 'good', 3000)
-            const response = await downloadFile(accessToken, userId, data.data.fileId)
+            const response = await downloadFile(data.data.fileId)
             navigate(`/file/${data.data.fileId}`)
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement('a');

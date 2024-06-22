@@ -3,8 +3,9 @@ import { optionsPie } from "./models";
 import { useEffect } from "react";
 
 function TablePie({ series }) {
+  const sum = series[0] + series[1] + series[2] + 1;
   useEffect(() => {
-    if(window.outerWidth < 1024) {
+    if (window.outerWidth < 1024) {
       window.dispatchEvent(new Event("resize"));
     }
   }, []);
@@ -27,18 +28,24 @@ function TablePie({ series }) {
         <tbody>
           <tr className="charts__table-row">
             <td className="charts__table-cell">Юридическое лицо</td>
-            <td className="charts__table-cell">28</td>
-            <td className="charts__table-cell">62.5%</td>
+            <td className="charts__table-cell">{series[0]}</td>
+            <td className="charts__table-cell">
+              {(series[0] / sum).toFixed(2) * 100}%
+            </td>
           </tr>
           <tr className="charts__table-row">
             <td className="charts__table-cell">Инд.предприниматель</td>
-            <td className="charts__table-cell">12</td>
-            <td className="charts__table-cell">25%</td>
+            <td className="charts__table-cell">{series[1]}</td>
+            <td className="charts__table-cell">
+              {(series[1] / sum).toFixed(2) * 100}%
+            </td>
           </tr>
           <tr className="charts__table-row">
             <td className="charts__table-cell">Физическое лицо</td>
-            <td className="charts__table-cell">6</td>
-            <td className="charts__table-cell">12.5%</td>
+            <td className="charts__table-cell">{series[2]}</td>
+            <td className="charts__table-cell">
+              {(series[2] / sum).toFixed(2) * 100}%
+            </td>
           </tr>
         </tbody>
       </table>

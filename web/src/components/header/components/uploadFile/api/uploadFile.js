@@ -4,6 +4,9 @@ import { BASE_URL } from "../../../../../const";
 const uploadFileInstance = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "multipart/form-data" },
+  onUploadProgress: function (progressEvent) {
+    console.log(progressEvent);
+  },
 });
 
 export async function uploadFile(file, accessToken, userId) {

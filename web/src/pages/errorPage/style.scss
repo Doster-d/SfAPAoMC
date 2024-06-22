@@ -1,0 +1,50 @@
+.error-page {
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+  @media (max-width: 767px) {
+    gap: 30px;
+  }
+  &__text {
+    text-align: center;
+    font-size: 64px;
+    @media (max-width: 1439px) {
+      font-size: 48px;
+    }
+    @media (max-width: 767px) {
+      font-size: 36px;
+    }
+    @media (max-width: 424px) {
+        font-size: 28px;
+    }
+  }
+  &__central-text {
+    display: flex;
+    align-items: center;
+    font-size: 96px;
+    gap: 12px;
+    @media (max-width: 1439px) {
+      font-size: 64px;
+    }
+    @media (max-width: 767px) {
+      font-size: 48px;
+    }
+    @media (max-width: 424px) {
+        font-size: 36px;
+    }
+  }
+  &__image {
+    @media (max-width: 1439px) {
+      width: 120px;
+    }
+    @media (max-width: 767px) {
+      width: 100px;
+    }
+    @media (max-width: 424px) {
+        width: 70px;
+    }
+  }
+}

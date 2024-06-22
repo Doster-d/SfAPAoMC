@@ -1,3 +1,4 @@
+from uuid import uuid4
 from typing import Annotated
 from pathlib import Path
 
@@ -16,6 +17,12 @@ __all__ = [
 
 router = APIRouter(prefix="/api")
 
+singleton_instance = OrgClassificator()
+
+
+def get_classificator() -> OrgClassificator:
+    return singleton_instance
+
 
 @router.post("/upload/{user_id}")
 async def upload_data(
@@ -24,6 +31,7 @@ async def upload_data(
     authorization: Annotated[str, Header()],
     user_service: Annotated[UserService, Depends(get_user_service)],
     file_service: Annotated[FileService, Depends(get_file_service)],
+    classificator: Annotated[OrgClassificator, Depends(get_classificator)],
 ) -> JSONResponse:
     access_token = authorization.split()[-1]
     user = await user_service.fetch_by_token(access_token)
@@ -34,7 +42,7 @@ async def upload_data(
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
-    path = Path(f"/data/uploaded/{user.username}/{file.filename}")
+    path = Path(f"/data/uploaded/{str(uuid4())}_{file.filename}")
     path.parent.mkdir(exist_ok=True, parents=True)
     path.touch()
     with path.open(mode="bw") as fout:
@@ -42,8 +50,19 @@ async def upload_data(
 
     loader = FileLoader()
     await loader.load_file(str(path))
+    await loader.process_file()
 
     loader.patent_linker.export_final_dataframe_to_excel(path)
+
+    data = classificator.get_company_ids_from_excel(path)
+    await classificator.classify_company(
+        data,
+        classify_categories=False,
+        target_classifier=classificator.global_classification[
+            loader.patent_processor.patent_type
+        ],
+    )
+    await classificator.classify_company(data)
 
     file_id = await file_service.create(user.id, str(path))
 
@@ -55,23 +74,11 @@ async def upload_data(
     )
 
 
-@router.get("/download/{user_id}/{file_id}")
+@router.get("/download/{file_id}")
 async def download_data(
-    user_id: int,
     file_id: int,
-    authorization: Annotated[str, Header()],
-    user_service: Annotated[UserService, Depends(get_user_service)],
     file_service: Annotated[FileService, Depends(get_file_service)],
 ) -> Response:
-    access_token = authorization.split()[-1]
-    user = await user_service.fetch_by_token(access_token)
-
-    if user is None or user.id != user_id:
-        return JSONResponse(
-            {"detail": "Для загрузки файла нужно войти в свой аккаунт"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-
     file = await file_service.fetch_by_id(file_id)
 
     if file is None:
@@ -83,23 +90,12 @@ async def download_data(
     return FileResponse(file.path)
 
 
-@router.get("/information/{user_id}/{file_id}")
+@router.get("/information/{file_id}")
 async def fetch_information(
-    user_id: int,
     file_id: int,
-    authorization: Annotated[str, Header()],
-    user_service: Annotated[UserService, Depends(get_user_service)],
     file_service: Annotated[FileService, Depends(get_file_service)],
+    classificator: Annotated[OrgClassificator, Depends(get_classificator)],
 ) -> JSONResponse:
-    access_token = authorization.split()[-1]
-    user = await user_service.fetch_by_token(access_token)
-
-    if user is None or user.id != user_id:
-        return JSONResponse(
-            {"detail": "Для получения информации"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-
     file = await file_service.fetch_by_id(file_id)
 
     if file is None:
@@ -108,28 +104,11 @@ async def fetch_information(
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    classificator = OrgClassificator()
-    loader = FileLoader()
-    await loader.load_file(file.path)
-
-    data = loader.patent_processor.patents_ids["company_id"].to_list()
-    classificator.classify_company(data)
-
     return classificator.classification
 
 
 @router.get("/information")
 async def fetch_all_information(
-    authorization: Annotated[str, Header()],
-    user_service: Annotated[UserService, Depends(get_user_service)],
+    classificator: Annotated[OrgClassificator, Depends(get_classificator)],
 ) -> JSONResponse:
-    access_token = authorization.split()[-1]
-    user = await user_service.fetch_by_token(access_token)
-
-    if user is None:
-        return JSONResponse(
-            {"detail": "Для получения информации войти в свой аккаунт"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-
-    return OrgClassificator.global_classification
+    return classificator.global_classification

@@ -15,13 +15,20 @@ import fastApi from "./../../assets/images/mainpage/team_fastAPI.svg";
 import "./style.scss";
 import TeamCard from "./components/teamCard/TeamCard";
 import { Autoplay, Navigation } from "swiper/modules";
-import 'swiper/scss/navigation';
+import "swiper/scss/navigation";
 function TeamSlider() {
   return (
     <section className="team">
       <div className="container">
         <h2 className="title-h2 team__title">Команда</h2>
-        <Swiper spaceBetween={150} modules={[Navigation, Autoplay]} autoplay={{delay: 3000, disableOnInteraction: true, }} speed={1000} navigation className="team__swiper">
+        <Swiper
+          spaceBetween={150}
+          modules={[Navigation, Autoplay]}
+          autoplay={{ delay: 3000, disableOnInteraction: true }}
+          speed={1000}
+          navigation
+          className="team__swiper"
+        >
           <SwiperSlide className="team__slide">
             <TeamCard
               avatar={AV}
@@ -64,7 +71,7 @@ function TeamSlider() {
               title={"Федоров Александр"}
               position={"Фронтендер"}
               age={"20 лет"}
-              description={"бла-бла-бла"}
+              description={"Фронтенд разработчик на втором курсе РТУ МИРЭА"}
             >
               <picture
                 className="image-wrapper team-card__floating-image"
@@ -140,7 +147,9 @@ function TeamSlider() {
               title={"Алексеев Дмитрий"}
               position={"ML-инженер"}
               age={"19 лет"}
-              description={"бла-бла-бла"}
+              description={
+                "Onyxbay maintainer, закончил ЦК по применении ИИ в прикладных задачах"
+              }
             >
               <picture
                 className="image-wrapper team-card__floating-image"
@@ -173,7 +182,7 @@ function TeamSlider() {
               avatarAlt={"Арефев Александр"}
               title={"Арефев Александр"}
               position={"ML-инженер"}
-              age={"19 лет"}
+              age={"20 лет"}
               description={"бла-бла-бла"}
             >
               <picture
