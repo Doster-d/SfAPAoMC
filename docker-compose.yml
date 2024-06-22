@@ -1,14 +1,26 @@
 services:
-#  test:
-#    image: nvidia/cuda:12.3.2-runtime-ubuntu22.04
-#    command: nvidia-smi
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-#            - driver: nvidia
-#              count: all
-#              capabilities: [ gpu ]
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - postgres
+    volumes:
+      - ./uploaded-files:/app/data
+      - ./api:/app
+      - api-cache:/root/.cache
+    environment:
+      USE_NOT_ML: 0
+      chunk_size: 16000000
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
   postgres:
     container_name: postgres_container
     image: postgres:16.1-alpine3.18
@@ -87,16 +99,6 @@ services:
           memory: 1G
     networks:
       - postgres
-  api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    networks:
-      - postgres
-    volumes:
-      - uploaded-files:/app/data
   web:
     container_name: web_container
     build:
@@ -116,6 +118,7 @@ volumes:
   patentdb-data:
   pgadmin-data:
   uploaded-files:
+  api-cache:
 
 networks:
   postgres:
