@@ -75,4 +75,4 @@ if __name__ == "__main__":
     a = FileLoader()
     loop = asyncio.get_event_loop()
     loop.run_until_complete(a.manual_start("../../../data/DesignsSmall.xlsx"))
-    a.patent_linker.export_final_dataframe_to_excel("../../../data/DesignFinal")
+    a.patent_linker.export_final_dataframe_to_excel("../../../data/DesignFinal.xlsx")

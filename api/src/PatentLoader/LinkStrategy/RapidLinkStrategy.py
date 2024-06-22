@@ -1,3 +1,7 @@
+try:
+	import cudf.pandas
+except ImportError:
+	pass
 import pandas as pd
 import numpy as np
 from rapidfuzz import process, utils
@@ -32,10 +36,10 @@ class RapidLinkStrategy:
 			score_cutoff=93,
 		)
 
+		row['company_id'] = []
+		row['tin'] = []
+		row['psrn'] = []
 		if matches is not None and len(matches) > 0:
-			row['company_id'] = []
-			row['tin'] = []
-			row['psrn'] = []
 			for match in matches:
 				extracted_row = cleared_company_df.loc[match[2]]
 				row['company_id'].append(extracted_row['company_id'])

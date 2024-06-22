@@ -1,4 +1,8 @@
 from .LinkStrategy.RapidLinkStrategy import RapidLinkStrategy
+try:
+    import cudf.pandas
+except ImportError:
+    pass
 import pandas as pd
 import re
 import numpy as np
@@ -8,8 +12,10 @@ import asyncio
 
 
 def process_row(row):
-	return len(row['patent processed']) != len(row['company_id'])
-
+	try:
+		return len(row['patent processed']) != len(row['company_id'])
+	except TypeError:
+		return True
 
 class PatentLinkage:
 	"""
@@ -114,16 +120,17 @@ class PatentLinkage:
 
 	def extract_tin(self, df: pd.DataFrame):
 		"""
-        Extracts TIN and PSRN and merges them with the patent DataFrame.
+		Extracts TIN and PSRN and merges them with the patent DataFrame.
 
-        Parameters:
-        df (pd.DataFrame): DataFrame with linked company and patent data.
-        """
+		Parameters:
+		df (pd.DataFrame): DataFrame with linked company and patent data.
+		"""
 		final_df = df.groupby('registration_number')['company_id'].apply(list).reset_index()
 		final_df["tin"] = df.groupby('registration_number')["tin"].apply(list).reset_index()["tin"]
 		final_df["psrn"] = df.groupby('registration_number')["psrn"].apply(list).reset_index()["psrn"]
-		final_df = final_df.dropna(subset={'company_id'})
 		final_df = self.final_df.merge(final_df, on='registration_number', how='left')
+		if 'company_id' not in final_df.columns.to_list():
+			return
 		final_df["is_multiple_choice"] = final_df.apply(
 			process_row, axis=1
 		)

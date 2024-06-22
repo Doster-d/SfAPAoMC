@@ -1,4 +1,8 @@
 import re
+try:
+	import cudf.pandas
+except ImportError:
+	pass
 import pandas as pd
 
 
