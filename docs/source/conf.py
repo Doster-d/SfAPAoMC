@@ -18,7 +18,7 @@ release = '0.1.0'
 
 extensions = ['autoapi.extension']
 
-autoapi_dirs = ['../../CompanyCategory', '../../PatentLoader', '../../web/src', '../../api/src']
+autoapi_dirs = ['../../api/src/CompanyCategory', '../../api/src/PatentLoader', '../../web/src', '../../api/src']
 
 templates_path = ['_templates']
 exclude_patterns = []
