@@ -342,20 +342,19 @@ class OrgClassificator:
 	        "model": {
 	            "count": counts["model"]["count"],
 	            "count_found": counts["model"]["count_found"],
-		        "patent_holders": {"LE": 0, "PE": 0, "IE": 0}
+		        "patent_holders": counts["model"]["patent_holders"]
 	        },
 	        "design": {
 	            "count": counts["design"]["count"],
 	            "count_found": counts["design"]["count_found"],
-		        "patent_holders": {"LE": 0, "PE": 0, "IE": 0}
+		        "patent_holders": counts["design"]["patent_holders"]
 	        },
 	        "invention": {
 	            "count": counts["invention"]["count"],
 	            "count_found": counts["invention"]["count_found"],
-		        "patent_holders": {"LE": 0, "PE": 0, "IE": 0}
+		        "patent_holders": counts["invention"]["patent_holders"]
 	        },
         }
-		await self.link.fetch_companies_full_names_by_patent_type(self.count_company, global_classification)
 		logging.info('finish get_global_classification')
 		return global_classification
 

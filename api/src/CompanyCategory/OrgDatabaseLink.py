@@ -106,44 +106,6 @@ class OrgDatabaseLink:
 				await count_company_func(record['full_name'], global_classification[patent_type])
 			offset += chunk_size
 
-	async def fetch_companies_full_names_by_patent_type(self, count_company_func, global_classification,
-	                                                    chunk_size=int(os.getenv("chunk_size", '500000'))):
-		conn = await asyncpg.connect(
-			user=self.user,
-			password=self.password,
-			database=self.database,
-			host=self.host,
-			port=self.port,
-		)
-		queries = {
-			"model": """
-	            SELECT he.full_name
-	            FROM HOLDER_ENTITY he
-	            JOIN PATENT_MODEL_HOLDER pmh ON he.company_id = pmh.company_id
-	            LIMIT $1 OFFSET $2;
-	        """,
-			"design": """
-	            SELECT he.full_name
-	            FROM HOLDER_ENTITY he
-	            JOIN PATENT_DESIGN_HOLDER pdh ON he.company_id = pdh.company_id
-	            LIMIT $1 OFFSET $2;
-	        """,
-			"invention": """
-	            SELECT he.full_name
-	            FROM HOLDER_ENTITY he
-	            JOIN PATENT_INVENTION_HOLDER pih ON he.company_id = pih.company_id
-	            LIMIT $1 OFFSET $2;
-	        """
-		}
-
-		await self.fetch_patent_chunks(queries["model"], conn, count_company_func, global_classification, "model",
-		                          chunk_size)
-		await self.fetch_patent_chunks(queries["design"], conn, count_company_func, global_classification, "design",
-		                          chunk_size)
-		await self.fetch_patent_chunks(queries["invention"], conn, count_company_func, global_classification,
-		                               "invention", chunk_size)
-		await conn.close()
-
 	async def fetch_patent_info(self):
 		logging.info("Starting fetch_patent_info function")
 		conn = await asyncpg.connect(
@@ -156,23 +118,47 @@ class OrgDatabaseLink:
 		QUERIES = {
 			"model": {
 				"count": "SELECT COUNT(*) FROM PATENT_MODEL;",
-				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_MODEL_HOLDER;"
+				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_MODEL_HOLDER;",
+				"class_counts": """
+		            SELECT classification, COUNT(DISTINCT pmh.patent_id) AS count
+		            FROM HOLDER_ENTITY he 
+		            JOIN PATENT_MODEL_HOLDER pmh ON he.company_id = pmh.company_id 
+		            GROUP BY classification;
+		        """
 			},
 			"invention": {
 				"count": "SELECT COUNT(*) FROM PATENT_INVENTION;",
-				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_INVENTION_HOLDER;"
+				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_INVENTION_HOLDER;",
+				"class_counts": """
+		            SELECT classification, COUNT(DISTINCT pih.patent_id) AS count
+		            FROM HOLDER_ENTITY he 
+		            JOIN PATENT_INVENTION_HOLDER pih ON he.company_id = pih.company_id 
+		            GROUP BY classification;
+		        """
 			},
 			"design": {
 				"count": "SELECT COUNT(*) FROM PATENT_DESIGN;",
-				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_DESIGN_HOLDER;"
+				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_DESIGN_HOLDER;",
+				"class_counts": """
+		            SELECT classification, COUNT(DISTINCT pdh.patent_id) AS count
+		            FROM HOLDER_ENTITY he 
+		            JOIN PATENT_DESIGN_HOLDER pdh ON he.company_id = pdh.company_id 
+		            GROUP BY classification;
+		        """
 			}
 		}
 		results = {}
 		for key, q_dict in QUERIES.items():
 			results[key] = {}
 			for label, query in q_dict.items():
-				result = await conn.fetchval(query)
-				results[key][label] = result
+				if label == "class_counts":
+					class_counts = await conn.fetch(query)
+					results[key]["patent_holders"] = {"LE": 0, "PE": 0, "IE": 0}
+					for record in class_counts:
+						results[key]["patent_holders"][record['classification']] = record['count']
+				else:
+					result = await conn.fetchval(query)
+					results[key][label] = result
 		await conn.close()
 		logging.info("Completed fetch_patent_info function")
 		return results
