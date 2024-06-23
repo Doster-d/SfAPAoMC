@@ -201,10 +201,11 @@ async def fetch_files_ids(
         }
     )
 
+
 @router.get("/files-info")
 async def fetch_files_info(
-    page: int = 0,
     file_service: Annotated[FileService, Depends(get_file_service)],
+    page: int = 0,
 ) -> JSONResponse:
     return JSONResponse(
         {
