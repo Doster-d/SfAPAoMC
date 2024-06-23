@@ -13,10 +13,10 @@ from icecream import ic
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def update_category_count(row, categories):
-	category = row["okved"]
+def update_category_count(row, categories:dict):
+	category = row["classification"]
 	ic(category)
-	if category in categories:
+	if categories.get(category) is not None:
 		categories[category] += 1
 	return row
 
@@ -313,10 +313,11 @@ class OrgClassificator:
 				classification["design"]["count"] += 1
 				classification["invention"]["count"] += 1
 				# print(f"Company ID {company_id} is not found in any patent types")
-			data_df = self.link.category_detector(
-				data_df, okvd_column_name="okved", new_column_name="classification"
-			)
-			data_df.apply(update_category_count, axis=1, categories=classification["general_classification"])
+		data_df = self.link.category_detector(
+			data_df, okvd_column_name="okved", new_column_name="classification"
+		)
+		ic(data_df)
+		data_df.apply(update_category_count, axis=1, categories=classification["general_classification"])
 		logging.info("Completed classify_companies_by_tin_data")
 		return classification
 
