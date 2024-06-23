@@ -66,6 +66,11 @@ function Mainpage() {
           <h2 className="title-h2 charts__title">
             {isError ? "ПРОИЗОШЛА ОШИБКА ПРИ ГЕНЕРАЦИИ" : "ОБЩАЯ СТАТИСТИКА"}
           </h2>
+          <p className="main-banner__tip">
+            Для просмотра дополнительной статистики по каждой категории нажмите на трек
+            конкретной категории.
+          </p>
+
           {isPending ? (
             <LocalLoader />
           ) : (
@@ -75,24 +80,24 @@ function Mainpage() {
                   handleBarSelection={handleBarSelection}
                   series={[
                     (
-                      generalData?.data.model.count /
-                      (generalData?.data.model.count +
-                        generalData?.data.design.count +
-                        generalData?.data.invention.count +
+                      generalData?.data?.model?.count /
+                      (generalData?.data?.model?.count +
+                        generalData?.data?.design?.count +
+                        generalData?.data?.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                     (
-                      generalData?.data.design.count /
-                      (generalData?.data.model.count +
-                        generalData?.data.design.count +
-                        generalData?.data.invention.count +
+                      generalData?.data?.design?.count /
+                      (generalData?.data?.model?.count +
+                        generalData?.data?.design?.count +
+                        generalData?.data?.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                     (
-                      generalData?.data.invention.count /
-                      (generalData?.data.model.count +
-                        generalData?.data.design.count +
-                        generalData?.data.invention.count +
+                      generalData?.data?.invention?.count /
+                      (generalData?.data?.model?.count +
+                        generalData?.data?.design?.count +
+                        generalData?.data?.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                   ]}

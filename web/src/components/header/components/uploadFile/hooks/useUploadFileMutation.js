@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { uploadFile } from "../api/uploadFile";
 import { useSelector, useDispatch } from "react-redux";
-import { downloadFile } from "../api/downloadFile";
+import { downloadFile } from "../../../../../api/downloadFile";
 import { useNavigate } from "react-router-dom";
 import { addNewNotification } from "../../../../../setup/store/reducers/notificationSlice";
 import { NOTIFICATION_BAD, NOTIFICATION_GOOD } from "../../../../../const";

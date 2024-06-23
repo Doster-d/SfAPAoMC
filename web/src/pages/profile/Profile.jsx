@@ -16,7 +16,7 @@ export function loader() {
   return null;
 }
 function Profile() {
-  const { username } = useSelector((state) => state.user);
+  const { username, email } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logOutHandle = () => {
@@ -71,7 +71,7 @@ function Profile() {
             </div>
             <div className="profile__addition-info-item">
               <p className="profile__item-name">Электронная почта</p>
-              <p className="profile__item-info">example@example.com</p>
+              <p className="profile__item-info">{email}</p>
             </div>
           </section>
         </div>

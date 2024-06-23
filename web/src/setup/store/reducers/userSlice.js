@@ -4,6 +4,7 @@ const initialState = {
   username: "",
   accessToken: "",
   userId: null,
+  email: ''
 };
 
 export const userSlice = createSlice({
@@ -16,11 +17,13 @@ export const userSlice = createSlice({
         ? action.payload?.accessToken
         : "";
       state.userId = action.payload.userId ? action.payload?.userId : null;
+      state.email = action.payload.email ? action.payload?.email : null
     },
     clearUserData(state) {
       state.username = "";
       state.accessToken = "";
       state.userId = null;
+      state.email = ''
     },
   },
 });
