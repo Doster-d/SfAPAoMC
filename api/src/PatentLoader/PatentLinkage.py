@@ -1,8 +1,8 @@
 from .LinkStrategy.RapidLinkStrategy import RapidLinkStrategy
 try:
-    import cudf.pandas
+	import cudf.pandas
 except ImportError:
-    pass
+	pass
 import pandas as pd
 import re
 import numpy as np
@@ -10,6 +10,23 @@ import math
 import asyncpg
 import asyncio
 
+def trim_list_tin(row):
+	if type(row['patent processed']) == list and type(row['tin']) == list:
+		return row['tin'][:len(row['patent processed'])]
+	else:
+		return row
+
+def trim_list_psrn(row):
+	if type(row['patent processed']) == list and type(row['psrn']) == list:
+		return row['psrn'][:len(row['patent processed'])]
+	else:
+		return row
+
+def trim_list_id(row):
+	if type(row['patent processed']) == list and type(row['company_id']) == list:
+		return row['company_id'][:len(row['patent processed'])]
+	else:
+		return row
 
 def process_row(row):
 	try:
@@ -19,37 +36,37 @@ def process_row(row):
 
 class PatentLinkage:
 	"""
-    Class for linking patent data with company data.
+	Class for linking patent data with company data.
 
-    Methods:
-    - __init__: Initializes the DataFrame attributes.
-    - clean_name: Cleans and normalizes the company name.
-    - load_patent_df: Loads the patent DataFrame.
-    - proceed_chunk: Processes a chunk of company data and links it to patent data.
-    - process_rapid_df_linkage: Links patent data to company data using rapid fuzzy matching.
-    - extract_tin: Extracts TIN and PSRN and merges them with the patent DataFrame.
-    """
+	Methods:
+	- __init__: Initializes the DataFrame attributes.
+	- clean_name: Cleans and normalizes the company name.
+	- load_patent_df: Loads the patent DataFrame.
+	- proceed_chunk: Processes a chunk of company data and links it to patent data.
+	- process_rapid_df_linkage: Links patent data to company data using rapid fuzzy matching.
+	- extract_tin: Extracts TIN and PSRN and merges them with the patent DataFrame.
+	"""
 
 	allow_rapid_linkage = True
 
 	def __init__(self):
 		"""
-        Initializes the DataFrame attributes.
-        """
+		Initializes the DataFrame attributes.
+		"""
 		self.patent_df = pd.DataFrame()
 		self.linkage_df = pd.DataFrame()
 		self.final_df = pd.DataFrame()
 
 	def clean_name(self, name: str) -> str:
 		"""
-        Cleans and normalizes the company name.
+		Cleans and normalizes the company name.
 
-        Parameters:
-        name (str): The name of the company.
+		Parameters:
+		name (str): The name of the company.
 
-        Returns:
-        str: The cleaned and normalized company name.
-        """
+		Returns:
+		str: The cleaned and normalized company name.
+		"""
 		name = name.replace(" ", "")
 		name = re.sub(r'[«»"]+', "", name)
 		name = re.sub(r"\([^)]*\)", "", name)
@@ -57,11 +74,11 @@ class PatentLinkage:
 
 	def load_patent_df(self, patent_df: pd.DataFrame):
 		"""
-        Loads the patent DataFrame.
+		Loads the patent DataFrame.
 
-        Parameters:
-        patent_df (pd.DataFrame): DataFrame containing patent data.
-        """
+		Parameters:
+		patent_df (pd.DataFrame): DataFrame containing patent data.
+		"""
 		self.patent_df = patent_df
 
 	def load_linkage_df(self, linkage_df: pd.DataFrame):
@@ -77,15 +94,15 @@ class PatentLinkage:
 			self, df: pd.DataFrame, chunk_df: pd.DataFrame
 	) -> pd.DataFrame:
 		"""
-        Links patent data to company data using rapid fuzzy matching.
+		Links patent data to company data using rapid fuzzy matching.
 
-        Parameters:
-        df (pd.DataFrame): DataFrame with patent data.
-        chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.
+		Parameters:
+		df (pd.DataFrame): DataFrame with patent data.
+		chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.
 
-        Returns:
-        pd.DataFrame: DataFrame with linked company and patent data.
-        """
+		Returns:
+		pd.DataFrame: DataFrame with linked company and patent data.
+		"""
 		cleared = chunk_df[
 			~chunk_df["company_id"].isin(
 				df[df["company_id"].notna()]["company_id"].to_list()
@@ -95,14 +112,14 @@ class PatentLinkage:
 
 	async def proceed_chunk(self, chunk_df: pd.DataFrame) -> pd.DataFrame:
 		"""
-        Processes a chunk of company data and links it to patent data.
+		Processes a chunk of company data and links it to patent data.
 
-        Parameters:
-        chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.
+		Parameters:
+		chunk_df (pd.DataFrame): DataFrame containing a chunk of company data.
 
-        Returns:
-        pd.DataFrame: DataFrame with linked company and patent data.
-        """
+		Returns:
+		pd.DataFrame: DataFrame with linked company and patent data.
+		"""
 		company_df = chunk_df
 		company_df["full_name"] = company_df["full_name"].str.lower()
 		company_df = company_df.dropna(subset=["full_name", "company_id"])
@@ -134,6 +151,9 @@ class PatentLinkage:
 		final_df["is_multiple_choice"] = final_df.apply(
 			process_row, axis=1
 		)
+		final_df['tin'] = final_df.apply(trim_list_tin, axis=1)
+		final_df['psrn'] = final_df.apply(trim_list_psrn, axis=1)
+		final_df['company_id'] = final_df.apply(trim_list_psrn, axis=1)
 		self.final_df = final_df
 
 	def export_final_dataframe_to_excel(self, filepath):
