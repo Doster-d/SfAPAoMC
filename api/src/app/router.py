@@ -111,8 +111,10 @@ async def upload_tin_data(
     with path.open(mode="bw") as fout:
         fout.write(await file.read())
 
-    data = classificator.get_company_data_from_excel_tin(path)
-    classification = classificator.classify_companies_by_tin_data(data)
+    data = await classificator.get_company_data_from_excel_tin(path)
+    ic(data)
+    classification = await classificator.classify_companies_by_tin_data(data)
+    ic(classification)
 
     file_id = await file_service.create(
         user.id,
