@@ -1,21 +1,20 @@
 import { useForm } from "react-hook-form";
-import { signInSchema } from "./models";
+import { signUpSchema } from "./models";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSignInMutation } from "../hooks/useSignInMutation";
 import { useSignUpMutation } from "../hooks/useSignUpMutation";
 
-function SignUp({ setIsRegistration, addNotification }) {
+function SignUp({ setIsRegistration }) {
   const {
     register,
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(signInSchema) });
-  const signUpMutation = useSignUpMutation(addNotification)
+  } = useForm({ resolver: yupResolver(signUpSchema) });
+  const signUpMutation = useSignUpMutation();
   const onSubmit = async (data) => {
-    await signUpMutation.mutateAsync(data)
-    if(signUpMutation.isSuccess) {
-      setIsRegistration(false)
+    await signUpMutation.mutateAsync(data);
+    if (signUpMutation.isSuccess) {
+      setIsRegistration(false);
     }
   };
   return (
@@ -24,6 +23,23 @@ function SignUp({ setIsRegistration, addNotification }) {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
+      <label htmlFor="email" className="account__label">
+        Электронная почта
+        <input
+          type="email"
+          name="email"
+          className={
+            errors.email
+              ? "account__input account__input--error"
+              : "account__input"
+          }
+          placeholder="Email"
+          {...register("email")}
+        />
+        {errors.email && (
+          <p className="account__error">{errors.email.message}</p>
+        )}
+      </label>
       <label htmlFor="username" className="account__label">
         Имя пользователя
         <input
@@ -42,23 +58,7 @@ function SignUp({ setIsRegistration, addNotification }) {
           <p className="account__error">{errors.username.message}</p>
         )}
       </label>
-      <label htmlFor="email" className="account__label">
-        Электронная почта
-        <input
-          type="email"
-          name="email"
-          className={
-            errors.email
-              ? "account__input account__input--error"
-              : "account__input"
-          }
-          placeholder="Email"
-          {...register("email")}
-        />
-        {errors.email && (
-          <p className="account__error">{errors.email.message}</p>
-        )}
-      </label>
+
       <label htmlFor="password" className="account__label">
         Пароль
         <input
@@ -76,8 +76,12 @@ function SignUp({ setIsRegistration, addNotification }) {
           <p className="account__error">{errors.password.message}</p>
         )}
       </label>
-      <button className="account__btn" type="submit" disabled={signUpMutation.isPending}>
-        {signUpMutation.isPending ? 'Регистрируемся' : 'Зарегистрироваться'}
+      <button
+        className="account__btn"
+        type="submit"
+        disabled={signUpMutation.isPending}
+      >
+        {signUpMutation.isPending ? "Регистрируемся" : "Зарегистрироваться"}
       </button>
       <p className="account__text">
         Уже есть аккаунт?

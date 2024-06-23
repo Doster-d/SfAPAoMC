@@ -44,7 +44,6 @@ function Mainpage() {
               Решение кейса “Сервис анализа патентной активности компаний
               Москвы”
             </h1>
-            <Link className="main-banner__button">Кнопка для чего-то</Link>
           </div>
         </section>
         <TeamSlider />

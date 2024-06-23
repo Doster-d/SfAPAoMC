@@ -18,7 +18,7 @@
   }
   &__label {
     color: rgb(105, 92, 92);
-    font-family: "Geologica";
+    font-family: "Geologica", Geneva, Verdana, sans-serif;
     font-style: italic;
     font-size: 14px;
     font-weight: 400;
@@ -31,7 +31,7 @@
     padding: 13px 10px 15px;
     border-radius: 10px;
     border: #000000 1px solid;
-    font-family: "Geologica";
+    font-family: "Geologica", Geneva, Verdana, sans-serif;
     font-size: 16px;
     font-style: italic;
     font-weight: 400;
@@ -43,7 +43,6 @@
   }
   &__input--error {
     border: rgb(243, 59, 59) 1px solid;
-
   }
   &__btn {
     margin-top: 12px;

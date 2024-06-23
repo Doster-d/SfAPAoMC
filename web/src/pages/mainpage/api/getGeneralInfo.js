@@ -1,8 +1,9 @@
 import axios from "axios";
-import { BASE_URL } from "../../../const";
 
-const getGeneralInfoInstance = axios.create({baseURL:BASE_URL})
+const getGeneralInfoInstance = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+});
 
 export async function getGeneralInfo() {
-    return (await getGeneralInfoInstance.get('/api/information'))
+  return await getGeneralInfoInstance.get("/api/information");
 }

@@ -10,7 +10,7 @@ const Notification = ({ message, duration, onClose, type }) => {
   }, [duration, onClose]);
 
   return (
-    <div style={{animationDuration: `${duration}ms`}} className={type === 'good' ? 'notification' : 'notification notification--bad'}>
+    <div style={{animationDuration: `${duration}ms`}} className={type ? 'notification' : 'notification notification--bad'}>
       {message}
     </div>
   );

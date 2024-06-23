@@ -3,14 +3,14 @@ import { signInSchema } from "./models";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSignInMutation } from "../hooks/useSignInMutation";
 
-function SignIn({ setIsRegistration, addNotification }) {
+function SignIn({ setIsRegistration}) {
   const {
     register,
     setError,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(signInSchema) });
-  const signInMutation = useSignInMutation(addNotification);
+  const signInMutation = useSignInMutation();
   const onSubmit = async (data) => {
     await signInMutation.mutateAsync(data);
   };

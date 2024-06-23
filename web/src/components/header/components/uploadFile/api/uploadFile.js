@@ -1,8 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "../../../../../const";
 
 const uploadFileInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   headers: { "Content-Type": "multipart/form-data" },
   onUploadProgress: function (progressEvent) {
     console.log(progressEvent);

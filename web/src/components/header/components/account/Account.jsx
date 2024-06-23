@@ -5,7 +5,7 @@ import SignUp from "./signup/SignUp";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUserData } from "../../../../setup/store/reducers/userSlice";
 
-function Account({ addNotification }) {
+function Account() {
   const [isRegistration, setIsRegistration] = useState(false);
   const { userId } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -27,12 +27,10 @@ function Account({ addNotification }) {
         </button>
       ) : isRegistration ? (
         <SignUp
-          addNotification={addNotification}
           setIsRegistration={setIsRegistration}
         />
       ) : (
         <SignIn
-          addNotification={addNotification}
           setIsRegistration={setIsRegistration}
         />
       )}
