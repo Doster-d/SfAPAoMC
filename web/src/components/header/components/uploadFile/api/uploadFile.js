@@ -12,7 +12,7 @@ export async function uploadFile(file, accessToken, userId) {
   const formData = new FormData();
   formData.append("file", file);
   console.log(file, formData);
-  return await uploadFileInstance.post(`/api/upload/${userId}`, formData, {
+  return await uploadFileInstance.post(`/api/upload_tin/${userId}`, formData, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 }
