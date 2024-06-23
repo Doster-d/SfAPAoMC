@@ -3,7 +3,7 @@ services:
     image: ngrok/ngrok:alpine
     env_file:
       - .ngrok.env
-    command: ["http", "proxy:80", "--domain", "honestly-assured-wildcat.ngrok-free.app"]
+    command: ["http", "proxy:80", "--domain", "cobra-sincere-grouper.ngrok-free.app"]
     networks:
       - postgres
       
