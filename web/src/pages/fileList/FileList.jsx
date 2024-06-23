@@ -30,7 +30,7 @@ function FileList() {
             <tbody>
               {filesQuery.data?.pages.map((group, index) => (
                 <Fragment key={index}>
-                  {group.map((file) => (
+                  {group?.map((file) => (
                     <tr className="file-table__row">
                       <td className="file-table__column">{file.id}</td>
                       <td className="file-table__column">{file.fileName}</td>
