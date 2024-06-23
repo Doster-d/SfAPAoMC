@@ -1,8 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { signUp } from "../api/signUp";
 import { useDispatch } from "react-redux";
-import { addNewNotification } from "../../../../../setup/store/reducers/notificationSlice";
-import { NOTIFICATION_BAD, NOTIFICATION_GOOD } from "../../../../../const";
+import { NOTIFICATION_BAD, NOTIFICATION_GOOD } from "../../../const";
+import { addNewNotification } from "../../../setup/store/reducers/notificationSlice";
+import { signUp } from "../api/signUp";
+
 
 export function useSignUpMutation() {
   const dispatch = useDispatch();

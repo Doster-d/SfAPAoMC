@@ -1,20 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "./../../assets/images/mainpage/header_logo.svg";
 import "./style.scss";
 import { useToggle } from "../../hooks/useToggle";
 import UploadFile from "./components/uploadFile/UploadFile";
 import NotificationContainer from "../notification/Notification";
 import useNotifications from "../../hooks/useNotification";
-import Account from "./components/account/Account";
 import openNav from "./../../assets/images/openMenu.svg";
 import closeNav from "./../../assets/images/closeMenu.svg";
 import { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewNotification } from "../../setup/store/reducers/notificationSlice";
+import { NOTIFICATION_BAD } from "../../const";
 function Header() {
   const dispatch = useDispatch();
   const [isDownloadOpen, toggleDownloadOpen] = useToggle();
   const { newNotification } = useSelector((state) => state.notification);
+  const navigate = useNavigate()
   const { notifications, addNotification, removeNotification } =
     useNotifications();
   useEffect(() => {
@@ -28,7 +29,6 @@ function Header() {
     }
   }, [newNotification]);
   const { userId } = useSelector((state) => state.user);
-  const [isAccountOpen, toggleAccountOpen] = useToggle();
   const [isMenuOpened, toggleMenuOpened] = useToggle();
   const navigationRef = useRef();
   return (
@@ -81,7 +81,15 @@ function Header() {
               </li>
               <li className="header__navigation-item">
                 <button
-                  onClick={toggleDownloadOpen}
+                  onClick={() => {
+                    if (userId) {
+                      toggleDownloadOpen();
+                    }
+                    else {
+                      addNotification('Необходимо войти в аккаунт', NOTIFICATION_BAD,  3000)
+                      navigate('/signin')
+                    }
+                  }}
                   className="header__navigation-text"
                 >
                   Использовать сейчас
@@ -91,13 +99,12 @@ function Header() {
                 )}
               </li>
               <li className="header__navigation-item">
-                <button
-                  onClick={toggleAccountOpen}
+                <Link
+                  to={userId ? "/profile" : "/signin"}
                   className="header__navigation-text"
                 >
                   Личный кабинет
-                </button>
-                {isAccountOpen && <Account addNotification={addNotification} />}
+                </Link>
               </li>
             </ul>
           </div>

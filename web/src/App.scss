@@ -6,7 +6,7 @@ body {
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
-  font-family: "Geologica" , Geneva, Verdana, sans-serif;
+  font-family: "Geologica", Geneva, Verdana, sans-serif;
   background: linear-gradient(
     90deg,
     rgb(161, 196, 253),
@@ -30,6 +30,12 @@ body {
     background-size: cover;
     background-image: url("./assets/images/background_lines.svg");
   }
+}
+
+#root {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
@@ -73,5 +79,161 @@ body {
   }
   @media (max-width: 424px) {
     font-size: 24px;
+  }
+}
+
+.title-h3 {
+  color: #000000;
+  font-family: "Rimma_Sans", Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  @media (max-width: 1023px) {
+    font-size: 20px;
+  }
+  @media (max-width: 424px) {
+    font-size: 18px;
+  }
+}
+.auth {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  &__container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @media (max-width: 1023px) {
+      margin-top: 50px;
+      flex-direction: column;
+    }
+  }
+  &__title {
+    max-width: 688px;
+    @media (max-width: 1023px) {
+      display: none;
+    }
+  }
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
+  max-width: 470px;
+  width: 100%;
+  &__error {
+    position: absolute;
+    bottom: -18px;
+    left: 9px;
+    color: rgb(243, 59, 59);
+  }
+  &__title {
+    text-align: center;
+  }
+  &__label {
+    color: rgb(105, 92, 92);
+    font-family: "Geologica", Geneva, Verdana, sans-serif;
+    font-style: italic;
+    position: relative;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: -1px;
+    &::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 14px;
+    }
+  }
+  &__input {
+    width: 100%;
+    color: #000;
+    padding: 12px 0px 12px 48px;
+    border-radius: 10px;
+    border: #000000 2px solid;
+    font-family: "Geologica", Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: -1px;
+    text-align: left;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+  &__input--error {
+    border: rgb(243, 59, 59) 2px solid;
+  }
+  &__input-password::after {
+    background-image: url("./assets/images/auth/auth_pass.svg");
+  }
+  &__input-email::after {
+    background-image: url("./assets/images/auth/auth_mail.svg");
+  }
+  &__input-username::after {
+    background-image: url("./assets/images/auth/auth_user.svg");
+  }
+  &__btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 11px 10px 17px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+    /* green_grad */
+    background: linear-gradient(
+      62.98deg,
+      rgb(67, 233, 123) 0.314%,
+      rgb(56, 249, 215) 99.73%
+    );
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0%;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    @media (hover: hover) {
+      &:hover {
+        font-size: 18px;
+      }
+    }
+  }
+  &__text {
+    color: rgb(13, 14, 14);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: -1px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+  &__link {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: rgb(22, 0, 98);
+    font-weight: 600;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

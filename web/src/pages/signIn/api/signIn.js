@@ -1,4 +1,4 @@
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 
 const signInInstance = axios.create({baseURL: import.meta.env.VITE_BASE_URL})

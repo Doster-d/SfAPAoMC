@@ -19,6 +19,7 @@ function Mainpage() {
       event.target.parentElement.attributes.seriesName ||
       event.target.attributes.selected
     ) {
+      
       if (event.target.attributes.selected?.value === "true") {
         setBarSelected(event.target.parentElement.attributes.seriesName?.value);
       } else {
@@ -65,19 +66,19 @@ function Mainpage() {
                       generalData?.data.model.count /
                       (generalData?.data.model.count +
                         generalData?.data.design.count +
-                        generalData?.data.invention.count)
+                        generalData?.data.invention.count + 1)
                     ).toFixed(2) * 100,
                     (
                       generalData?.data.design.count /
                       (generalData?.data.model.count +
                         generalData?.data.design.count +
-                        generalData?.data.invention.count)
+                        generalData?.data.invention.count + 1)
                     ).toFixed(2) * 100,
                     (
                       generalData?.data.invention.count /
                       (generalData?.data.model.count +
                         generalData?.data.design.count +
-                        generalData?.data.invention.count)
+                        generalData?.data.invention.count + 1)
                     ).toFixed(2) * 100,
                   ]}
                 />
