@@ -76,7 +76,7 @@ class PatentProcessor:
 			lambda date: datetime.strptime(date, date_format) if pd.notna(date) and has_numbers(date) else unix_start_time
         )
         self.current_patents_dataframe['actual'] = self.current_patents_dataframe['actual'].apply(
-			lambda state: state if pd.notna(state) else False
+			lambda state: state == "true" if pd.notna(state) else False
         )
 
     def load_patents(self, patents_df: pd.DataFrame):
