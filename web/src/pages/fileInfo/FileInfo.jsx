@@ -74,32 +74,54 @@ function FileInfo() {
             <div className="file-info__charts">
               <div className="file-info__charts-row">
                 <MultiRadialBar
-                  series={[30, 30, 30]}
+                  series={[
+                    (
+                      fileData?.data.model.count /
+                      (fileData?.data.model.count +
+                        fileData?.data.design.count +
+                        fileData?.data.invention.count +
+                        0.0001)
+                    ).toFixed(2) * 100,
+                    (
+                      fileData?.data.design.count /
+                      (fileData?.data.model.count +
+                        fileData?.data.design.count +
+                        fileData?.data.invention.count +
+                        0.0001)
+                    ).toFixed(2) * 100,
+                    (
+                      fileData?.data.invention.count /
+                      (fileData?.data.model.count +
+                        fileData?.data.design.count +
+                        fileData?.data.invention.count +
+                        0.0001)
+                    ).toFixed(2) * 100,
+                  ]}
                   handleBarSelection={handleBarSelection}
                 />
                 {barSelected === "Модель" ? (
                   <TablePie
                     series={[
-                      fileData?.data.patent_holders.LE,
-                      fileData?.data.patent_holders.IE,
-                      fileData?.data.patent_holders.PE,
+                      fileData?.data.model.patent_holders.LE,
+                      fileData?.data.model.patent_holders.IE,
+                      fileData?.data.model.patent_holders.PE,
                     ]}
                   />
                 ) : barSelected === "Образец" ? (
                   <TablePie
                     series={[
-                      fileData?.data.patent_holders.LE,
-                      fileData?.data.patent_holders.IE,
-                      fileData?.data.patent_holders.PE,
+                      fileData?.data.design.patent_holders.LE,
+                      fileData?.data.design.patent_holders.IE,
+                      fileData?.data.design.patent_holders.PE,
                     ]}
                   />
                 ) : (
                   barSelected === "Изобретение" && (
                     <TablePie
                       series={[
-                        fileData?.data.patent_holders.LE,
-                        fileData?.data.patent_holders.IE,
-                        fileData?.data.patent_holders.PE,
+                        fileData?.data.invention.patent_holders.LE,
+                        fileData?.data.invention.patent_holders.IE,
+                        fileData?.data.invention.patent_holders.PE,
                       ]}
                     />
                   )
@@ -112,8 +134,8 @@ function FileInfo() {
                     series={[
                       Math.round(
                         (
-                          fileData?.data.count_found /
-                          (fileData?.data.count + 0.0001)
+                          fileData?.data.model.count_found /
+                          (fileData?.data.model.count + 0.0001)
                         ).toFixed(2) * 100
                       ),
                     ]}
@@ -123,8 +145,8 @@ function FileInfo() {
                     series={[
                       Math.round(
                         (
-                          fileData?.data.count_found /
-                          (fileData?.data.count + 0.0001)
+                          fileData?.data.design.count_found /
+                          (fileData?.data.design.count + 0.0001)
                         ).toFixed(2) * 100
                       ),
                     ]}
@@ -135,8 +157,8 @@ function FileInfo() {
                       series={[
                         Math.round(
                           (
-                            fileData?.data.count_found /
-                            (fileData?.data.count + 0.0001)
+                            fileData?.data.invention.count_found /
+                            (fileData?.data.invention.count + 0.0001)
                           ).toFixed(2) * 100
                         ),
                       ]}
