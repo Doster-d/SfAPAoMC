@@ -21,17 +21,15 @@ class FileService:
             user_id: int,
             path: str,
             file_type: str,
-            file_name: str,
-            file_author: str,
             patent_type=None,
             classification_json="{}"
     ) -> int:
         query = """
-        INSERT INTO processed_files(user_id, path, file_name, file_author, file_type, patent_type, patent_classification_json)
-        VALUES($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO processed_files(user_id, path, file_type, patent_type, patent_classification_json)
+        VALUES($1, $2, $3, $4, $5)
         RETURNING ID
         """
-        return await self._con.fetchval(query, user_id, path, file_name, file_author, file_type, patent_type,
+        return await self._con.fetchval(query, user_id, path, file_type, patent_type,
                                         classification_json)
 
     async def fetch_by_id(self, file_id: int) -> ProcessedFile | None:

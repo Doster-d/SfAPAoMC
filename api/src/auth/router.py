@@ -55,6 +55,7 @@ async def login_user(
 
     return LoginUserResult(
         username=user.username,
+        email=user.email,
         accessToken=token,
         userId=user.id,
     )

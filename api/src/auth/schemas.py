@@ -22,3 +22,4 @@ class LoginUserResult(BaseModel):
     userId: int
     accessToken: str
     username: str
+    email: str

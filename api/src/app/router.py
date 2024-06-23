@@ -74,8 +74,6 @@ async def upload_data(
         user.id,
         str(path),
         "Patent",
-        file.filename,
-        user.username,
         loader.patent_processor.patent_type,
         classification_json=json.dumps(classificator.classification)
     )
@@ -125,8 +123,6 @@ async def upload_tin_data(
         user.id,
         str(path),
         "TIN",
-        file.filename,
-        user.username,
         classification_json=json.dumps(classification)
     )
     file_data = await file_service.fetch_by_id(file_id)
@@ -161,6 +157,7 @@ async def download_data(
 async def fetch_information(
     file_id: int,
     file_service: Annotated[FileService, Depends(get_file_service)],
+    user_servuce: Annotated[UserService, Depends(get_user_service)],
     classificator: Annotated[OrgClassificator, Depends(get_classificator)],
 ) -> JSONResponse:
     file = await file_service.fetch_by_id(file_id)
@@ -170,6 +167,15 @@ async def fetch_information(
             {"detail": "Файл не найден"},
             status_code=status.HTTP_400_BAD_REQUEST,
         )
+    
+    author = await user_service.fetch_by_id(file.user_id)
+    
+    return JSONResponse(
+        {
+            "classificationData": json.loads(file.patent_classification_json),
+            "authorUsername": author.username,
+        }
+    )
 
     return json.loads(file.patent_classification_json)
 
