@@ -31,7 +31,7 @@ api.add_middleware(
 async def catch_exceptions_middleware(request: Request, call_next):
     try:
         return await call_next(request)
-    except Exception as e:
+    except Exception:
         print(f"EXCEPTION={traceback.format_exc()}")
         if DEBUG:
             return JSONResponse(
