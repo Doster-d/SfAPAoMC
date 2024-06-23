@@ -3,7 +3,21 @@ services:
     image: ngrok/ngrok:alpine
     env_file:
       - .ngrok.env
-    command: ["http", "web:3000", "--domain", "$NGROK_DOMAIN"]
+    command: ["http", "proxy:80", "--domain", "cobra-sincere-grouper.ngrok-free.app"]
+    networks:
+      - postgres
+
+  proxy:
+    depends_on:
+      - api
+      - web
+    build:
+      dockerfile: Dockerfile
+      context: nginx
+    ports:
+      - 80:80
+    networks:
+      - postgres
 
   api:
     build:
