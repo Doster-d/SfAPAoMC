@@ -9,8 +9,14 @@ import { store } from "./setup/store/store.js";
 import { setUserData } from "./setup/store/reducers/userSlice.js";
 import { getCookieByName } from "./utils.js";
 
-const queryClient = new QueryClient();
-store.dispatch(setUserData(JSON.parse(getCookieByName('user'))))
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+});
+store.dispatch(setUserData(JSON.parse(getCookieByName("user"))));
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>

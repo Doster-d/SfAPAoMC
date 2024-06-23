@@ -16,7 +16,6 @@ import { NOTIFICATION_BAD } from "../../const";
 function Mainpage() {
   const { data: generalData, isPending, isError, error } = useGetGeneralInfo();
   const dispatch = useDispatch();
-  console.log(generalData, error);
   const [barSelected, setBarSelected] = useState(undefined);
 
   const handleBarSelection = (event) => {
