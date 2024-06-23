@@ -15,7 +15,8 @@ class RapidLinkStrategy:
 	- process_row: Processes a row of data to link patent holders to companies based on fuzzy matching.
 	"""
 
-	def process_row(self, row, cleared_company_df: pd.DataFrame) -> pd.Series:
+	@staticmethod
+	def process_row(row, cleared_company_df: pd.DataFrame) -> pd.Series:
 		"""
 		Processes a row of data to link patent holders to companies based on fuzzy matching.
 

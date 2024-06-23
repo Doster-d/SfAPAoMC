@@ -20,7 +20,8 @@ class StandardParseStrategy:
 	- remove_spaces: Removes spaces from a list of strings.
 	"""
 
-	def apply_replace_strategy(self, row, column='patent processed', column_alt='authors'):
+	@staticmethod
+	def apply_replace_strategy(row, column='patent processed', column_alt='authors'):
 		"""
 		Replaces missing values in a specific column based on an alternate column.
 
@@ -34,7 +35,8 @@ class StandardParseStrategy:
 		"""
 		return row[column_alt] if pd.isna(row[column]) and row[column_alt] != "" else row[column]
 
-	def lower_text(self, text: str) -> str:
+	@staticmethod
+	def lower_text(text: str) -> str:
 		"""
 		Converts text to lowercase.
 
@@ -46,7 +48,8 @@ class StandardParseStrategy:
 		"""
 		return text.lower()
 
-	def find_foreign(self, row):
+	@staticmethod
+	def find_foreign(row):
 		"""
 		Identifies foreign patents based on specific patterns.
 
@@ -57,8 +60,8 @@ class StandardParseStrategy:
 		list: List indicating whether each patent holder is foreign.
 		"""
 		pattern = r'\((.*?)\)'
-		data = self.apply_replace_strategy(row, column='patent_holders').lower()
-		data = self.process_patent_holder(data)
+		data = StandardParseStrategy.apply_replace_strategy(row, column='patent_holders').lower()
+		data = StandardParseStrategy.process_patent_holder()
 		mask = []
 		preparts = [part.strip() for part in re.split(pattern, data) if part.strip()]
 		find = {}
@@ -78,7 +81,8 @@ class StandardParseStrategy:
 			mask = mask[:patent_len]
 		return mask
 
-	def process_patent_holder(self, text: str) -> str:
+	@staticmethod
+	def process_patent_holder(text: str) -> str:
 		"""
 		Cleans and normalizes the patent holder text.
 
@@ -93,7 +97,8 @@ class StandardParseStrategy:
 		text = re.sub(r'[«»"]+', "", text)
 		return text
 
-	def split_holders(self, patent_holder: str) -> list:
+	@staticmethod
+	def split_holders(patent_holder: str) -> list:
 		"""
 		Splits the patent holders string into unique components.
 
@@ -108,7 +113,8 @@ class StandardParseStrategy:
 		unique_parts = list(set(parts))
 		return unique_parts
 
-	def remove_parentheses(self, text: list) -> list:
+	@staticmethod
+	def remove_parentheses(text: list) -> list:
 		"""
 		Removes text within parentheses from a list of strings.
 
@@ -120,7 +126,8 @@ class StandardParseStrategy:
 		"""
 		return [re.sub(r'\([^)]*\)', '', word) for word in text]
 
-	def remove_spaces(self, text: list) -> list:
+	@staticmethod
+	def remove_spaces(text: list) -> list:
 		"""
 		Removes spaces from a list of strings.
 

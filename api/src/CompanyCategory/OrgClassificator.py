@@ -138,25 +138,26 @@ class OrgClassificator:
 			if not total:
 				target_classifier["count"] += 1
 			full_name = row["full_name"]
-			if any(
-					le_class in full_name
-					for le_class in ["организация", "общество", "предприятие"]
-			):
-				target_classifier["patent_holders"]["LE"] += 1
-			elif any(
-					ie_class in full_name
-					for ie_class in ["индивидуальный предприниматель", "ИП"]
-			):
-				target_classifier["patent_holders"]["IE"] += 1
-			else:
-				target_classifier["patent_holders"]["PE"] += 1
+			await self.count_company(full_name, target_classifier)
 			# if await self.link.does_exist_in_holders(row["company_id"], patent_type):
 			target_classifier["count_found"] += 1
 			if classify_categories:
-				target_classifier["categories"][
-					company_class.loc[ind]["classification"]
-				] += 1
+				company_class.apply(self.update_category_count, axis=1, categories=target_classifier["categories"])
 		ic("company chunk proceesed")
+
+	async def count_company(self, full_name, target_classifier):
+		if any(
+				le_class in full_name
+				for le_class in ["организация", "общество", "предприятие"]
+		):
+			target_classifier["patent_holders"]["LE"] += 1
+		elif any(
+				ie_class in full_name
+				for ie_class in ["индивидуальный предприниматель", "ИП"]
+		):
+			target_classifier["patent_holders"]["IE"] += 1
+		else:
+			target_classifier["patent_holders"]["PE"] += 1
 
 	async def classify_company(
 			self,
@@ -223,6 +224,80 @@ class OrgClassificator:
 			company_ids = df['company_id'][df['company_id'] != np.nan].to_list()
 			company_ids = [item for sublist in company_ids for item in sublist]
 			return company_ids
+		except ValueError:
+			return None
+
+	@staticmethod
+	def update_category_count(row, categories):
+		category = row["okved"]
+		if category in categories:
+			categories[category] += 1
+		return row
+
+	async def classify_companies_by_tin_data(self, data_df: pd.DataFrame):
+		self.reset_classification()
+		categories_template = {
+			"ВУЗ": 0,
+			"Высокотехнологичные ИТ компании": 0,
+			"Добывающая промышленность": 0,
+			"Здравоохранение и социальные услуги": 0,
+			"Колледжи": 0,
+			"Медиа и развлечения": 0,
+			"Научные организации": 0,
+			"Нет категории": 0,
+			"Обрабатывающая промышленность": 0,
+			"Розничная торговля": 0,
+			"Сельское хозяйство и пищевая промышленность": 0,
+			"Строительство и недвижимость": 0,
+			"Транспорт и логистика": 0,
+			"Туризм и гостиничный бизнес": 0,
+			"Финансовые услуги": 0,
+			"Энергетика": 0,
+			"Юридические и профессиональные услуги": 0,
+		}
+
+		patent_holders_template = {"LE": 0, "PE": 0, "IE": 0}
+
+		classification_template = {
+			"count": 0,
+			"count_found": 0,
+			"patent_holders": patent_holders_template,
+		}
+
+		classification = {
+			"model": classification_template,
+			"design": classification_template,
+			"invention": classification_template,
+			"general_classification": categories_template
+		}
+		company_names = data_df.set_index('company_id')['full_name'].to_dict()
+		result = await self.link.check_company_in_patent_holders(set(data_df['company_id'].unique()))
+		for company_id, patents in result.items():
+			if patents:
+				# print(f"Company ID {company_id} has the following patents:")
+				for patent_id, patent_type, description in patents:
+					classification[patent_type]["count"] += 1
+					classification[patent_type]["count_found"] += 1
+					await self.count_company(company_names[company_id], classification[patent_type])
+					# print(f"  - Patent ID {patent_id} ({patent_type}): {description}")
+			else:
+				classification["model"]["count"] += 1
+				classification["design"]["count"] += 1
+				classification["invention"]["count"] += 1
+				# print(f"Company ID {company_id} is not found in any patent types")
+			data_df = self.link.category_detector(
+				data_df, okvd_column_name="okved", new_column_name="classification"
+			)
+		return classification
+
+	async def get_company_data_from_excel_tin(self, file_path):
+		try:
+			df = pd.read_excel(file_path, dtype={'ИНН': str})
+			if 'ИНН' not in df.columns.to_list():
+				return None
+			tins = df['ИНН'].to_list()
+			data = await self.link.fetch_company_data_by_tin(tins)
+			return data
 		except ValueError:
 			return None
 

@@ -1,6 +1,7 @@
 from uuid import uuid4
 from typing import Annotated
 from pathlib import Path
+import json
 
 from fastapi import APIRouter, UploadFile, Header, status, Depends
 from fastapi.responses import JSONResponse, FileResponse, Response
@@ -64,7 +65,15 @@ async def upload_data(
     )
     await classificator.classify_company(data)
 
-    file_id = await file_service.create(user.id, str(path))
+    file_id = await file_service.create(
+        user.id,
+        str(path),
+        "Patent",
+        file.filename,
+        user.username,
+        loader.patent_processor.patent_type,
+        classification_json=json.dumps(classificator.classification)
+    )
 
     return JSONResponse(
         {
@@ -73,6 +82,48 @@ async def upload_data(
         }
     )
 
+@router.post("/upload_tin/{user_id}")
+async def upload_tin_data(
+    user_id: int,
+    file: UploadFile,
+    authorization: Annotated[str, Header()],
+    user_service: Annotated[UserService, Depends(get_user_service)],
+    file_service: Annotated[FileService, Depends(get_file_service)],
+    classificator: Annotated[OrgClassificator, Depends(get_classificator)],
+) -> JSONResponse:
+    access_token = authorization.split()[-1]
+    user = await user_service.fetch_by_token(access_token)
+
+    if user is None or user.id != user_id:
+        return JSONResponse(
+            {"detail": "Для загрузки файла нужно войти в свой аккаунт."},
+            status_code=status.HTTP_401_UNAUTHORIZED,
+        )
+
+    path = Path(f"/data/uploaded/{str(uuid4())}_{file.filename}")
+    path.parent.mkdir(exist_ok=True, parents=True)
+    path.touch()
+    with path.open(mode="bw") as fout:
+        fout.write(await file.read())
+
+    data = classificator.get_company_data_from_excel_tin(path)
+    classification = classificator.classify_companies_by_tin_data(data)
+
+    file_id = await file_service.create(
+        user.id,
+        str(path),
+        "TIN",
+        file.filename,
+        user.username,
+        classification_json=json.dumps(classification)
+    )
+
+    return JSONResponse(
+        {
+            "filename": file.filename,
+            "fileId": file_id,
+        }
+    )
 
 @router.get("/download/{file_id}")
 async def download_data(
@@ -104,7 +155,7 @@ async def fetch_information(
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    return classificator.classification
+    return file.patent_classification_json
 
 
 @router.get("/information")

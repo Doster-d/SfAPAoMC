@@ -16,9 +16,22 @@ class FileService:
     def __init__(self, con: Connection) -> None:
         self._con = con
 
-    async def create(self, user_id: int, path: str) -> int:
-        query = "INSERT INTO processed_files(user_id, path) VALUES($1, $2) RETURNING ID"
-        return await self._con.fetchval(query, user_id, path)
+    async def create(
+            self,
+            user_id: int,
+            path: str,
+            file_type: str,
+            file_name: str,
+            file_author: str,
+            patent_type=None,
+            classification_json="{}"
+    ) -> int:
+        query = f"""
+        INSERT INTO processed_files(user_id, path, file_name, file_author, file_type, patent_type, patent_classification_json)
+        VALUES({user_id}, {path}, {file_name}, {file_author}, {file_type}, {patent_type}, {classification_json})
+        RETURNING ID
+        """
+        return await self._con.fetchval(query)
 
     async def fetch_by_id(self, file_id: int) -> ProcessedFile | None:
         query = "SELECT * FROM processed_files WHERE id=$1"

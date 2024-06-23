@@ -91,7 +91,7 @@ class PatentLinkage:
 				df[df["company_id"].notna()]["company_id"].to_list()
 			)
 		]
-		return df.apply(RapidLinkStrategy().process_row, axis=1, args=(cleared,))
+		return df.apply(RapidLinkStrategy.process_row, axis=1, args=(cleared,))
 
 	async def proceed_chunk(self, chunk_df: pd.DataFrame) -> pd.DataFrame:
 		"""
