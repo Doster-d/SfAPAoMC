@@ -200,3 +200,14 @@ async def fetch_files_ids(
             "filesIds": await file_service.fech_all_ids(),
         }
     )
+
+@router.get("/files-info")
+async def fetch_files_info(
+    page: int = 0,
+    file_service: Annotated[FileService, Depends(get_file_service)],
+) -> JSONResponse:
+    return JSONResponse(
+        {
+            "filesInfo": await file_service.fetch_paginated_info(page),
+        }
+    )

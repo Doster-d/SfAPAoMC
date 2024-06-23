@@ -1,3 +1,6 @@
+from typing import TypedDict
+from pathlib import Path
+
 from fastapi import Depends
 from asyncpg import Connection
 
@@ -7,7 +10,14 @@ from src.dto import ProcessedFile
 __all__ = [
     "FileService",
     "get_file_service",
+    "FileInfo",
 ]
+
+
+class FileInfo(TypedDict):
+    id: int
+    authorName: str
+    fileName: str
 
 
 class FileService:
@@ -49,6 +59,20 @@ class FileService:
         result = await self._con.fetch(query)
 
         return [row["id"] for row in result]
+
+    async def fetch_paginated_info(self, page: int) -> list[FileInfo]:
+        query = "SELECT f.id, f.path, u.username FROM processed_files AS f JOIN users AS u ON f.user_id = u.id LIMIT 5 OFFSET $1"
+
+        result = await self._con.fetch(query, page)
+
+        return [
+            {
+                "id": row["id"],
+                "authorName": row["username"],
+                "fileName": Path(row["path"]).name.split("_")[1],
+            }
+            for row in result
+        ]
 
 
 def get_file_service(
