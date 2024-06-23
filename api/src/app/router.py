@@ -132,7 +132,7 @@ async def upload_tin_data(
             "fileId": file_id,
             "fileType": file_data.file_type,
             "uploaderName": user.username,
-            "createdAt": file_data.uploaded_at
+            "createdAt": str(file_data.uploaded_at)
         }
     )
 

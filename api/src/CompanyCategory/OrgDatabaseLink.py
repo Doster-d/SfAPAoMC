@@ -60,17 +60,29 @@ class OrgDatabaseLink:
 			port=self.port,
 		)
 
-		offset_string = f"OFFSET {offset} LIMIT {limit}" if use_offset else ""
+		offset_limit_clause = "OFFSET $2 LIMIT $3" if use_offset else ""
 
 		query = f"""
 		SELECT company_id, okved, full_name
 		FROM HOLDER_ENTITY
 		WHERE {target_where} = ANY($1::bigint[])
-		{offset_string};
+		{offset_limit_clause};
 		"""
 
-		records = await conn.fetch(query, target_ids)
-		await conn.close()
+		ic(query)
+
+		params = [target_ids]
+		if use_offset:
+			params.extend([offset, limit])
+
+		try:
+			records = await conn.fetch(query, *params)
+		except Exception as e:
+			ic(e)
+			records = {'company_id': [], 'okved': [], 'full_name': []}
+		finally:
+			await conn.close()
+
 		ic(len(records))
 		return records
 
@@ -258,7 +270,8 @@ class OrgDatabaseLink:
 			tins,
 			offset=0,
 			limit=0,
-			target_where="")
+			use_offset=False,
+			target_where="tin")
 		if not records:
 			return
 		return pd.DataFrame(

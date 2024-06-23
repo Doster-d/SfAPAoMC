@@ -250,18 +250,22 @@ class OrgClassificator:
 			"Юридические и профессиональные услуги": 0,
 		}
 
-		patent_holders_template = {"LE": 0, "PE": 0, "IE": 0}
-
-		classification_template = {
-			"count": 0,
-			"count_found": 0,
-			"patent_holders": patent_holders_template,
-		}
-
 		classification = {
-			"model": classification_template,
-			"design": classification_template,
-			"invention": classification_template,
+			"model": {
+				"count": 0,
+				"count_found": 0,
+				"patent_holders": {"LE": 0, "PE": 0, "IE": 0},
+			},
+			"design": {
+				"count": 0,
+				"count_found": 0,
+				"patent_holders": {"LE": 0, "PE": 0, "IE": 0},
+			},
+			"invention": {
+				"count": 0,
+				"count_found": 0,
+				"patent_holders": {"LE": 0, "PE": 0, "IE": 0},
+			},
 			"general_classification": categories_template
 		}
 		company_names = data_df.set_index('company_id')['full_name'].to_dict()
@@ -290,7 +294,8 @@ class OrgClassificator:
 			df = pd.read_excel(file_path, dtype={'ИНН': str})
 			if 'ИНН' not in df.columns.to_list():
 				return None
-			tins = df['ИНН'].to_list()
+			tins = [int(tin) for tin in df['ИНН'].to_list()]
+			ic(tins)
 			data = await self.link.fetch_company_data_by_tin(tins)
 			return data
 		except ValueError:
