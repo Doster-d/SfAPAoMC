@@ -152,15 +152,10 @@ class OrgClassificator:
 		ic("company chunk proceesed")
 
 	async def count_company(self, full_name, target_classifier):
-		if any(
-				le_class in full_name
-				for le_class in ["организация", "общество", "предприятие"]
-		):
+		full_name = full_name.lower()
+		if any(le_class in full_name for le_class in ["организация", "общество", "предприятие"]):
 			target_classifier["patent_holders"]["LE"] += 1
-		elif any(
-				ie_class in full_name
-				for ie_class in ["индивидуальный предприниматель", "ИП"]
-		):
+		elif any(ie_class in full_name for ie_class in ["индивидуальный предприниматель", "ип"]):
 			target_classifier["patent_holders"]["IE"] += 1
 		else:
 			target_classifier["patent_holders"]["PE"] += 1

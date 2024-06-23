@@ -122,11 +122,15 @@ async def upload_tin_data(
         user.username,
         classification_json=json.dumps(classification)
     )
+    file_data = await file_service.fetch_by_id(file_id)
 
     return JSONResponse(
         {
             "filename": file.filename,
             "fileId": file_id,
+            "fileType": file_data.file_type,
+            "uploaderName": user.username,
+            "createdAt": file_data.uploaded_at
         }
     )
 
