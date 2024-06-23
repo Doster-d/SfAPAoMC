@@ -9,8 +9,8 @@ import GlobalLoader from "../../components/globalLoader/GlobalLoader";
 function FileList() {
   const [filesCounter, setFilesCounter] = useState(1);
   const filesQuery = useGetFiles();
-  if(filesQuery.isFetching) {
-    return <GlobalLoader />
+  if (filesQuery.isFetching) {
+    return <GlobalLoader />;
   }
   return (
     <main className="file-list">
@@ -28,34 +28,43 @@ function FileList() {
               </tr>
             </thead>
             <tbody>
-              {filesQuery.data?.pages.map((group, index) => (
-                <Fragment key={index}>
-                  {group?.map((file) => (
-                    <tr className="file-table__row">
-                      <td className="file-table__column">{file.id}</td>
-                      <td className="file-table__column">{file.fileName}</td>
-                      <td className="file-table__column">{file.authorName}</td>
-                      <td className="file-table__column">
-                        <Link
-                          className="file-table__stat"
-                          to={`/file/${file.id}`}
-                        >
-                          Статистика <img src={statBtn} alt="" />
-                        </Link>
-                      </td>
-                      <td className="file-table__column">
-                        <DownloadBtn fileId={file.id} />
-                      </td>
-                    </tr>
-                  ))}
-                </Fragment>
-              ))}
+              {filesQuery.data?.pages.map((group, index) => {
+                console.log(group);
+                return (
+                  <Fragment key={index}>
+                    {group?.map((file) => (
+                      <tr className="file-table__row">
+                        <td className="file-table__column">{file.id}</td>
+                        <td className="file-table__column">{file.fileName}</td>
+                        <td className="file-table__column">
+                          {file.authorName}
+                        </td>
+                        <td className="file-table__column">
+                          <Link
+                            className="file-table__stat"
+                            to={`/file/${file.id}`}
+                          >
+                            Статистика <img src={statBtn} alt="" />
+                          </Link>
+                        </td>
+                        <td className="file-table__column">
+                          <DownloadBtn fileId={file.id} />
+                        </td>
+                      </tr>
+                    ))}
+                  </Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>
         <div className="file-table__addition">
           {filesQuery.hasNextPage && (
-            <button disabled={filesQuery.isFetchingNextPage} onClick={() => filesQuery.fetchNextPage()} className="file-table__next-page">
+            <button
+              disabled={filesQuery.isFetchingNextPage}
+              onClick={() => filesQuery.fetchNextPage()}
+              className="file-table__next-page"
+            >
               {filesQuery.isFetchingNextPage ? "Загрузка..." : "Показать еще"}{" "}
               <img src={moreBtn} alt="" />
             </button>
