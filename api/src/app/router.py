@@ -75,7 +75,7 @@ async def upload_data(
         str(path),
         "Patent",
         loader.patent_processor.patent_type,
-        classification_json=json.dumps(classificator.classification)
+        classification_json=json.dumps(classificator.classification),
     )
 
     return JSONResponse(
@@ -84,6 +84,7 @@ async def upload_data(
             "fileId": file_id,
         }
     )
+
 
 @router.post("/upload_tin/{user_id}")
 async def upload_tin_data(
@@ -113,17 +114,16 @@ async def upload_tin_data(
     ic(data)
     if data is None:
         return JSONResponse(
-            {"detail": "Ошибка при обработке данных. Возможно, что База Данных не инициализирована или нет ни одного совпадения"},
+            {
+                "detail": "Ошибка при обработке данных. Возможно, что База Данных не инициализирована или нет ни одного совпадения"
+            },
             status_code=status.HTTP_400_BAD_REQUEST,
         )
     classification = await classificator.classify_companies_by_tin_data(data)
     ic(classification)
 
     file_id = await file_service.create(
-        user.id,
-        str(path),
-        "TIN",
-        classification_json=json.dumps(classification)
+        user.id, str(path), "TIN", classification_json=json.dumps(classification)
     )
     file_data = await file_service.fetch_by_id(file_id)
 
@@ -133,9 +133,10 @@ async def upload_tin_data(
             "fileId": file_id,
             "fileType": file_data.file_type,
             "uploaderName": user.username,
-            "createdAt": str(file_data.uploaded_at)
+            "createdAt": str(file_data.uploaded_at),
         }
     )
+
 
 @router.get("/download/{file_id}")
 async def download_data(
@@ -157,7 +158,7 @@ async def download_data(
 async def fetch_information(
     file_id: int,
     file_service: Annotated[FileService, Depends(get_file_service)],
-    user_servuce: Annotated[UserService, Depends(get_user_service)],
+    user_service: Annotated[UserService, Depends(get_user_service)],
     classificator: Annotated[OrgClassificator, Depends(get_classificator)],
 ) -> JSONResponse:
     file = await file_service.fetch_by_id(file_id)
@@ -167,17 +168,17 @@ async def fetch_information(
             {"detail": "Файл не найден"},
             status_code=status.HTTP_400_BAD_REQUEST,
         )
-    
+
     author = await user_service.fetch_by_id(file.user_id)
-    
+    filename = Path(file.path).name.split("_")[1]
+
     return JSONResponse(
         {
             "classificationData": json.loads(file.patent_classification_json),
             "authorUsername": author.username,
+            "fileName": filename,
         }
     )
-
-    return json.loads(file.patent_classification_json)
 
 
 @router.get("/information")
