@@ -5,7 +5,7 @@ import FileInfo from "../../pages/fileInfo/FileInfo";
 import ErrorPage from "../../pages/errorPage/ErrorPage";
 import SignIn, { loader as signInLoader } from "../../pages/signIn/SignIn";
 import SignUp, { loader as signUpLoader } from "../../pages/signup/SignUp";
-import Profile from "../../pages/profile/Profile";
+import Profile, { loader as profileLoader } from "../../pages/profile/Profile";
 
 
 export const router = createHashRouter([
@@ -24,16 +24,17 @@ export const router = createHashRouter([
             },
             {
                 path: '/signin',
-                //loader: signInLoader,
+                loader: signInLoader,
                 element: <SignIn/>
             },
             {
                 path: '/signup',
-                //loader: signUpLoader,
+                loader: signUpLoader,
                 element: <SignUp />
             },
             {
                 path: '/profile',
+                loader: profileLoader,
                 element: <Profile />
             }
         ]

@@ -1,0 +1,67 @@
+@keyframes right {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes left {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.spinner {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  @media (max-width: 767px) {
+    width: 150px;
+    height: 150px;
+  }
+  @media (max-width: 424px) {
+    width: 100px;
+    height: 100px;
+  }
+  &__image {
+    width: 50%;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("./../../assets/images/spinner/spinner_right.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    animation: right 2s linear infinite;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background-image: url("./../../assets/images/spinner/spinner_left.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+    animation: left 1.5s linear infinite;
+    @media (max-width: 424px) {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+    }
+  }
+}

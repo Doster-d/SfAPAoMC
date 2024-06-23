@@ -15,7 +15,7 @@ function Header() {
   const dispatch = useDispatch();
   const [isDownloadOpen, toggleDownloadOpen] = useToggle();
   const { newNotification } = useSelector((state) => state.notification);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { notifications, addNotification, removeNotification } =
     useNotifications();
   useEffect(() => {
@@ -28,6 +28,7 @@ function Header() {
       dispatch(addNewNotification({ message: "", type: "", duration: null }));
     }
   }, [newNotification]);
+
   const { userId } = useSelector((state) => state.user);
   const [isMenuOpened, toggleMenuOpened] = useToggle();
   const navigationRef = useRef();
@@ -84,10 +85,13 @@ function Header() {
                   onClick={() => {
                     if (userId) {
                       toggleDownloadOpen();
-                    }
-                    else {
-                      addNotification('Необходимо войти в аккаунт', NOTIFICATION_BAD,  3000)
-                      navigate('/signin')
+                    } else {
+                      addNotification(
+                        "Необходимо войти в аккаунт",
+                        NOTIFICATION_BAD,
+                        3000
+                      );
+                      navigate("/signin");
                     }
                   }}
                   className="header__navigation-text"

@@ -3,7 +3,7 @@ import { optionsPie } from "./models";
 import { useEffect } from "react";
 
 function TablePie({ series }) {
-  const sum = series[0] + series[1] + series[2] + 1;
+  const sum = series[0] + series[1] + series[2] + 0.0001;
   useEffect(() => {
     if (window.outerWidth < 1024) {
       window.dispatchEvent(new Event("resize"));

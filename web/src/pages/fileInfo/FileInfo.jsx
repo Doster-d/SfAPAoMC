@@ -5,13 +5,33 @@ import SemiRadialBar from "../../components/charts/semiRadialBar/SemiRadialBar";
 import TablePie from "../../components/charts/tablePie/TablePie";
 import { Helmet } from "react-helmet-async";
 import SimplePie from "../../components/charts/simplePie/SimplePie";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetFileInfoById } from "./hooks/useGetFileInfoById";
+import GlobalLoader from "../../components/globalLoader/GlobalLoader";
+import { useDispatch } from "react-redux";
+import { addNewNotification } from "../../setup/store/reducers/notificationSlice";
+import { NOTIFICATION_BAD } from "../../const";
 function FileInfo() {
   const { fileId } = useParams();
   const { data: fileData, isPending, isError } = useGetFileInfoById(fileId);
   const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   console.log(fileData);
+  const [barSelected, setBarSelected] = useState(undefined);
+
+  const handleBarSelection = (event) => {
+    if (
+      event.target.parentElement.attributes.seriesName ||
+      event.target.attributes.selected
+    ) {
+      if (event.target.attributes.selected?.value === "true") {
+        setBarSelected(event.target.parentElement.attributes.seriesName?.value);
+      } else {
+        setBarSelected(undefined);
+      }
+    }
+  };
   useEffect(() => {
     document.body.style =
       "  background:linear-gradient(90deg, rgb(132, 250, 176), rgb(143, 211, 244) 52.465%)";
@@ -25,6 +45,19 @@ function FileInfo() {
       setCategories(Object.values(fileData?.data.categories));
     }
   }, [fileData]);
+  useEffect(() => {
+    if (isError) {
+      dispatch(
+        addNewNotification({
+          message: "При загрузке данных по файлу произошла ошибка",
+          type: NOTIFICATION_BAD,
+          duration: 5000,
+        })
+      );
+      /* TO-DO  УБРАТЬ КОММЕНТАРИЙ В ПРОДЕ*/
+      //navigate('/')
+    }
+  }, [isError]);
   return (
     <>
       <Helmet>
@@ -33,33 +66,83 @@ function FileInfo() {
         <meta rel="canonical" href={`/file/${fileId}`} />
       </Helmet>
       {isPending ? (
-        <h2 className="title-h2">Загрузка данных...</h2>
+        <GlobalLoader />
       ) : (
         <main className="file-info">
           <div className="container">
             <h1 className="title-h1 file-info__title">Статистика по файлу</h1>
             <div className="file-info__charts">
               <div className="file-info__charts-row">
-                <TablePie
-                  series={[
-                    fileData?.data.patent_holders.LE,
-                    fileData?.data.patent_holders.IE,
-                    fileData?.data.patent_holders.PE,
-                  ]}
+                <MultiRadialBar
+                  series={[30, 30, 30]}
+                  handleBarSelection={handleBarSelection}
                 />
+                {barSelected === "Модель" ? (
+                  <TablePie
+                    series={[
+                      fileData?.data.patent_holders.LE,
+                      fileData?.data.patent_holders.IE,
+                      fileData?.data.patent_holders.PE,
+                    ]}
+                  />
+                ) : barSelected === "Образец" ? (
+                  <TablePie
+                    series={[
+                      fileData?.data.patent_holders.LE,
+                      fileData?.data.patent_holders.IE,
+                      fileData?.data.patent_holders.PE,
+                    ]}
+                  />
+                ) : (
+                  barSelected === "Изобретение" && (
+                    <TablePie
+                      series={[
+                        fileData?.data.patent_holders.LE,
+                        fileData?.data.patent_holders.IE,
+                        fileData?.data.patent_holders.PE,
+                      ]}
+                    />
+                  )
+                )}
               </div>
               <div className="file-info__charts-row">
                 <SimplePie series={categories} />
-                <SemiRadialBar
-                  series={[
-                    Math.round(
-                      (
-                        fileData?.data.count_found /
-                        (fileData?.data.count + 1)
-                      ).toFixed(2) * 100
-                    ),
-                  ]}
-                />
+                {barSelected === "Модель" ? (
+                  <SemiRadialBar
+                    series={[
+                      Math.round(
+                        (
+                          fileData?.data.count_found /
+                          (fileData?.data.count + 0.0001)
+                        ).toFixed(2) * 100
+                      ),
+                    ]}
+                  />
+                ) : barSelected === "Образец" ? (
+                  <SemiRadialBar
+                    series={[
+                      Math.round(
+                        (
+                          fileData?.data.count_found /
+                          (fileData?.data.count + 0.0001)
+                        ).toFixed(2) * 100
+                      ),
+                    ]}
+                  />
+                ) : (
+                  barSelected === "Изобретение" && (
+                    <SemiRadialBar
+                      series={[
+                        Math.round(
+                          (
+                            fileData?.data.count_found /
+                            (fileData?.data.count + 0.0001)
+                          ).toFixed(2) * 100
+                        ),
+                      ]}
+                    />
+                  )
+                )}
               </div>
             </div>
           </div>

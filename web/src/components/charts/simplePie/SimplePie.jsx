@@ -4,9 +4,7 @@ import { useEffect } from "react";
 
 function SimplePie({ series }) {
   useEffect(() => {
-    if (window.outerWidth < 1024) {
-      window.dispatchEvent(new Event("resize"));
-    }
+    window.dispatchEvent(new Event("resize"));
   }, []);
   return (
     <ReactApexChart
@@ -14,6 +12,7 @@ function SimplePie({ series }) {
       series={series}
       type="donut"
       width={460}
+      height={800}
     />
   );
 }

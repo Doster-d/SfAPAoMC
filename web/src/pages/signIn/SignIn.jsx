@@ -5,6 +5,7 @@ import { useSignInMutation } from "./hooks/useSignInMutation";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { getCookieByName } from "../../utils";
+import GlobalLoader from "../../components/globalLoader/GlobalLoader";
 
 export function loader() {
   if (getCookieByName("user") !== "{}") {
@@ -28,6 +29,7 @@ function SignIn() {
   return (
     <>
       {" "}
+      {signInMutation.isPending && <GlobalLoader />}
       <Helmet>
         <title>K1 - Авторизация</title>
         <meta

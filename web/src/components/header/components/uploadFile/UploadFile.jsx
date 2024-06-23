@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addNewNotification } from "../../../../setup/store/reducers/notificationSlice";
 import { NOTIFICATION_BAD, NOTIFICATION_GOOD } from "../../../../const";
+import GlobalLoader from "../../../globalLoader/GlobalLoader";
 function UploadFile({ toggleDownloadOpen }) {
   const [drop, setDrop] = useState(false);
   const dispatch = useDispatch();
@@ -74,44 +75,47 @@ function UploadFile({ toggleDownloadOpen }) {
     handleFile(e.target.files[0]);
   };
   return (
-    <form
-      className="upload-form"
-      onDrop={handleDrop}
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
-    >
-      <label
-        htmlFor="upload-input"
-        className={
-          drop
-            ? "upload-form__label upload-form__label--dropping"
-            : "upload-form__label"
-        }
+    <>
+      {uploadFileMutation.isPending && <GlobalLoader />}
+      <form
+        className="upload-form"
+        onDrop={handleDrop}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
       >
-        {!drop && (
-          <>
-            <span className="upload-form__span">
-              {fileName
-                ? uploadFileMutation.isPending
-                  ? "Обработка..."
-                  : "Файл загружен"
-                : "Загузить файлы"}
-            </span>
-            <input
-              id="upload-input"
-              className="upload-form__input"
-              type="file"
-              onChange={handleFileChange}
-              disabled={uploadFileMutation.isPending}
-              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            />
-            <span className="upload-form__add-span">
-              {fileName ? fileName : "Формат .xlxs"}
-            </span>
-          </>
-        )}
-      </label>
-    </form>
+        <label
+          htmlFor="upload-input"
+          className={
+            drop
+              ? "upload-form__label upload-form__label--dropping"
+              : "upload-form__label"
+          }
+        >
+          {!drop && (
+            <>
+              <span className="upload-form__span">
+                {fileName
+                  ? uploadFileMutation.isPending
+                    ? "Обработка..."
+                    : "Файл загружен"
+                  : "Загузить файлы"}
+              </span>
+              <input
+                id="upload-input"
+                className="upload-form__input"
+                type="file"
+                onChange={handleFileChange}
+                disabled={uploadFileMutation.isPending}
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              />
+              <span className="upload-form__add-span">
+                {fileName ? fileName : "Формат .xlxs"}
+              </span>
+            </>
+          )}
+        </label>
+      </form>
+    </>
   );
 }
 

@@ -5,7 +5,7 @@ import "./style.scss";
 import { redirect, useNavigate } from "react-router-dom";
 import { addNewNotification } from "../../setup/store/reducers/notificationSlice";
 import { NOTIFICATION_GOOD } from "../../const";
-import { getCookieByName } from "../../utils";
+import { eraseCookie, getCookieByName } from "../../utils";
 import { clearUserData } from "../../setup/store/reducers/userSlice";
 import { Helmet } from "react-helmet-async";
 
@@ -21,7 +21,7 @@ function Profile() {
   const navigate = useNavigate();
   const logOutHandle = () => {
     dispatch(clearUserData());
-    document.cookie = "";
+    eraseCookie('user')
   };
   return (
     <>
@@ -29,7 +29,7 @@ function Profile() {
         <title>K1 - Личный кабинет</title>
         <meta
           name="description"
-          content="Ваш личный аккаунт в сервисе анализа патентной активности компаний москвы"
+          content="Ваш личный кабинет в сервисе анализа патентной активности компаний москвы"
         />
         <meta rel="canonical" href="/profile" />
       </Helmet>

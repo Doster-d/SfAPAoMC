@@ -1,6 +1,7 @@
 import spinnerRight from "./../../assets/images/spinner/spinner_right.svg";
 import spinnerLeft from "./../../assets/images/spinner/spinner_left.svg";
 import logo from "./../../assets/images/mainpage/header_logo.svg";
+import './style.scss'
 function LoaderSpinner() {
   return (
     <picture className="spinner">

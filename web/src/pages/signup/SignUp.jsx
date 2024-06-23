@@ -6,6 +6,7 @@ import { Link, redirect, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useSelector } from "react-redux";
 import { getCookieByName } from "./../../utils";
+import GlobalLoader from "../../components/globalLoader/GlobalLoader";
 
 export function loader() {
   if (getCookieByName("user") !== "{}") {
@@ -29,6 +30,7 @@ function SignUp() {
   };
   return (
     <>
+      {signUpMutation.isPending && <GlobalLoader />}
       <Helmet>
         <title>K1 - Регистрация</title>
         <meta

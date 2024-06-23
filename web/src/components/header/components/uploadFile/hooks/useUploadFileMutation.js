@@ -16,7 +16,7 @@ export function useUploadFileMutation() {
       console.log(error);
       dispatch(
         addNewNotification({
-          message: error.response.data?.detail
+          message: error.response?.data?.detail
             ? error.response.data.detail
             : "Что-то пошло не так...",
           type: NOTIFICATION_BAD,

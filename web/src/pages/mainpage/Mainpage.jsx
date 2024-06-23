@@ -1,25 +1,29 @@
-import { Link } from "react-router-dom";
 import "./style.scss";
 
 // Import Swiper styles
 import "swiper/css";
 import TeamSlider from "../../components/teamSlider/TeamSlider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MultiRadialBar from "../../components/charts/multiRadialBar/MultiRadialBar";
 import SemiRadialBar from "../../components/charts/semiRadialBar/SemiRadialBar";
 import TablePie from "../../components/charts/tablePie/TablePie";
 import { Helmet } from "react-helmet-async";
 import { useGetGeneralInfo } from "./hooks/useGetGeneralInfo";
+import LocalLoader from "../../components/localLoader/LocalLoader";
+import { useDispatch } from "react-redux";
+import { addNewNotification } from "../../setup/store/reducers/notificationSlice";
+import { NOTIFICATION_BAD } from "../../const";
 function Mainpage() {
-  const [barSelected, setBarSelected] = useState(undefined);
   const { data: generalData, isPending, isError, error } = useGetGeneralInfo();
+  const dispatch = useDispatch();
   console.log(generalData, error);
+  const [barSelected, setBarSelected] = useState(undefined);
+
   const handleBarSelection = (event) => {
     if (
       event.target.parentElement.attributes.seriesName ||
       event.target.attributes.selected
     ) {
-      
       if (event.target.attributes.selected?.value === "true") {
         setBarSelected(event.target.parentElement.attributes.seriesName?.value);
       } else {
@@ -27,6 +31,17 @@ function Mainpage() {
       }
     }
   };
+  useEffect(() => {
+    if (isError) {
+      dispatch(
+        addNewNotification({
+          message: "При загрузке общей статистики произошла ошибка",
+          NOTIFICATION_BAD,
+          duration: 5000,
+        })
+      );
+    }
+  }, [isError]);
 
   return (
     <>
@@ -50,13 +65,11 @@ function Mainpage() {
         <TeamSlider />
         <section className="charts">
           <h2 className="title-h2 charts__title">
-            {isPending
-              ? "ГЕНЕРАЦИЯ ОБЩЕЙ СТАТИСТИКИ..."
-              : isError
-              ? "ПРОИЗОШЛА ОШИБКА ПРИ ГЕНЕРАЦИИ"
-              : "ОБЩАЯ СТАТИСТИКА"}
+            {isError ? "ПРОИЗОШЛА ОШИБКА ПРИ ГЕНЕРАЦИИ" : "ОБЩАЯ СТАТИСТИКА"}
           </h2>
-          {!isPending && (
+          {isPending ? (
+            <LocalLoader />
+          ) : (
             <div className="container charts__container">
               <div className="charts__main-chart">
                 <MultiRadialBar
@@ -66,19 +79,22 @@ function Mainpage() {
                       generalData?.data.model.count /
                       (generalData?.data.model.count +
                         generalData?.data.design.count +
-                        generalData?.data.invention.count + 1)
+                        generalData?.data.invention.count +
+                        0.0001)
                     ).toFixed(2) * 100,
                     (
                       generalData?.data.design.count /
                       (generalData?.data.model.count +
                         generalData?.data.design.count +
-                        generalData?.data.invention.count + 1)
+                        generalData?.data.invention.count +
+                        0.0001)
                     ).toFixed(2) * 100,
                     (
                       generalData?.data.invention.count /
                       (generalData?.data.model.count +
                         generalData?.data.design.count +
-                        generalData?.data.invention.count + 1)
+                        generalData?.data.invention.count +
+                        0.0001)
                     ).toFixed(2) * 100,
                   ]}
                 />
@@ -91,7 +107,7 @@ function Mainpage() {
                         series={[
                           (
                             generalData?.data.model.count_found /
-                            (generalData?.data.model.count + 1)
+                            (generalData?.data.model.count + 0.0001)
                           ).toFixed(2) * 100,
                         ]}
                       />
@@ -109,7 +125,7 @@ function Mainpage() {
                         series={[
                           (
                             generalData?.data.design.count_found /
-                            (generalData?.data.design.count + 1)
+                            (generalData?.data.design.count + 0.0001)
                           ).toFixed(2) * 100,
                         ]}
                       />
@@ -128,7 +144,7 @@ function Mainpage() {
                           series={[
                             (
                               generalData?.data.invention.count_found /
-                              (generalData?.data.invention.count + 1)
+                              (generalData?.data.invention.count + 0.0001)
                             ).toFixed(2) * 100,
                           ]}
                         />
