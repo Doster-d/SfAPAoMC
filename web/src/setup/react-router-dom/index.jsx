@@ -2,6 +2,7 @@ import { createHashRouter } from "react-router-dom";
 import Layout from "../../pages/layout/Layout";
 import Mainpage from "../../pages/mainpage/Mainpage";
 import FileInfo from "../../pages/fileInfo/FileInfo";
+import FileList from "../../pages/fileList/FileList";
 import ErrorPage from "../../pages/errorPage/ErrorPage";
 import SignIn, { loader as signInLoader } from "../../pages/signIn/SignIn";
 import SignUp, { loader as signUpLoader } from "../../pages/signup/SignUp";
@@ -36,6 +37,10 @@ export const router = createHashRouter([
                 path: '/profile',
                 loader: profileLoader,
                 element: <Profile />
+            },
+            {
+                path: '/stats',
+                element: <FileList />
             }
         ]
     }

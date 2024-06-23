@@ -86,24 +86,24 @@ function FileInfo() {
                 <MultiRadialBar
                   series={[
                     (
-                      fileData?.data.classificationData.model.count /
-                      (fileData?.data.classificationData.model.count +
-                        fileData?.data.classificationData.design.count +
-                        fileData?.data.classificationData.invention.count +
+                      fileData?.data?.classificationData?.model?.count /
+                      (fileData?.data?.classificationData?.model?.count +
+                        fileData?.data?.classificationData?.design?.count +
+                        fileData?.data?.classificationData?.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                     (
-                      fileData?.data.classificationData.design.count /
-                      (fileData?.data.classificationData.model.count +
-                        fileData?.data.classificationData.design.count +
-                        fileData?.data.classificationData.invention.count +
+                      fileData?.data.classificationData.design?.count /
+                      (fileData?.data.classificationData.model?.count +
+                        fileData?.data.classificationData.design?.count +
+                        fileData?.data.classificationData.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                     (
                       fileData?.data.invention.count /
-                      (fileData?.data.classificationData.model.count +
-                        fileData?.data.classificationData.design.count +
-                        fileData?.data.classificationData.invention.count +
+                      (fileData?.data.classificationData.model?.count +
+                        fileData?.data.classificationData.design?.count +
+                        fileData?.data.classificationData.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                   ]}
@@ -150,8 +150,8 @@ function FileInfo() {
                     series={[
                       Math.round(
                         (
-                          fileData?.data.classificationData.model.count_found /
-                          (fileData?.data.classificationData.model.count +
+                          fileData?.data.classificationData.model?.count_found /
+                          (fileData?.data.classificationData.model?.count +
                             0.0001)
                         ).toFixed(2) * 100
                       ),
@@ -162,8 +162,9 @@ function FileInfo() {
                     series={[
                       Math.round(
                         (
-                          fileData?.data.classificationData.design.count_found /
-                          (fileData?.data.classificationData.design.count +
+                          fileData?.data.classificationData.design
+                            ?.count_found /
+                          (fileData?.data.classificationData.design?.count +
                             0.0001)
                         ).toFixed(2) * 100
                       ),
@@ -176,8 +177,9 @@ function FileInfo() {
                         Math.round(
                           (
                             fileData?.data.classificationData.invention
-                              .count_found /
-                            (fileData?.data.classificationData.invention.count +
+                              ?.count_found /
+                            (fileData?.data.classificationData.invention
+                              ?.count +
                               0.0001)
                           ).toFixed(2) * 100
                         ),
