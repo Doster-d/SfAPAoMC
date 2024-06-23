@@ -81,6 +81,11 @@ function Header() {
                 </Link>
               </li>
               <li className="header__navigation-item">
+                <Link className="header__navigation-text" to={"/stats"}>
+                  Файлы
+                </Link>
+              </li>
+              <li className="header__navigation-item">
                 <button
                   onClick={() => {
                     if (userId) {
