@@ -42,7 +42,7 @@ function FileInfo() {
   }, []);
 
   useEffect(() => {
-    if (fileData?.data.categories) {
+    if (fileData?.data.classificationData.general_classification) {
       setCategories(Object.values(fileData?.data.categories));
     }
   }, [fileData]);
