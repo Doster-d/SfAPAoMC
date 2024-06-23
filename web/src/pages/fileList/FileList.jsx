@@ -12,6 +12,7 @@ function FileList() {
   if (filesQuery.isFetching) {
     return <GlobalLoader />;
   }
+  console.log(filesQuery.data);
   return (
     <main className="file-list">
       <div className="container file-list__container">
