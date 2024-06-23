@@ -31,9 +31,8 @@ async def main():
 	PG_DATABASE = os.getenv("DB_db", "patentanal")
 	conn = await asyncpg.connect(user=PG_USER, password=PG_PASS, database=PG_DATABASE, host=PG_HOST, port=PG_PORT)
 	try:
-		while True:
-			# Процессим чанки данных
-			await process_chunk(conn)
+		# Процессим чанки данных
+		await process_chunk(conn)
 	finally:
 		await conn.close()
 
