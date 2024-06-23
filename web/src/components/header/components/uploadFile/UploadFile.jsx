@@ -3,30 +3,48 @@ import "./style.scss";
 import { useForm } from "react-hook-form";
 import { useUploadFileMutation } from "./hooks/useUploadFileMutation";
 import { useNavigate } from "react-router-dom";
-function UploadFile({ addNotification, toggleDownloadOpen }) {
+import { useDispatch } from "react-redux";
+import { addNewNotification } from "../../../../setup/store/reducers/notificationSlice";
+import { NOTIFICATION_BAD, NOTIFICATION_GOOD } from "../../../../const";
+function UploadFile({ toggleDownloadOpen }) {
   const [drop, setDrop] = useState(false);
+  const dispatch = useDispatch();
   const [fileName, setFileName] = useState(undefined);
-  const uploadFileMutation = useUploadFileMutation(addNotification);
-  const navigate = useNavigate();
+  const uploadFileMutation = useUploadFileMutation();
   const handleFile = async (file) => {
     console.log(file);
     if (
       file.type !==
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ) {
-      addNotification("Не правильный тип файла", "bad", 5000);
+      dispatch(
+        addNewNotification({
+          message: "Не правильный тип файла",
+          type: NOTIFICATION_BAD,
+          duration: 5000,
+        })
+      );
       return;
     }
-    addNotification("Файл добавлен", "good", 5000);
-    setFileName(file.name);
-    addNotification(
-      "Данные обрабатываются. Пожалуйста подождите, это может занять продолжительное время.",
-      "good",
-      5000
+    dispatch(
+      addNewNotification({
+        message: "Файл добавлен",
+        type: NOTIFICATION_GOOD,
+        duration: 5000,
+      })
     );
+    setFileName(file.name);
+    dispatch(
+      addNewNotification({
+        message:
+          "Данные обрабатываются. Пожалуйста подождите, это может занять продолжительное время.",
+        type: NOTIFICATION_GOOD,
+        duration: 5000,
+      })
+    );
+
     const response = await uploadFileMutation.mutateAsync(file);
-    await addNotification("Данные обработаны", "good", 3000);
-    toggleDownloadOpen()
+    toggleDownloadOpen();
     console.log("Response:", response);
   };
   const onDragLeave = (e) => {

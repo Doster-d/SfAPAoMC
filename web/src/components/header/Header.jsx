@@ -1,21 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "./../../assets/images/mainpage/header_logo.svg";
 import "./style.scss";
 import { useToggle } from "../../hooks/useToggle";
 import UploadFile from "./components/uploadFile/UploadFile";
 import NotificationContainer from "../notification/Notification";
 import useNotifications from "../../hooks/useNotification";
-import Account from "./components/account/Account";
 import openNav from "./../../assets/images/openMenu.svg";
 import closeNav from "./../../assets/images/closeMenu.svg";
-import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useRef, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewNotification } from "../../setup/store/reducers/notificationSlice";
+import { NOTIFICATION_BAD } from "../../const";
 function Header() {
+  const dispatch = useDispatch();
   const [isDownloadOpen, toggleDownloadOpen] = useToggle();
+  const { newNotification } = useSelector((state) => state.notification);
+  const navigate = useNavigate()
   const { notifications, addNotification, removeNotification } =
     useNotifications();
-  const { userId, username } = useSelector((state) => state.user);
-  const [isAccountOpen, toggleAccountOpen] = useToggle();
+  useEffect(() => {
+    if (newNotification.message !== "") {
+      addNotification(
+        newNotification.message,
+        newNotification.type,
+        newNotification.duration
+      );
+      dispatch(addNewNotification({ message: "", type: "", duration: null }));
+    }
+  }, [newNotification]);
+  const { userId } = useSelector((state) => state.user);
   const [isMenuOpened, toggleMenuOpened] = useToggle();
   const navigationRef = useRef();
   return (
@@ -66,27 +79,32 @@ function Header() {
                   Главная
                 </Link>
               </li>
-              {userId && (
-                <li className="header__navigation-item">
-                  <button
-                    onClick={toggleDownloadOpen}
-                    className="header__navigation-text"
-                  >
-                    Использовать сейчас
-                  </button>
-                  {isDownloadOpen && (
-                    <UploadFile toggleDownloadOpen={toggleDownloadOpen} addNotification={addNotification} />
-                  )}
-                </li>
-              )}
               <li className="header__navigation-item">
                 <button
-                  onClick={toggleAccountOpen}
+                  onClick={() => {
+                    if (userId) {
+                      toggleDownloadOpen();
+                    }
+                    else {
+                      addNotification('Необходимо войти в аккаунт', NOTIFICATION_BAD,  3000)
+                      navigate('/signin')
+                    }
+                  }}
+                  className="header__navigation-text"
+                >
+                  Использовать сейчас
+                </button>
+                {isDownloadOpen && (
+                  <UploadFile toggleDownloadOpen={toggleDownloadOpen} />
+                )}
+              </li>
+              <li className="header__navigation-item">
+                <Link
+                  to={userId ? "/profile" : "/signin"}
                   className="header__navigation-text"
                 >
                   Личный кабинет
-                </button>
-                {isAccountOpen && <Account addNotification={addNotification} />}
+                </Link>
               </li>
             </ul>
           </div>

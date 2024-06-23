@@ -1,8 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "../../../../../const";
 
 
-const signInInstance = axios.create({baseURL: BASE_URL})
+const signInInstance = axios.create({baseURL: import.meta.env.VITE_BASE_URL})
 
 
 export async function signUp(data) {
