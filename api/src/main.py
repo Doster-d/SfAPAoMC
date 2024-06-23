@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-
+from .config import DEBUG
 from .auth import router as auth_router
 from .app import router as app_router
 
@@ -32,7 +32,11 @@ async def catch_exceptions_middleware(request: Request, call_next):
     try:
         return await call_next(request)
     except Exception as e:
-        print(f"EXCEPTIOn={traceback.format_exc()}")
+        print(f"EXCEPTION={traceback.format_exc()}")
+        if DEBUG:
+            return JSONResponse(
+                {"exception": f"{traceback.format_exc()}"}, status_code=500
+            )
         return JSONResponse({"detail": "Что-то пошло не так"}, status_code=500)
 
 
