@@ -189,3 +189,14 @@ async def fetch_all_information(
     classification = await classificator.get_global_classification()
     ic(classification)
     return classification
+
+
+@router.get("/files")
+async def fetch_files_ids(
+    file_service: Annotated[FileService, Depends(get_file_service)],
+) -> JSONResponse:
+    return JSONResponse(
+        {
+            "filesIds": await file_service.fech_all_ids(),
+        }
+    )
