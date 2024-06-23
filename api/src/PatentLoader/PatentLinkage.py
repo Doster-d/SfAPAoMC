@@ -11,22 +11,25 @@ import asyncpg
 import asyncio
 
 def trim_list_tin(row):
-	if type(row['patent processed']) == list and type(row['tin']) == list:
-		return row['tin'][:len(row['patent processed'])]
+	if isinstance(row['patent processed'], list) and isinstance(row['tin'], list):
+		min_len = min(len(row['patent processed']), len(row['tin']))
+		return row['tin'][:min_len]
 	else:
-		return row
+		return row['tin']
 
 def trim_list_psrn(row):
-	if type(row['patent processed']) == list and type(row['psrn']) == list:
-		return row['psrn'][:len(row['patent processed'])]
+	if isinstance(row['patent processed'], list) and isinstance(row['psrn'], list):
+		min_len = min(len(row['patent processed']), len(row['psrn']))
+		return row['psrn'][:min_len]
 	else:
-		return row
+		return row['psrn']
 
 def trim_list_id(row):
-	if type(row['patent processed']) == list and type(row['company_id']) == list:
-		return row['company_id'][:len(row['patent processed'])]
+	if isinstance(row['patent processed'], list) and isinstance(row['company_id'], list):
+		min_len = min(len(row['patent processed']), len(row['company_id']))
+		return row['company_id'][:min_len]
 	else:
-		return row
+		return row['company_id']
 
 def process_row(row):
 	try:

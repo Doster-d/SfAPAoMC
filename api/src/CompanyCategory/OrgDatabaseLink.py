@@ -59,13 +59,13 @@ class OrgDatabaseLink:
 			port=self.port,
 		)
 
-		offset_string = f"OFFSET {offset} LIMIT {limit}"
+		offset_string = f"OFFSET {offset} LIMIT {limit}" if use_offset else ""
 
 		query = f"""
 		SELECT company_id, okved, full_name
 		FROM HOLDER_ENTITY
-		WHERE {target_where} IN ({', '.join(target_ids)})
-		{offset_string if use_offset else ""};
+		WHERE {target_where} IN ({', '.join([str(id) for id in target_ids])})
+		{offset_string};
 		"""
 
 		records = await conn.fetch(query)

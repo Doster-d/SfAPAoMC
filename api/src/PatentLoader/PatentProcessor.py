@@ -100,14 +100,15 @@ class PatentProcessor:
         """
         if pd.isna(row["patent_holders"]):
             return row
-        row["patent processed"] = StandardParseStrategy.lower_text(row["patent processed"])
-        row["patent processed"] = StandardParseStrategy.process_patent_holder(
+        processor = StandardParseStrategy()
+        row["patent processed"] = processor.lower_text(row["patent processed"])
+        row["patent processed"] = processor.process_patent_holder(
             row["patent processed"]
         )
-        row["patent processed"] = StandardParseStrategy.split_holders(row["patent processed"])
-        row["is foreign"] = StandardParseStrategy.find_foreign(row)
-        row["patent processed"] = StandardParseStrategy.remove_parentheses(row["patent processed"])
-        row["patent processed"] = StandardParseStrategy.remove_spaces(row["patent processed"])
+        row["patent processed"] = processor.split_holders(row["patent processed"])
+        row["is foreign"] = processor.find_foreign(row)
+        row["patent processed"] = processor.remove_parentheses(row["patent processed"])
+        row["patent processed"] = processor.remove_spaces(row["patent processed"])
 
         return row
 
