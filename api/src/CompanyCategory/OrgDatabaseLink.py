@@ -10,6 +10,10 @@ import asyncpg
 import asyncio
 from icecream import ic
 
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 class OrgDatabaseLink:
 	"""
@@ -32,6 +36,7 @@ class OrgDatabaseLink:
 		"""
         Initializes the connection parameters and classifier.
         """
+		logging.info("Initializing OrgDatabaseLink")
 		self.chunk_size = int(os.getenv("chunk_size", "5000000"))
 		self.port = os.getenv("DB_port", 5432)
 		self.host = os.getenv("DB_address", "postgres")
@@ -39,6 +44,8 @@ class OrgDatabaseLink:
 		self.password = os.getenv("DB_pass", "mycoolpassword123")
 		self.database = os.getenv("DB_db", "patentanal")
 		self.category_detector = CategoryDetector()
+		logging.info("OrgDatabaseLink initialized")
+
 
 	async def fetch_company_entities(self, target_ids, offset, limit, target_where="company_id", use_offset=True):
 		"""
@@ -52,6 +59,7 @@ class OrgDatabaseLink:
         Returns:
         list: Records from the database.
         """
+		logging.info("Starting fetch_company_entities function")
 		conn = await asyncpg.connect(
 			user=self.user,
 			password=self.password,
@@ -84,9 +92,60 @@ class OrgDatabaseLink:
 			await conn.close()
 
 		ic(len(records))
+		logging.info("Completed fetch_company_entities function")
 		return records
 
+	async def fetch_patent_chunks(self, query, conn, count_company_func, global_classification, patent_type,
+	                              chunk_size=int(os.getenv("chunk_size", '500000'))):
+		offset = 0
+		while True:
+			chunk = await conn.fetch(query, chunk_size, offset)
+			if not chunk:
+				break
+			for record in chunk:
+				await count_company_func(record['full_name'], global_classification[patent_type])
+			offset += chunk_size
+
+	async def fetch_companies_full_names_by_patent_type(self, count_company_func, global_classification,
+	                                                    chunk_size=int(os.getenv("chunk_size", '500000'))):
+		conn = await asyncpg.connect(
+			user=self.user,
+			password=self.password,
+			database=self.database,
+			host=self.host,
+			port=self.port,
+		)
+		queries = {
+			"model": """
+	            SELECT he.full_name
+	            FROM HOLDER_ENTITY he
+	            JOIN PATENT_MODEL_HOLDER pmh ON he.company_id = pmh.company_id
+	            LIMIT $1 OFFSET $2;
+	        """,
+			"design": """
+	            SELECT he.full_name
+	            FROM HOLDER_ENTITY he
+	            JOIN PATENT_DESIGN_HOLDER pdh ON he.company_id = pdh.company_id
+	            LIMIT $1 OFFSET $2;
+	        """,
+			"invention": """
+	            SELECT he.full_name
+	            FROM HOLDER_ENTITY he
+	            JOIN PATENT_INVENTION_HOLDER pih ON he.company_id = pih.company_id
+	            LIMIT $1 OFFSET $2;
+	        """
+		}
+
+		await self.fetch_patent_chunks(queries["model"], conn, count_company_func, global_classification, "model",
+		                          chunk_size)
+		await self.fetch_patent_chunks(queries["design"], conn, count_company_func, global_classification, "design",
+		                          chunk_size)
+		await self.fetch_patent_chunks(queries["invention"], conn, count_company_func, global_classification,
+		                               "invention", chunk_size)
+		await conn.close()
+
 	async def fetch_patent_info(self):
+		logging.info("Starting fetch_patent_info function")
 		conn = await asyncpg.connect(
 			user=self.user,
 			password=self.password,
@@ -115,6 +174,7 @@ class OrgDatabaseLink:
 				result = await conn.fetchval(query)
 				results[key][label] = result
 		await conn.close()
+		logging.info("Completed fetch_patent_info function")
 		return results
 
 
@@ -129,6 +189,7 @@ class OrgDatabaseLink:
         Returns:
         bool: True if the company exists, False otherwise.
         """
+		logging.info("Starting does_exist_in_holders function")
 		query = """
 		SELECT EXISTS (
 			SELECT 1 FROM PATENT_MODEL_HOLDER WHERE company_id = $1
@@ -173,6 +234,7 @@ class OrgDatabaseLink:
 		async with conn.transaction():
 			exists = await conn.fetchval(query, company_id)
 		await conn.close()
+		logging.info("Completed does_exist_in_holders function")
 		return exists
 
 	async def fetch_company_entities_in_chunks(self, chunk_size, company_ids):
@@ -186,6 +248,7 @@ class OrgDatabaseLink:
         Returns:
         generator: A DataFrame generator with data of organizations.
         """
+		logging.info("Starting fetch_company_entities_in_chunks function")
 		if len(company_ids) <= 0:
 			return
 		offset = 0
@@ -198,6 +261,7 @@ class OrgDatabaseLink:
 			)
 			yield df_chunk
 			offset += chunk_size
+		logging.info("Completed fetch_company_entities_in_chunks function")
 
 	async def fetch_patent_entities_in_chunks(self, chunk_size, patent_type="design"):
 		"""
@@ -210,6 +274,7 @@ class OrgDatabaseLink:
         Returns:
         generator: A DataFrame generator with data of organizations.
         """
+		logging.info("Starting fetch_patent_entities_in_chunks function")
 		offset = 0
 		while True:
 			records = await self.fetch_patent_entities(patent_type, offset, chunk_size)
@@ -217,6 +282,8 @@ class OrgDatabaseLink:
 				break
 			yield records
 			offset += chunk_size
+		logging.info("Completed fetch_patent_entities_in_chunks function")
+
 
 	async def fetch_patent_entities(self, patent_type, offset, limit):
 		"""
@@ -230,6 +297,7 @@ class OrgDatabaseLink:
 		  Returns:
 		  list: Records from the database.
 		  """
+		logging.info("Starting fetch_patent_entities")
 		conn = await asyncpg.connect(
 			user=self.user,
 			password=self.password,
@@ -253,6 +321,7 @@ class OrgDatabaseLink:
 		await conn.close()
 		if records is None:
 			return records
+		logging.info("Finished fetch_patent_entities")
 		return [record['registration_number'] for record in records]
 
 	async def fetch_company_data_by_tin(self, tins):
@@ -266,6 +335,7 @@ class OrgDatabaseLink:
 		Returns:
 		generator: A DataFrame generator with data of link between patents and organizations.
 		"""
+		logging.info("Starting fetch_company_data_by_tin")
 		records = await self.fetch_company_entities(
 			tins,
 			offset=0,
@@ -274,6 +344,7 @@ class OrgDatabaseLink:
 			target_where="tin")
 		if not records:
 			return
+		logging.info("Completed fetch_company_data_by_tin")
 		return pd.DataFrame(
 			records, columns=["company_id", "okved", "full_name"]
 		)
@@ -290,6 +361,7 @@ class OrgDatabaseLink:
 		Returns:
 		str: The description of the patent.
 		"""
+		logging.info("Starting fetch_description function")
 		table_mapping = {
 			'model': 'PATENT_MODEL',
 			'design': 'PATENT_DESIGN',
@@ -298,6 +370,7 @@ class OrgDatabaseLink:
 
 		query = f"SELECT description FROM {table_mapping[patent_type]} WHERE registration_number = $1"
 		record = await conn.fetchrow(query, patent_id)
+		logging.info("Completed fetch_description function")
 		return record['description'] if record else None
 
 	async def check_company_in_patent_holders(self, company_ids):
@@ -318,7 +391,7 @@ class OrgDatabaseLink:
 			host=self.host,
 			port=self.port,
 		)
-
+		logging.info("Starting check_company_in_patent_holders function")
 		query_template = """
 	    SELECT company_id, patent_id, 'model' as patent_type FROM PATENT_MODEL_HOLDER WHERE company_id = ANY($1)
 	    UNION ALL
@@ -335,192 +408,223 @@ class OrgDatabaseLink:
 			result[record['company_id']].append((record['patent_id'], record['patent_type'], description))
 
 		await conn.close()
+		logging.info("Completed check_company_in_patent_holders function")
 		return result
 
-	async def fetch_holder_entities(self, offset, limit, patent_type="design"):
-		"""
-        Fetches organization data by chunks.
+		async def fetch_holder_entities(self, offset, limit, patent_type="design"):
+			"""
+	        Fetches organization data by chunks.
 
-        Parameters:
-        offset (int): Offset for data sampling.
-        limit (int): The limit of the data sample.
-        patent_type (str): Type of patent (default is "design").
+	        Parameters:
+	        offset (int): Offset for data sampling.
+	        limit (int): The limit of the data sample.
+	        patent_type (str): Type of patent (default is "design").
 
-        Returns:
-        list: Records from the database.
-        """
-		conn = await asyncpg.connect(
-			user=self.user,
-			password=self.password,
-			database=self.database,
-			host=self.host,
-			port=self.port,
-		)
-
-		patent_types = {
-			"model": "patent_model_holder",
-			"design": "patent_design_holder",
-			"invention": "patent_invention_holder",
-		}
-		query = f"""
-		SELECT company_id, patent_id
-		FROM {patent_types[patent_type]}
-		OFFSET {offset} LIMIT {limit};
-		"""
-
-		records = await conn.fetch(query)
-		await conn.close()
-		return records
-
-	async def fetch_holder_entities_in_chunks(self, chunk_size, patent_type="design"):
-		"""
-        Fetches organization data in chunks.
-
-        Parameters:
-        chunk_size (int): The size of the chunk to sample the data.
-        patent_type (str): Type of patent (default is "design").
-
-        Returns:
-        generator: A DataFrame generator with data of organizations.
-        """
-		offset = 0
-		while True:
-			records = await self.fetch_holder_entities(offset, chunk_size, patent_type)
-			if not records:
-				break
-			df_chunk = pd.DataFrame(records, columns=["company_id", "patent_id"])
-			yield df_chunk
-			offset += chunk_size
-
-	async def fetch_holder_entities_in_chunks_by_ids(self, patent_ids, chunk_size, patent_type="design"):
-		"""
-        Fetches organization data in chunks.
-
-        Parameters:
-        chunk_size (int): The size of the chunk to sample the data.
-        patent_type (str): Type of patent (default is "design").
-
-        Returns:
-        generator: A DataFrame generator with data of organizations.
-        """
-		offset = 0
-		while True:
-			records = await self.fetch_holder_entities_by_ids(patent_ids, offset, chunk_size, patent_type)
-			if not records:
-				break
-			yield records
-			offset += chunk_size
-
-	async def fetch_holder_entities_by_ids(self, patent_ids, offset, limit, patent_type="design"):
-		"""
-                    Fetches organization data by chunks.
-
-                    Parameters:
-                    offset (int): Offset for data sampling.
-                    limit (int): The limit of the data sample.
-                    patent_type (str): Type of patent (default is "design").
-
-                    Returns:
-                    list: Records from the database.
-                    """
-		conn = await asyncpg.connect(
-			user=self.user,
-			password=self.password,
-			database=self.database,
-			host=self.host,
-			port=self.port,
-		)
-
-		patent_types = {
-			"model": "patent_model_holder",
-			"design": "patent_design_holder",
-			"invention": "patent_invention_holder",
-		}
-		query = f"""
-            		SELECT company_id
-            		FROM {patent_types[patent_type]}
-            		WHERE patent_id IN ({', '.join(patent_ids)})
-            		OFFSET {offset} LIMIT {limit};
-            		"""
-
-		records = await conn.fetch(query)
-		await conn.close()
-		if records is None:
-			return records
-		return [record['company_id'] for record in records]
-
-	async def process_company(self, company_ids, batch_size=10000):
-		"""
-        Processes company data with its classification.
-
-        Parameters:
-        company_ids (list): List of company IDs.
-        batch_size (int): The batch size for the data to be inserted.
-
-        Returns:
-        None
-        """
-		async for chunk in self.fetch_company_entities_in_chunks(self.chunk_size, company_ids):
-			data = self.category_detector(
-				chunk, okvd_column_name="okved", new_column_name="classification"
+	        Returns:
+	        list: Records from the database.
+	        """
+			logging.info("Starting fetch_holder_entities function")
+			conn = await asyncpg.connect(
+				user=self.user,
+				password=self.password,
+				database=self.database,
+				host=self.host,
+				port=self.port,
 			)
-			await self.insert_classification(data, batch_size)
 
-	def run_process(self, company_ids):
-		"""
-        Starts the data processing.
+			patent_types = {
+				"model": "patent_model_holder",
+				"design": "patent_design_holder",
+				"invention": "patent_invention_holder",
+			}
+			query = f"""
+		        SELECT company_id, patent_id
+		        FROM {patent_types[patent_type]}
+		        OFFSET {offset} LIMIT {limit};
+		        """
 
-        Parameters:
-        company_ids (list): A list of company IDs.
+			records = await conn.fetch(query)
+			await conn.close()
+			logging.info("Completed fetch_holder_entities function")
+			return records
 
-        Returns:
-        None
-        """
-		loop = asyncio.get_event_loop()
-		loop.run_until_complete(self.process_company(company_ids))
+		async def fetch_holder_entities_in_chunks(self, chunk_size, patent_type="design"):
+			"""
+	        Fetches organization data in chunks.
 
-	async def insert_classification(self, updates, batch_size):
-		"""
-        Inserts the classification results into the database.
+	        Parameters:
+	        chunk_size (int): The size of the chunk to sample the data.
+	        patent_type (str): Type of patent (default is "design").
 
-        Parameters:
-        updates (pd.DataFrame): DataFrame with the classification results.
-        batch_size (int): The batch size for the data to insert.
+	        Returns:
+	        generator: A DataFrame generator with data of organizations.
+	        """
+			logging.info("Starting fetch_holder_entities_in_chunks function")
+			offset = 0
+			while True:
+				records = await self.fetch_holder_entities(offset, chunk_size, patent_type)
+				if not records:
+					break
+				df_chunk = pd.DataFrame(records, columns=["company_id", "patent_id"])
+				yield df_chunk
+				offset += chunk_size
+			logging.info("Completed fetch_holder_entities_in_chunks function")
 
-        Returns:
-        None
-        """
-		conn = await asyncpg.connect(
-			user=self.user,
-			password=self.password,
-			database=self.database,
-			host=self.host,
-			port=self.port,
-		)
-		for i in range(0, len(updates), batch_size):
-			batch = updates[i: i + batch_size]
-			await self.update_classification(conn, batch)
-		await conn.close()
+		async def fetch_holder_entities_in_chunks_by_ids(self, patent_ids, chunk_size, patent_type="design"):
+			"""
+	        Fetches organization data in chunks.
 
-	async def update_classification(self, conn, updates):
-		"""
-        Updates the classification in the database.
+	        Parameters:
+	        chunk_size (int): The size of the chunk to sample the data.
+	        patent_type (str): Type of patent (default is "design").
 
-        Parameters:
-        conn (asyncpg.Connection): Connection to the database.
-        updates (pd.DataFrame): DataFrame with the results of the classification.
+	        Returns:
+	        generator: A DataFrame generator with data of organizations.
+	        """
+			logging.info("Starting fetch_holder_entities_in_chunks_by_ids function")
+			offset = 0
+			while True:
+				records = await self.fetch_holder_entities_by_ids(patent_ids, offset, chunk_size, patent_type)
+				if not records:
+					break
+				yield records
+				offset += chunk_size
+			logging.info("Completed fetch_holder_entities_in_chunks_by_ids function")
 
-        Returns:
-        None
-        """
-		query = """
-		UPDATE HOLDER_ENTITY
-		SET classification = $1
-		WHERE company_id = $2
-		"""
-		async with conn.transaction():
-			for index, row in updates.iterrows():
-				await conn.execute(query, row["classification"], row["company_id"])
+		async def fetch_holder_entities_by_ids(self, patent_ids, offset, limit, patent_type="design"):
+			"""
+	        Fetches organization data by chunks.
+
+	        Parameters:
+	        offset (int): Offset for data sampling.
+	        limit (int): The limit of the data sample.
+	        patent_type (str): Type of patent (default is "design").
+
+	        Returns:
+	        list: Records from the database.
+	        """
+			logging.info("Starting fetch_holder_entities_by_ids function")
+			conn = await asyncpg.connect(
+				user=self.user,
+				password=self.password,
+				database=self.database,
+				host=self.host,
+				port=self.port,
+			)
+
+			patent_types = {
+				"model": "patent_model_holder",
+				"design": "patent_design_holder",
+				"invention": "patent_invention_holder",
+			}
+			query = f"""
+		        SELECT company_id
+		        FROM {patent_types[patent_type]}
+		        WHERE patent_id IN ({', '.join(patent_ids)})
+		        OFFSET {offset} LIMIT {limit};
+		        """
+
+			records = await conn.fetch(query)
+			await conn.close()
+			if records is None:
+				logging.error("in fetch_holder_entities_by_ids records is None")
+				return records
+
+			logging.info("Completed fetch_holder_entities_by_ids function")
+			return [record['company_id'] for record in records]
+
+		async def process_company(self, company_ids, batch_size=10000):
+			"""
+	        Processes company data with its classification.
+
+	        Parameters:
+	        company_ids (list): List of company IDs.
+	        batch_size (int): The batch size for the data to be inserted.
+
+	        Returns:
+	        None
+	        """
+			logging.info("Starting process_company function")
+			async for chunk in self.fetch_company_entities_in_chunks(self.chunk_size, company_ids):
+				data = self.category_detector(
+					chunk, okvd_column_name="okved", new_column_name="classification"
+				)
+				await self.insert_classification(data, batch_size)
+			logging.info("Completed process_company function")
+
+		def run_process(self, company_ids):
+			"""
+	        Starts the data processing.
+
+	        Parameters:
+	        company_ids (list): A list of company IDs.
+
+	        Returns:
+	        None
+	        """
+			logging.info("Starting run_process function")
+			loop = asyncio.get_event_loop()
+			try:
+				loop.run_until_complete(self.process_company(company_ids))
+			except Exception as e:
+				logging.error(f"Error in run_process: {e}")
+			finally:
+				loop.close()
+			logging.info("Completed run_process function")
+
+		async def insert_classification(self, updates, batch_size):
+			"""
+	        Inserts the classification results into the database.
+
+	        Parameters:
+	        updates (pd.DataFrame): DataFrame with the classification results.
+	        batch_size (int): The batch size for the data to insert.
+
+	        Returns:
+	        None
+	        """
+			logging.info("Starting insert_classification function")
+			conn = await asyncpg.connect(
+				user=self.user,
+				password=self.password,
+				database=self.database,
+				host=self.host,
+				port=self.port,
+			)
+			try:
+				for i in range(0, len(updates), batch_size):
+					batch = updates[i: i + batch_size]
+					await self.update_classification(conn, batch)
+			except Exception as e:
+				logging.error(f"Error in insert_classification: {e}")
+			finally:
+				await conn.close()
+			logging.info("Completed insert_classification function")
+
+		async def update_classification(self, conn, updates):
+			"""
+	        Updates the classification in the database.
+
+	        Parameters:
+	        conn (asyncpg.Connection): Connection to the database.
+	        updates (pd.DataFrame): DataFrame with the results of the classification.
+
+	        Returns:
+	        None
+	        """
+			logging.info("Starting update_classification function")
+			query = """
+		        UPDATE HOLDER_ENTITY
+		        SET classification = $1
+		        WHERE company_id = $2
+		        """
+			async with conn.transaction():
+				try:
+					for index, row in updates.iterrows():
+						await conn.execute(query, row["classification"], row["company_id"])
+				except Exception as e:
+					logging.error(f"Error in update_classification: {e}")
+			logging.info("Completed update_classification function")
 
 
 if __name__ == "__main__":

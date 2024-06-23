@@ -113,6 +113,11 @@ async def upload_tin_data(
 
     data = await classificator.get_company_data_from_excel_tin(path)
     ic(data)
+    if data is None:
+        return JSONResponse(
+            {"detail": "Ошибка при обработке данных. Возможно, что База Данных не инициализирована или нет ни одного совпадения"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     classification = await classificator.classify_companies_by_tin_data(data)
     ic(classification)
 
@@ -173,5 +178,7 @@ async def fetch_information(
 async def fetch_all_information(
     classificator: Annotated[OrgClassificator, Depends(get_classificator)],
 ) -> JSONResponse:
+    ic("start classification")
     classification = await classificator.get_global_classification()
+    ic(classification)
     return classification

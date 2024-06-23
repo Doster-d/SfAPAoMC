@@ -1,4 +1,6 @@
+import logging
 from .OrgDatabaseLink import OrgDatabaseLink
+
 try:
     import cudf.pandas
 except ImportError:
@@ -8,14 +10,27 @@ import asyncio
 import numpy as np
 from icecream import ic
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 def update_category_count(row, categories):
 	category = row["okved"]
+	ic(category)
 	if category in categories:
 		categories[category] += 1
 	return row
 
 def fix_row(row):
+	"""
+		    Fixes the format of 'company_id' and 'patent processed' fields in the row.
+
+		    Parameters:
+		    row (pd.Series): The row from the DataFrame.
+
+		    Returns:
+		    pd.Series: The fixed row.
+		"""
+	logging.info("Starting fix_row")
 	row['patent processed'] = row['patent processed'].replace("]", "").replace("[", "").replace("'", "").split(', ')
 
 	try:
@@ -28,6 +43,7 @@ def fix_row(row):
 	except AttributeError:
 		row['company_id'] = [np.nan]
 
+	logging.info("Completed fix_row")
 	return row
 
 
@@ -57,11 +73,13 @@ class OrgClassificator:
 		"""
         Initializes the OrgClassificator with necessary attributes and links.
         """
+		logging.info("Initializing OrgClassificator")
 		self.dirty = True
 		self.classification = None
 		self.link = OrgDatabaseLink()
 		self.reset_classification()
 		self.reset_global_classification()
+		logging.info("OrgClassificator initialized")
 
 	def reset_classification(self):
 		"""
@@ -91,6 +109,7 @@ class OrgClassificator:
 				"Юридические и профессиональные услуги": 0,
 			},
 		}
+		logging.info('reset_classification complete')
 
 	def reset_global_classification(self):
 		"""
@@ -113,6 +132,7 @@ class OrgClassificator:
 				"patent_holders": {"LE": 0, "PE": 0, "IE": 0},
 			},
 		}
+		logging.info('reset_global_classification complete')
 
 	async def classify_companies(
 			self,
@@ -131,7 +151,7 @@ class OrgClassificator:
         classify_categories (bool): Whether to classify categories (default is True).
         target_classifier (dict): Target classifier dictionary (default is None).
         """
-		ic("start processing company chunk")
+		logging.info("start processing company chunk")
 		if target_classifier is None:
 			target_classifier = self.classification
 		if total:
@@ -149,9 +169,10 @@ class OrgClassificator:
 			target_classifier["count_found"] += 1
 			if classify_categories:
 				company_class.apply(update_category_count, axis=1, categories=target_classifier["categories"])
-		ic("company chunk proceesed")
+		logging.info("company chunk proceesed")
 
 	async def count_company(self, full_name, target_classifier):
+		logging.info("Starting count_company function")
 		full_name = full_name.lower()
 		if any(le_class in full_name for le_class in ["организация", "общество", "предприятие"]):
 			target_classifier["patent_holders"]["LE"] += 1
@@ -159,6 +180,7 @@ class OrgClassificator:
 			target_classifier["patent_holders"]["IE"] += 1
 		else:
 			target_classifier["patent_holders"]["PE"] += 1
+		logging.info("Completed count_company function")
 
 	async def classify_company(
 			self,
@@ -176,6 +198,7 @@ class OrgClassificator:
         classify_categories (bool): Whether to classify categories (default is True).
         target_classifier (dict): Target classifier dictionary (default is None).
         """
+		logging.info("Starting classify_company")
 		self.reset_classification()
 		if company_ids is None:
 			return
@@ -186,6 +209,7 @@ class OrgClassificator:
 			await self.classify_companies(
 				chunk, patent_type, classify_categories, target_classifier, total=len(company_ids)
 			)
+		logging.info("FINISHED classify_company")
 
 	async def classify_patent(self):
 		"""
@@ -197,6 +221,7 @@ class OrgClassificator:
         Returns:
         None
         """
+		logging.info("Starting classify_patent")
 		self.dirty = False
 		self.reset_global_classification()
 		for patent_type in ["design", "model", "invention"]:
@@ -215,8 +240,10 @@ class OrgClassificator:
 			await self.classify_company(
 				company_ids, patent_type, False, self.global_classification[patent_type]
 			)
+		logging.info("FINISHED classify_patent")
 
 	def get_company_ids_from_excel(self, file_path):
+		logging.info("Starting get_company_ids_from_excel")
 		try:
 			df = pd.read_excel(file_path, usecols={'company_id', 'patent processed'})
 			df = df.apply(
@@ -224,11 +251,14 @@ class OrgClassificator:
 			)
 			company_ids = df['company_id'][df['company_id'] != np.nan].to_list()
 			company_ids = [item for sublist in company_ids for item in sublist]
+			logging.info("Completed get_company_ids_from_excel")
 			return company_ids
 		except ValueError:
+			logging.error(f"Failed with {file_path}")
 			return None
 
 	async def classify_companies_by_tin_data(self, data_df: pd.DataFrame):
+		logging.info("Starting classify_companies_by_tin_data")
 		self.reset_classification()
 		categories_template = {
 			"ВУЗ": 0,
@@ -287,9 +317,11 @@ class OrgClassificator:
 				data_df, okvd_column_name="okved", new_column_name="classification"
 			)
 			data_df.apply(update_category_count, axis=1, categories=classification["general_classification"])
+		logging.info("Completed classify_companies_by_tin_data")
 		return classification
 
 	async def get_company_data_from_excel_tin(self, file_path):
+		logging.info("Starting get_company_data_from_excel_tin")
 		try:
 			df = pd.read_excel(file_path, dtype={'ИНН': str})
 			if 'ИНН' not in df.columns.to_list():
@@ -297,11 +329,14 @@ class OrgClassificator:
 			tins = [int(tin) for tin in df['ИНН'].to_list()]
 			ic(tins)
 			data = await self.link.fetch_company_data_by_tin(tins)
+			logging.info("Completed get_company_data_from_excel_tin")
 			return data
 		except ValueError:
+			logging.error(f"Failed with {file_path}")
 			return None
 
 	async def get_global_classification(self):
+		logging.info('start get_global_classification')
 		counts = await self.link.fetch_patent_info()
 		global_classification = {
 	        "model": {
@@ -320,6 +355,8 @@ class OrgClassificator:
 		        "patent_holders": {"LE": 0, "PE": 0, "IE": 0}
 	        },
         }
+		await self.link.fetch_companies_full_names_by_patent_type(self.count_company, global_classification)
+		logging.info('finish get_global_classification')
 		return global_classification
 
 	def run_process_manual(self, company_ids):
@@ -332,9 +369,12 @@ class OrgClassificator:
         Returns:
         None
         """
+		logging.info("Starting run_process_manual")
 		loop = asyncio.get_event_loop()
 		loop.run_until_complete(self.classify_company(company_ids))
-		print(self.classification)
+		ic(self.classification)
+		logging.info("Completed run_process_manual")
+
 
 	def run_process_manual_patents(self, file_path):
 		"""
@@ -346,12 +386,14 @@ class OrgClassificator:
         Returns:
         None
         """
+		logging.info("Starting run_process_manual_patents")
 		loop = asyncio.get_event_loop()
 		company_ids = self.get_company_ids_from_excel(file_path)
 		loop.run_until_complete(self.classify_company(
 			company_ids, classify_categories=False, target_classifier=self.global_classification["design"]
 		))
 		print(self.global_classification)
+		logging.info("Completed run_process_manual_patents")
 
 
 if __name__ == "__main__":
