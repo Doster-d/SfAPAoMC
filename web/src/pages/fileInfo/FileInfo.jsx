@@ -86,26 +86,32 @@ function FileInfo() {
                 <MultiRadialBar
                   series={[
                     Math.round(
-                      fileData?.data.classificationData.model?.count /
+                      (
+                        fileData?.data.classificationData.model?.count /
                         (fileData?.data.classificationData.model?.count +
                           fileData?.data.classificationData.design?.count +
                           fileData?.data.classificationData.invention?.count +
                           0.0001)
-                    ).toFixed(2) * 100,
+                      ).toFixed(2) * 100
+                    ),
                     Math.round(
-                      fileData?.data.classificationData.design?.count /
+                      (
+                        fileData?.data.classificationData.design?.count /
                         (fileData?.data.classificationData.model?.count +
                           fileData?.data.classificationData.design?.count +
                           fileData?.data.classificationData.invention?.count +
                           0.0001)
-                    ).toFixed(2) * 100,
+                      ).toFixed(2) * 100
+                    ),
                     Math.round(
-                      fileData?.data.classificationData.invention?.count /
+                      (
+                        fileData?.data.classificationData.invention?.count /
                         (fileData?.data.classificationData.model?.count +
                           fileData?.data.classificationData.design?.count +
                           fileData?.data.classificationData.invention?.count +
                           0.0001)
-                    ).toFixed(2) * 100,
+                      ).toFixed(2) * 100
+                    ),
                   ]}
                   handleBarSelection={handleBarSelection}
                 />
