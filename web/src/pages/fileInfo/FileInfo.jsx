@@ -100,7 +100,7 @@ function FileInfo() {
                         0.0001)
                     ).toFixed(2) * 100,
                     (
-                      fileData?.data.invention.count /
+                      fileData?.data.classificationData.invention?.count /
                       (fileData?.data.classificationData.model?.count +
                         fileData?.data.classificationData.design?.count +
                         fileData?.data.classificationData.invention?.count +
