@@ -65,11 +65,11 @@ class OrgDatabaseLink:
 		query = f"""
 		SELECT company_id, okved, full_name
 		FROM HOLDER_ENTITY
-		WHERE {target_where} IN ({', '.join([str(id) for id in target_ids])})
+		WHERE {target_where} = ANY($1::bigint[])
 		{offset_string};
 		"""
 
-		records = await conn.fetch(query)
+		records = await conn.fetch(query, target_ids)
 		await conn.close()
 		ic(len(records))
 		return records
@@ -102,7 +102,7 @@ class OrgDatabaseLink:
 			for label, query in q_dict.items():
 				result = await conn.fetchval(query)
 				results[key][label] = result
-		conn.close()
+		await conn.close()
 		return results
 
 
