@@ -9,6 +9,12 @@ import numpy as np
 from icecream import ic
 
 
+def update_category_count(row, categories):
+	category = row["okved"]
+	if category in categories:
+		categories[category] += 1
+	return row
+
 def fix_row(row):
 	row['patent processed'] = row['patent processed'].replace("]", "").replace("[", "").replace("'", "").split(', ')
 
@@ -142,7 +148,7 @@ class OrgClassificator:
 			# if await self.link.does_exist_in_holders(row["company_id"], patent_type):
 			target_classifier["count_found"] += 1
 			if classify_categories:
-				company_class.apply(self.update_category_count, axis=1, categories=target_classifier["categories"])
+				company_class.apply(update_category_count, axis=1, categories=target_classifier["categories"])
 		ic("company chunk proceesed")
 
 	async def count_company(self, full_name, target_classifier):
@@ -227,13 +233,6 @@ class OrgClassificator:
 		except ValueError:
 			return None
 
-	@staticmethod
-	def update_category_count(row, categories):
-		category = row["okved"]
-		if category in categories:
-			categories[category] += 1
-		return row
-
 	async def classify_companies_by_tin_data(self, data_df: pd.DataFrame):
 		self.reset_classification()
 		categories_template = {
@@ -288,6 +287,7 @@ class OrgClassificator:
 			data_df = self.link.category_detector(
 				data_df, okvd_column_name="okved", new_column_name="classification"
 			)
+			data_df.apply(update_category_count, axis=1, categories=classification["general_classification"])
 		return classification
 
 	async def get_company_data_from_excel_tin(self, file_path):

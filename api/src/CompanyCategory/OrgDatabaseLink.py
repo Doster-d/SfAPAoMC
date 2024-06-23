@@ -8,6 +8,7 @@ except ImportError:
 import pandas as pd
 import asyncpg
 import asyncio
+from icecream import ic
 
 
 class OrgDatabaseLink:
@@ -70,6 +71,7 @@ class OrgDatabaseLink:
 
 		records = await conn.fetch(query)
 		await conn.close()
+		ic(len(records))
 		return records
 
 	async def does_exist_in_holders(self, company_id, patent_type="all"):

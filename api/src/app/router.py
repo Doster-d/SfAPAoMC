@@ -2,6 +2,7 @@ from uuid import uuid4
 from typing import Annotated
 from pathlib import Path
 import json
+from icecream import ic
 
 from fastapi import APIRouter, UploadFile, Header, status, Depends
 from fastapi.responses import JSONResponse, FileResponse, Response
@@ -51,9 +52,12 @@ async def upload_data(
 
     loader = FileLoader()
     await loader.load_file(str(path))
+    ic(f"file {file.filename} loaded")
     await loader.process_file()
+    ic(f"file {file.filename} processed")
 
     loader.patent_linker.export_final_dataframe_to_excel(path)
+    ic(f"file {file.filename} exported")
 
     data = classificator.get_company_ids_from_excel(path)
     await classificator.classify_company(
@@ -63,6 +67,7 @@ async def upload_data(
             loader.patent_processor.patent_type
         ],
     )
+    ic("global classified")
     await classificator.classify_company(data)
 
     file_id = await file_service.create(
@@ -155,7 +160,7 @@ async def fetch_information(
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    return file.patent_classification_json
+    return json.loads(file.patent_classification_json)
 
 
 @router.get("/information")

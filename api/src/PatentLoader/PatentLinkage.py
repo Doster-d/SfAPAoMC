@@ -156,8 +156,8 @@ class PatentLinkage:
 		)
 		final_df['tin'] = final_df.apply(trim_list_tin, axis=1)
 		final_df['psrn'] = final_df.apply(trim_list_psrn, axis=1)
-		final_df['company_id'] = final_df.apply(trim_list_psrn, axis=1)
+		final_df['company_id'] = final_df.apply(trim_list_id, axis=1)
 		self.final_df = final_df
 
 	def export_final_dataframe_to_excel(self, filepath):
-		self.final_df.to_excel(filepath)
+		self.final_df.to_excel(filepath, index=False)
