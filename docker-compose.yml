@@ -14,13 +14,13 @@ services:
     environment:
       USE_NOT_ML: 0
       chunk_size: 16000000
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: all
-    #           capabilities: [ gpu ]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
   postgres:
     container_name: postgres_container
     image: postgres:16.1-alpine3.18

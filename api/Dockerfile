@@ -8,10 +8,10 @@ RUN apt update -y && apt install gcc python3-all python3 python3-pip -y
 COPY requirements.txt /app/
 
 RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements.txt --no-cache-dir
+RUN pip3 install -r requirements.txt
 
-# COPY linux-only-requirements.txt /app/
-# RUN pip3 install -r linux-only-requirements.txt
+COPY linux-only-requirements.txt /app/
+RUN pip3 install -r linux-only-requirements.txt
 
 COPY . /app
 
