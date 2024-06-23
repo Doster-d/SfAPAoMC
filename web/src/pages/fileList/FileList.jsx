@@ -33,7 +33,7 @@ function FileList() {
                 console.log(group);
                 return (
                   <Fragment key={index}>
-                    {group?.map((file) => (
+                    {group?.filesInfo.map((file) => (
                       <tr className="file-table__row">
                         <td className="file-table__column">{file.id}</td>
                         <td className="file-table__column">{file.fileName}</td>
