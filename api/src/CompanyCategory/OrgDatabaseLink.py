@@ -65,14 +65,46 @@ class OrgDatabaseLink:
 		query = f"""
 		SELECT company_id, okved, full_name
 		FROM HOLDER_ENTITY
-		WHERE {target_where} = ANY($1)
+		WHERE {target_where} IN ({', '.join([str(id) for id in target_ids])})
 		{offset_string};
 		"""
 
-		records = await conn.fetch(query, target_ids)
+		records = await conn.fetch(query)
 		await conn.close()
 		ic(len(records))
 		return records
+
+	async def fetch_patent_info(self):
+		conn = await asyncpg.connect(
+			user=self.user,
+			password=self.password,
+			database=self.database,
+			host=self.host,
+			port=self.port,
+		)
+		QUERIES = {
+			"model": {
+				"count": "SELECT COUNT(*) FROM PATENT_MODEL;",
+				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_MODEL_HOLDER;"
+			},
+			"invention": {
+				"count": "SELECT COUNT(*) FROM PATENT_INVENTION;",
+				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_INVENTION_HOLDER;"
+			},
+			"design": {
+				"count": "SELECT COUNT(*) FROM PATENT_DESIGN;",
+				"count_found": "SELECT COUNT(DISTINCT patent_id) FROM PATENT_DESIGN_HOLDER;"
+			}
+		}
+		results = {}
+		for key, q_dict in QUERIES.items():
+			results[key] = {}
+			for label, query in q_dict.items():
+				result = await conn.fetchval(query)
+				results[key][label] = result
+		conn.close()
+		return results
+
 
 	async def does_exist_in_holders(self, company_id, patent_type="all"):
 		"""

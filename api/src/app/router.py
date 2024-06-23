@@ -173,4 +173,5 @@ async def fetch_information(
 async def fetch_all_information(
     classificator: Annotated[OrgClassificator, Depends(get_classificator)],
 ) -> JSONResponse:
-    return classificator.global_classification
+    classification = await classificator.get_global_classification()
+    return classification

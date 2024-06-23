@@ -296,6 +296,27 @@ class OrgClassificator:
 		except ValueError:
 			return None
 
+	async def get_global_classification(self):
+		counts = await self.link.fetch_patent_info()
+		global_classification = {
+	        "model": {
+	            "count": counts["model"]["count"],
+	            "count_found": counts["model"]["count_found"],
+		        "patent_holders": {"LE": 0, "PE": 0, "IE": 0}
+	        },
+	        "design": {
+	            "count": counts["design"]["count"],
+	            "count_found": counts["design"]["count_found"],
+		        "patent_holders": {"LE": 0, "PE": 0, "IE": 0}
+	        },
+	        "invention": {
+	            "count": counts["invention"]["count"],
+	            "count_found": counts["invention"]["count_found"],
+		        "patent_holders": {"LE": 0, "PE": 0, "IE": 0}
+	        },
+        }
+		return global_classification
+
 	def run_process_manual(self, company_ids):
 		"""
         Runs the classification process for companies manually.
