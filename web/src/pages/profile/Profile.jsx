@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet-async";
 
 export function loader() {
   if (getCookieByName("user") === "{}") {
+    console.log(getCookieByName("user"));
     return redirect("/");
   }
   return null;
