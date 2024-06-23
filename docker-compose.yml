@@ -1,4 +1,24 @@
 services:
+  ngrok:
+    image: ngrok/ngrok:alpine
+    env_file:
+      - .ngrok.env
+    command: ["http", "proxy:80", "--domain", "honestly-assured-wildcat.ngrok-free.app"]
+    networks:
+      - postgres
+      
+  proxy:
+    depends_on:
+      - api
+      - web
+    build:
+      dockerfile: Dockerfile
+      context: nginx
+    ports:
+      - 80:80
+    networks:
+      - postgres
+
   api:
     build:
       context: ./api
@@ -14,13 +34,13 @@ services:
     environment:
       USE_NOT_ML: 0
       chunk_size: 16000000
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [ gpu ]
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [ gpu ]
   postgres:
     container_name: postgres_container
     image: postgres:16.1-alpine3.18
