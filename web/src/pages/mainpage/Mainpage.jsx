@@ -13,11 +13,12 @@ import LocalLoader from "../../components/localLoader/LocalLoader";
 import { useDispatch } from "react-redux";
 import { addNewNotification } from "../../setup/store/reducers/notificationSlice";
 import { NOTIFICATION_BAD } from "../../const";
+import { getCookieByName } from "../../utils";
 function Mainpage() {
   const { data: generalData, isPending, isError, error } = useGetGeneralInfo();
   const dispatch = useDispatch();
   const [barSelected, setBarSelected] = useState(undefined);
-
+  const [generalInformation, setGeneralInformation] = useState(JSON.parse(getCookieByName('generalInformation')));
   const handleBarSelection = (event) => {
     if (
       event.target.parentElement.attributes.seriesName ||
@@ -41,6 +42,17 @@ function Mainpage() {
       );
     }
   }, [isError]);
+
+  useEffect(() => {
+    setGeneralInformation(generalData.data)
+    if(generalData) {
+      const expiresDate = new Date();
+      expiresDate.setHours(expiresDate.getHours() + 24);
+      document.cookie = `generalInformation=${JSON.stringify(
+        generalData.data
+      )};expires=${expiresDate.toUTCString()};`;
+    }
+  }, [generalData])
 
   return (
     <>
@@ -71,7 +83,7 @@ function Mainpage() {
             конкретной категории.
           </p>
 
-          {isPending ? (
+          {(isPending && Object.keys(generalInformation).length === 0)  ? (
             <LocalLoader />
           ) : (
             <div className="container charts__container">
@@ -80,24 +92,24 @@ function Mainpage() {
                   handleBarSelection={handleBarSelection}
                   series={[
                     (
-                      generalData?.data?.model?.count /
-                      (generalData?.data?.model?.count +
-                        generalData?.data?.design?.count +
-                        generalData?.data?.invention?.count +
+                      generalInformation.model?.count /
+                      (generalInformation.model?.count +
+                        generalInformation.design?.count +
+                        generalInformation.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                     (
-                      generalData?.data?.design?.count /
-                      (generalData?.data?.model?.count +
-                        generalData?.data?.design?.count +
-                        generalData?.data?.invention?.count +
+                      generalInformation.design?.count /
+                      (generalInformation.model?.count +
+                        generalInformation.design?.count +
+                        generalInformation.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                     (
-                      generalData?.data?.invention?.count /
-                      (generalData?.data?.model?.count +
-                        generalData?.data?.design?.count +
-                        generalData?.data?.invention?.count +
+                      generalInformation.invention?.count /
+                      (generalInformation.model?.count +
+                        generalInformation.design?.count +
+                        generalInformation.invention?.count +
                         0.0001)
                     ).toFixed(2) * 100,
                   ]}
@@ -110,16 +122,16 @@ function Mainpage() {
                       <SemiRadialBar
                         series={[
                           (
-                            generalData?.data.model.count_found /
-                            (generalData?.data.model.count + 0.0001)
+                            generalInformation.model.count_found /
+                            (generalInformation.model.count + 0.0001)
                           ).toFixed(2) * 100,
                         ]}
                       />
                       <TablePie
                         series={[
-                          generalData?.data.model.patent_holders.LE,
-                          generalData?.data.model.patent_holders.IE,
-                          generalData?.data.model.patent_holders.PE,
+                          generalInformation.model.patent_holders.LE,
+                          generalInformation.model.patent_holders.IE,
+                          generalInformation.model.patent_holders.PE,
                         ]}
                       />
                     </>
@@ -128,16 +140,16 @@ function Mainpage() {
                       <SemiRadialBar
                         series={[
                           (
-                            generalData?.data.design.count_found /
-                            (generalData?.data.design.count + 0.0001)
+                            generalInformation.design.count_found /
+                            (generalInformation.design.count + 0.0001)
                           ).toFixed(2) * 100,
                         ]}
                       />
                       <TablePie
                         series={[
-                          generalData?.data.design.patent_holders.LE,
-                          generalData?.data.design.patent_holders.IE,
-                          generalData?.data.design.patent_holders.PE,
+                          generalInformation.design.patent_holders.LE,
+                          generalInformation.design.patent_holders.IE,
+                          generalInformation.design.patent_holders.PE,
                         ]}
                       />
                     </>
@@ -147,16 +159,16 @@ function Mainpage() {
                         <SemiRadialBar
                           series={[
                             (
-                              generalData?.data.invention.count_found /
-                              (generalData?.data.invention.count + 0.0001)
+                              generalInformation.invention.count_found /
+                              (generalInformation.invention.count + 0.0001)
                             ).toFixed(2) * 100,
                           ]}
                         />
                         <TablePie
                           series={[
-                            generalData?.data.invention.patent_holders.LE,
-                            generalData?.data.invention.patent_holders.IE,
-                            generalData?.data.invention.patent_holders.PE,
+                            generalInformation.invention.patent_holders.LE,
+                            generalInformation.invention.patent_holders.IE,
+                            generalInformation.invention.patent_holders.PE,
                           ]}
                         />
                       </>
