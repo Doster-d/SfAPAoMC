@@ -28,7 +28,7 @@ services:
     networks:
       - postgres
     volumes:
-      - ./uploaded-files:/app/data
+      - api-uploaded:/app/data
       - ./api:/app
       - api-cache:/root/.cache
     environment:
@@ -139,6 +139,7 @@ volumes:
   pgadmin-data:
   uploaded-files:
   api-cache:
+  api-uploaded:
 
 networks:
   postgres:
