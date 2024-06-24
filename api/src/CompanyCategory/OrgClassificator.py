@@ -73,6 +73,7 @@ class OrgClassificator:
 		"""
         Initializes the OrgClassificator with necessary attributes and links.
         """
+		self.patent_data = None
 		logging.info("Initializing OrgClassificator")
 		self.dirty = True
 		self.classification = None
@@ -257,6 +258,42 @@ class OrgClassificator:
 			logging.error(f"Failed with {file_path}")
 			return None
 
+	async def extract_patents_with_tin(self, path_to_file):
+		logging.info("Start making TIN export excel file")
+		conn = await self.link.get_connection()
+		result_data = []
+		for company_id, patents in self.patent_data.items():
+			if patents:
+				tin = await self.link.get_tin_by_id(conn, company_id)
+				ic(tin)
+				for patent_id, patent_type, description in patents:
+					patent_data = await self.link.get_patent_data(conn, patent_type, patent_id)
+					ic(patent_data)
+					if tin:
+						for record in patent_data:
+							record_dict = dict(record)
+							record_dict['patent_type'] = patent_type
+							if 'tin' in record_dict:
+								record_dict['tin'].append(tin)
+							else:
+								record_dict['tin'] = [tin]
+							result_data.append(record_dict)
+		await conn.close()
+		result_df = pd.DataFrame(result_data)
+
+		if not result_df.empty:
+			result_df = result_df.groupby('registration_number').agg({
+				'publish_date': 'first',
+				'description': 'first',
+				'authors': 'first',
+				'patent_holders': 'first',
+				'is_active': 'first',
+				'tin': lambda x: list(set(sum(x, []))),
+				'patent_type': 'first'
+			}).reset_index()
+		result_df.to_excel(path_to_file, index=False)
+		logging.info("TIN export excel file created")
+
 	async def classify_companies_by_tin_data(self, data_df: pd.DataFrame):
 		logging.info("Starting classify_companies_by_tin_data")
 		self.reset_classification()
@@ -300,6 +337,7 @@ class OrgClassificator:
 		}
 		company_names = data_df.set_index('company_id')['full_name'].to_dict()
 		result = await self.link.check_company_in_patent_holders(set(data_df['company_id'].unique()))
+		self.patent_data = result
 		for company_id, patents in result.items():
 			if patents:
 				# print(f"Company ID {company_id} has the following patents:")

@@ -21,7 +21,7 @@ function TablePie({ series }) {
         <thead>
           <tr className="charts__table-row">
             <th className="charts__table-header">Тип правообладателя</th>
-            <th className="charts__table-header">Количество</th>
+            <th className="charts__table-header">Количество патентов</th>
             <th className="charts__table-header">%</th>
           </tr>
         </thead>

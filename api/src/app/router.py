@@ -121,7 +121,7 @@ async def upload_tin_data(
         )
     classification = await classificator.classify_companies_by_tin_data(data)
     ic(classification)
-
+    await classificator.extract_patents_with_tin(path)
     file_id = await file_service.create(
         user.id, str(path), "TIN", classification_json=json.dumps(classification)
     )
