@@ -18,7 +18,9 @@ function Mainpage() {
   const { data: generalData, isPending, isError, error } = useGetGeneralInfo();
   const dispatch = useDispatch();
   const [barSelected, setBarSelected] = useState(undefined);
-  const [generalInformation, setGeneralInformation] = useState(JSON.parse(getCookieByName('generalInformation')));
+  const [generalInformation, setGeneralInformation] = useState(
+    JSON.parse(getCookieByName("generalInformation"))
+  );
   const handleBarSelection = (event) => {
     if (
       event.target.parentElement.attributes.seriesName ||
@@ -44,15 +46,15 @@ function Mainpage() {
   }, [isError]);
 
   useEffect(() => {
-    setGeneralInformation(generalData.data)
-    if(generalData) {
+    if (generalData) {
+      setGeneralInformation(generalData.data);
       const expiresDate = new Date();
       expiresDate.setHours(expiresDate.getHours() + 24);
       document.cookie = `generalInformation=${JSON.stringify(
         generalData.data
       )};expires=${expiresDate.toUTCString()};`;
     }
-  }, [generalData])
+  }, [generalData]);
 
   return (
     <>
@@ -79,11 +81,11 @@ function Mainpage() {
             {isError ? "ПРОИЗОШЛА ОШИБКА ПРИ ГЕНЕРАЦИИ" : "ОБЩАЯ СТАТИСТИКА"}
           </h2>
           <p className="main-banner__tip">
-            Для просмотра дополнительной статистики по каждой категории нажмите на трек
-            конкретной категории.
+            Для просмотра дополнительной статистики по каждой категории нажмите
+            на трек конкретной категории.
           </p>
 
-          {(isPending && Object.keys(generalInformation).length === 0)  ? (
+          {isPending && Object.keys(generalInformation).length === 0 ? (
             <LocalLoader />
           ) : (
             <div className="container charts__container">
