@@ -13,7 +13,6 @@ function FileList() {
   if (filesQuery.isFetching) {
     return <GlobalLoader />;
   }
-  console.log(filesQuery.data);
   return (
     <>
       <Helmet>
@@ -40,7 +39,6 @@ function FileList() {
               </thead>
               <tbody>
                 {filesQuery.data?.pages.map((group, index) => {
-                  console.log(group);
                   return (
                     <Fragment key={index}>
                       {group?.filesInfo.map((file) => (

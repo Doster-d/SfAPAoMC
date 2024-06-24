@@ -46,7 +46,6 @@ function Mainpage() {
   }, [isError]);
 
   useEffect(() => {
-    console.log(generalData?.data);
     if (generalData) {
       setGeneralInformation(generalData.data);
       const expiresDate = new Date();

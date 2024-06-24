@@ -13,7 +13,6 @@ export function useUploadFileMutation() {
   return useMutation({
     mutationFn: async (data) => await uploadFile(data, accessToken, userId),
     onError: (error) => {
-      console.log(error);
       dispatch(
         addNewNotification({
           message: error.response?.data?.detail
@@ -42,7 +41,6 @@ export function useUploadFileMutation() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-      console.log(data);
     },
   });
 }

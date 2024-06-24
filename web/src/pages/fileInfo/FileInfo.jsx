@@ -18,7 +18,6 @@ function FileInfo() {
   const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(fileData);
   const [barSelected, setBarSelected] = useState(undefined);
 
   const handleBarSelection = (event) => {
@@ -55,8 +54,7 @@ function FileInfo() {
           duration: 5000,
         })
       );
-      /* TO-DO  УБРАТЬ КОММЕНТАРИЙ В ПРОДЕ*/
-      //navigate('/')
+      navigate('/')
     }
   }, [isError]);
   return (

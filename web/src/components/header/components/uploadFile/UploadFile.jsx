@@ -12,8 +12,7 @@ function UploadFile({ toggleDownloadOpen }) {
   const dispatch = useDispatch();
   const [fileName, setFileName] = useState(undefined);
   const uploadFileMutation = useUploadFileMutation();
-  const handleFile = async (file) => {
-    console.log(file);
+  const handleFile = async (file) => {;
     if (
       file.type !==
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -46,7 +45,6 @@ function UploadFile({ toggleDownloadOpen }) {
 
     const response = await uploadFileMutation.mutateAsync(file);
     toggleDownloadOpen();
-    console.log("Response:", response);
   };
   const onDragLeave = (e) => {
     e.preventDefault();
@@ -70,8 +68,6 @@ function UploadFile({ toggleDownloadOpen }) {
   const handleFileChange = (e) => {
     e.preventDefault();
     setDrop(false);
-
-    console.log(e);
     handleFile(e.target.files[0]);
   };
   return (

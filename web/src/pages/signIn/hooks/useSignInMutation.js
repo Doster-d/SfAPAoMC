@@ -12,7 +12,6 @@ export function useSignInMutation() {
         return await signIn(data);
       },
       onError: (error) => {
-        console.log(error);
         dispatch(
           addNewNotification({
             message: error.response.data?.detail
@@ -24,7 +23,6 @@ export function useSignInMutation() {
         );
       },
       onSuccess: (data) => {
-        console.log(data.data);
         dispatch(
           addNewNotification({
             message: `Вы вошли в аккаунт ${data.data.username}`,
@@ -38,7 +36,6 @@ export function useSignInMutation() {
         document.cookie = `user=${JSON.stringify(
           data.data
         )};expires=${expiresDate.toUTCString()};`;
-        console.log(document.cookie);
         dispatch(setUserData(data.data));
       },
     });

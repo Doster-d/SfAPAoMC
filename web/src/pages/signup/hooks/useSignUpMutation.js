@@ -12,7 +12,6 @@ export function useSignUpMutation() {
       return await signUp(data);
     },
     onError: (error) => {
-      console.log(error);
       dispatch(
         addNewNotification({
           message: error.response.data?.detail
@@ -24,7 +23,6 @@ export function useSignUpMutation() {
       );
     },
     onSuccess: (data, userData) => {
-      console.log(data);
       dispatch(
         addNewNotification({
           message: `Аккаунт ${userData.username} создан`,
