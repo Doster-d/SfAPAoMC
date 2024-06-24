@@ -61,7 +61,7 @@ class FileService:
         return [row["id"] for row in result]
 
     async def fetch_paginated_info(self, page: int) -> list[FileInfo]:
-        query = "SELECT f.id, f.path, u.username FROM processed_files AS f JOIN users AS u ON f.user_id = u.id LIMIT 5 OFFSET $1"
+        query = "SELECT f.id, f.path, u.username FROM processed_files AS f JOIN users AS u ON f.user_id = u.id LIMIT 5 OFFSET $1 ORDER BY id DESC"
 
         result = await self._con.fetch(query, page)
 
