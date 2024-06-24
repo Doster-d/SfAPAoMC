@@ -42,7 +42,9 @@ function FileInfo() {
 
   useEffect(() => {
     if (fileData?.data.classificationData.general_classification) {
-      setCategories(Object.values(fileData?.data.classificationData.general_classification));
+      setCategories(
+        Object.values(fileData?.data.classificationData.general_classification)
+      );
     }
   }, [fileData]);
   useEffect(() => {
@@ -54,7 +56,7 @@ function FileInfo() {
           duration: 5000,
         })
       );
-      navigate('/')
+      navigate("/");
     }
   }, [isError]);
   return (
@@ -80,6 +82,10 @@ function FileInfo() {
               Наименование файла — {fileData?.data?.fileName}
             </p>
             <div className="file-info__charts">
+              <p className="main-banner__tip">
+                Для просмотра дополнительной статистики по каждой категории
+                нажмите на трек конкретной категории.
+              </p>
               <div className="file-info__charts-row">
                 <MultiRadialBar
                   series={[
