@@ -8,7 +8,7 @@ function DownloadBtn({ fileId }) {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Обработанный_${data.data.filename}`; // Замените на нужное имя файла и расширение
+    a.download = `Обработанный_${response.data.filename}`; // Замените на нужное имя файла и расширение
     document.body.appendChild(a);
     a.click();
     a.remove();
