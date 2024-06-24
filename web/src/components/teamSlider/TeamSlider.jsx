@@ -105,7 +105,7 @@ function TeamSlider() {
               title={"Савченко Константин"}
               position={"Бэкендер"}
               age={"19 лет"}
-              description={"бла-бла-бла"}
+              description={"Python-разработчик, бэкендер"}
             >
               <picture
                 className="image-wrapper team-card__floating-image"
@@ -183,7 +183,7 @@ function TeamSlider() {
               title={"Арефев Александр"}
               position={"ML-инженер"}
               age={"20 лет"}
-              description={"бла-бла-бла"}
+              description={"ML-инженер, математик, аналитик"}
             >
               <picture
                 className="image-wrapper team-card__floating-image"
