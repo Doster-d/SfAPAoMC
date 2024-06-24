@@ -10,6 +10,34 @@
       gap: 20px;
     }
   }
+  &__multibar {
+    .apexcharts-radialbar path[selected="true"] {
+      stroke-width: 25px;
+      filter: none;
+      @media (max-width: 1023px) {
+        stroke-width: 20px;
+      }
+    }
+    // .apexcharts-radialbar path {
+    //   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    // }
+
+    .apexcharts-radialbar path ~ text {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .apexcharts-radialbar path[selected="true"] ~ text {
+      font-size: 28px;
+      fill: #000000;
+      @media (max-width: 1023px) {
+        font-size: 20px;
+      }
+    }
+
+    .apexcharts-radialbar text {
+      fill: #737373;
+    }
+  }
   &__author {
     font-size: 32px;
     margin-top: 32px;

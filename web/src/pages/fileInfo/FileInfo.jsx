@@ -87,38 +87,40 @@ function FileInfo() {
                 нажмите на трек конкретной категории.
               </p>
               <div className="file-info__charts-row">
-                <MultiRadialBar
-                  series={[
-                    Math.round(
-                      (
-                        fileData?.data.classificationData.model?.count /
-                        (fileData?.data.classificationData.model?.count +
-                          fileData?.data.classificationData.design?.count +
-                          fileData?.data.classificationData.invention?.count +
-                          0.0001)
-                      ).toFixed(2) * 100
-                    ),
-                    Math.round(
-                      (
-                        fileData?.data.classificationData.design?.count /
-                        (fileData?.data.classificationData.model?.count +
-                          fileData?.data.classificationData.design?.count +
-                          fileData?.data.classificationData.invention?.count +
-                          0.0001)
-                      ).toFixed(2) * 100
-                    ),
-                    Math.round(
-                      (
-                        fileData?.data.classificationData.invention?.count /
-                        (fileData?.data.classificationData.model?.count +
-                          fileData?.data.classificationData.design?.count +
-                          fileData?.data.classificationData.invention?.count +
-                          0.0001)
-                      ).toFixed(2) * 100
-                    ),
-                  ]}
-                  handleBarSelection={handleBarSelection}
-                />
+                <div className="file-info__multibar">
+                  <MultiRadialBar
+                    series={[
+                      Math.round(
+                        (
+                          fileData?.data.classificationData.model?.count /
+                          (fileData?.data.classificationData.model?.count +
+                            fileData?.data.classificationData.design?.count +
+                            fileData?.data.classificationData.invention?.count +
+                            0.0001)
+                        ).toFixed(2) * 100
+                      ),
+                      Math.round(
+                        (
+                          fileData?.data.classificationData.design?.count /
+                          (fileData?.data.classificationData.model?.count +
+                            fileData?.data.classificationData.design?.count +
+                            fileData?.data.classificationData.invention?.count +
+                            0.0001)
+                        ).toFixed(2) * 100
+                      ),
+                      Math.round(
+                        (
+                          fileData?.data.classificationData.invention?.count /
+                          (fileData?.data.classificationData.model?.count +
+                            fileData?.data.classificationData.design?.count +
+                            fileData?.data.classificationData.invention?.count +
+                            0.0001)
+                        ).toFixed(2) * 100
+                      ),
+                    ]}
+                    handleBarSelection={handleBarSelection}
+                  />
+                </div>
                 {barSelected === "Модель" ? (
                   <TablePie
                     series={[
