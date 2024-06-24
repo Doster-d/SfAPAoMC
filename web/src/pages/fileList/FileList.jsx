@@ -21,7 +21,7 @@ function FileList() {
           <table className="file-list__table file-table">
             <thead className="file-table__head">
               <tr className="file-table__row">
-                <td className="file-table__column">#</td>
+                <td className="file-table__column">id</td>
                 <td className="file-table__column">Наименование файла</td>
                 <td className="file-table__column">Пользователь</td>
                 <td className="file-table__column">Статистика</td>
